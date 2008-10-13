@@ -78,7 +78,7 @@
         <include name="jaxrpc.jar"></include>
         <include name="log4j.jar"></include>
         <include name="resolver.jar"></include>
-        <include name="saaj.jar"></include>
+        <include name="saaj-impl.jar"></include>
         <include name="saxon8.jar"></include>
         <include name="saxon8-dom.jar"></include>
         <include name="bsf.jar"></include>

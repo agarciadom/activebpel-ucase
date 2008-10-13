@@ -106,7 +106,8 @@ echo "Copying Libraries..."
                 cp -rf lib/jython.jar "$CATALINA_HOME"/shared/lib > /dev/null
                 cp -rf lib/mail.jar "$CATALINA_HOME"/shared/lib > /dev/null
                 cp -rf lib/resolver.jar "$CATALINA_HOME"/shared/lib > /dev/null
-                cp -rf lib/saaj.jar "$CATALINA_HOME"/shared/lib > /dev/null
+                cp -rf lib/saaj-impl.jar "$CATALINA_HOME"/shared/lib > /dev/null
+                cp -rf lib/saaj-api.jar "$CATALINA_HOME"/shared/lib > /dev/null
                 cp -rf lib/saxon8.jar "$CATALINA_HOME"/shared/lib > /dev/null
                 cp -rf lib/saxon8-dom.jar "$CATALINA_HOME"/shared/lib > /dev/null
                 cp -rf lib/TaminoAPI4J.jar "$CATALINA_HOME"/shared/lib > /dev/null

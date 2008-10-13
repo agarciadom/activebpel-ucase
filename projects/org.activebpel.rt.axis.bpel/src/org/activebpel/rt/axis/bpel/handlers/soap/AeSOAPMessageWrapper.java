@@ -27,6 +27,7 @@ import java.util.Iterator;
 import javax.xml.soap.AttachmentPart;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
 import javax.xml.soap.SOAPMessage;
@@ -213,5 +214,11 @@ public class AeSOAPMessageWrapper extends SOAPMessage
    protected void setMessage(Message aMessage)
    {
       mMessage = aMessage;
+   }
+
+   @Override
+   public AttachmentPart getAttachment(SOAPElement arg0) throws SOAPException {
+	   // TODO Auto-generated method stub
+	   return getMessage().getAttachment(arg0);
    }
 }

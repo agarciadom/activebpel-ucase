@@ -107,5 +107,15 @@ public class AeDelegatingDataSource implements DataSource
    {
       mDelegate = aDelegate;
    }
+
+public boolean isWrapperFor(Class<?> arg0) throws SQLException {
+	// TODO Auto-generated method stub
+	return false;
 }
- 
+
+public <T> T unwrap(Class<T> arg0) throws SQLException {
+	// TODO Auto-generated method stub
+	return null;
+}
+}
+

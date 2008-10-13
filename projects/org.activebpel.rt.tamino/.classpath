@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.bpel"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.bpel.server"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.xmldb"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/jaxen-1.1-beta-8.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/qname.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/TaminoAPI4J.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/TaminoJCA.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/xmlParserAPIs.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
