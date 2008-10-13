@@ -8,7 +8,7 @@ set CP=%CP%;\AEDevelopment\lib\commons-logging.jar
 set CP=%CP%;\AEDevelopment\lib\commons-discovery.jar
 set CP=%CP%;\AEDevelopment\lib\wsdl4j.jar
 set CP=%CP%;\AEDevelopment\lib\jaxrpc.jar
-set CP=%CP%;\AEDevelopment\lib\saaj.jar
+set CP=%CP%;\AEDevelopment\lib\saaj-impl.jar
 
 set OUT=engineAdmin.wsdl
 set LOC=http://127.0.0.1:8080/rdebug/BpelEngineAdmin
