@@ -147,6 +147,28 @@ public class AeActivityAssignImpl extends AeActivityImpl
 
             operation.execute();
 
+            // Print copy destination (if possible)
+            String path = "unknown";
+            if (operation instanceof AeCopyOperationBase) {
+                AeCopyOperationBase copyOp = (AeCopyOperationBase)operation;
+                IAeTo              iToElem = copyOp.getTo();
+                if (iToElem instanceof AeToBase) {
+                    AeToBase toElem = (AeToBase)iToElem;
+
+                    // We need the variable name (and part, if any)
+                    path = "$" + toElem.getVariableName();
+                    if (toElem instanceof AeToVariableMessagePart) {
+                        path = path + "." + ((AeToVariableMessagePart)toElem).getPart();
+                    }
+
+                    // Print the path to the element if the result is an XML node
+                    Object destino = toElem.getTarget();
+                    if (destino instanceof Node) {
+                        path = path + computePath((Node)destino);
+                    }
+                }
+            }
+
             // ... and log copy completion
             AeProcessInfoEvent evtF = new AeProcessInfoEvent(getProcess().getProcessId(),
                     String.format("%s/copy[%d]", getLocationPath(), index),
@@ -198,4 +220,59 @@ public class AeActivityAssignImpl extends AeActivityImpl
    {
       mCopyOperations = aCopyOperations;
    }
+
+   /**
+    * Returns the absolute path of the XML node from the root of its tree.
+    * Copied over from the XPath extension function uca:imprimirRutas.
+    * */
+   private String computePath(Node node) {
+        final String sName = resolveNameWithBPELPrefixes(getCopyOperationContext(), node);
+
+        if (node instanceof Document || node instanceof DocumentFragment) {
+            return "";
+        } else if (node instanceof Attr) {
+            final Node nCont = ((Attr) node).getOwnerElement();
+            return String.format("%s/@%s", computePath(nCont), sName);
+        } else {
+            final Node nParent = node.getParentNode();
+            int position = 1;
+
+            // Obtenemos posicion entre los hermanos con el mismo nombre
+            final NodeList nlChildren = nParent.getChildNodes();
+            for (int i = 0; i < nlChildren.getLength(); ++i) {
+                final Node nChildren = nlChildren.item(i);
+                if (nChildren.getNodeName().equals(sName)) {
+                    if (nChildren == node) {
+                        break;
+                    } else {
+                        position++;
+                    }
+                }
+            }
+
+            return String.format("%s/%s[%d]", computePath(nParent), sName,
+                    position);
+        }
+    }
+
+    private static String resolveNameWithBPELPrefixes(
+            IAeCopyOperationContext context, Node node) {
+        // We need to resolve the prefix using the BPEL process' context,
+        // or the prefixes won't match correctly (we would end up using
+        // those from the BPELUnit test suite specification instead of
+        // the WS-BPEL process definition's)
+        final String nbLocalAtr = node.getLocalName();
+        final String nsAtr = node.getNamespaceURI();
+        String nbAtr = nbLocalAtr;
+        if (nsAtr != null) {
+            if (XML_NAMESPACE.equals(nsAtr)) {
+                nbAtr = "xmlns:" + nbLocalAtr;
+            } else {
+                final String nsPrefix = (String) context
+                        .resolveNamespaceToPrefixes(nsAtr).toArray()[0];
+                nbAtr = String.format("%s:%s", nsPrefix, nbLocalAtr);
+            }
+        }
+        return nbAtr;
+    }
 }
