@@ -394,6 +394,16 @@ public class AeDebugDataSource extends AeDataSource implements DataSource, Runna
    public void setLogWriter(PrintWriter aWriter) throws SQLException
    {
       getDelegateDataSource().setLogWriter(aWriter);
-   }   
+   }
+
+public boolean isWrapperFor(Class<?> arg0) throws SQLException {
+	// TODO Auto-generated method stub
+	return false;
+}
+
+public <T> T unwrap(Class<T> arg0) throws SQLException {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }

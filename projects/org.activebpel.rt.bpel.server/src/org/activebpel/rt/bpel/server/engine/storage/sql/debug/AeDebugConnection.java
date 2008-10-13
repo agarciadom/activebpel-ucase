@@ -20,15 +20,23 @@
  */
 package org.activebpel.rt.bpel.server.engine.storage.sql.debug;
 
+import java.sql.Array;
+import java.sql.Blob;
 import java.sql.CallableStatement;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.NClob;
 import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.sql.Struct;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Debug connection that keeps track of unclosed connections during object finalization.
@@ -452,5 +460,59 @@ public class AeDebugConnection implements Connection
    {
       return mDelegate.prepareStatement(aSql, aColumnNames);
    }
+
+public Array createArrayOf(String arg0, Object[] arg1) throws SQLException {
+	return mDelegate.createArrayOf(arg0, arg1);
+}
+
+public Blob createBlob() throws SQLException {
+	return mDelegate.createBlob();
+}
+
+public Clob createClob() throws SQLException {
+	return mDelegate.createClob();
+}
+
+public NClob createNClob() throws SQLException {
+	return mDelegate.createNClob();
+}
+
+public SQLXML createSQLXML() throws SQLException {
+	return mDelegate.createSQLXML();
+}
+
+public Struct createStruct(String arg0, Object[] arg1) throws SQLException {
+	return mDelegate.createStruct(arg0, arg1);
+}
+
+public Properties getClientInfo() throws SQLException {
+	return mDelegate.getClientInfo();
+}
+
+public String getClientInfo(String arg0) throws SQLException {
+	return mDelegate.getClientInfo(arg0);
+}
+
+public boolean isValid(int arg0) throws SQLException {
+	return mDelegate.isValid(arg0);
+}
+
+public void setClientInfo(Properties arg0) throws SQLClientInfoException {
+	mDelegate.setClientInfo(arg0);
+}
+
+public void setClientInfo(String arg0, String arg1) throws SQLClientInfoException {
+	mDelegate.setClientInfo(arg0, arg1);
+}
+
+public boolean isWrapperFor(Class<?> arg0) throws SQLException {
+	// TODO Auto-generated method stub
+	return false;
+}
+
+public <T> T unwrap(Class<T> arg0) throws SQLException {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }
