@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+   <entry name="AttachmentManager">
+      <entry name="Class" value="org.activebpel.rt.bpel.impl.AeFileAttachmentManager"/>
+      <entry name="Debug" value="false"/>
+   </entry>
+   <entry name="EngineAdminImpl"
+          value="org.activebpel.rt.axis.bpel.web.AeWebEngineAdministration"/>
+   <entry name="UnmatchedReceiveTimeout" value="300"/>
+   <entry name="SharedSecret" value="terces"/>
+   <entry name="LockManager">
+      <entry name="Class" value="org.activebpel.rt.bpel.impl.AeInMemoryLockManager"/>
+   </entry>
+   <entry name="AllowEmptyQuerySelection" value="false"/>
+   <entry name="DeploymentLog">
+      <entry name="Class"
+             value="org.activebpel.rt.bpel.server.logging.AeFileDeploymentLoggerFactory"/>
+   </entry>
+   <entry name="TransmissionTracker">
+      <entry name="ReplyFactories">
+         <entry name="DurableQueuedInvoke">
+            <entry name="Class"
+                   value="org.activebpel.rt.bpel.server.engine.reply.AeDurableQueuingReplyReceiverFactory"/>
+         </entry>
+      </entry>
+      <entry name="Class"
+             value="org.activebpel.rt.bpel.server.transreceive.AeNoopTransmissionTracker"/>
+   </entry>
+   <entry name="Logging" value="urn:ae:full"/>
+   <entry name="DeploymentProvider">
+      <entry name="Class" value="org.activebpel.rt.bpel.server.deploy.AeDeploymentProvider"/>
+   </entry>
+   <entry name="CoordinationManager">
+      <entry name="Class"
+             value="org.activebpel.rt.bpel.server.coord.AeInMemoryCoordinationManager"/>
+   </entry>
+   <entry name="ProcessWorkManager">
+      <entry name="ProcessWorkCount" value="10"/>
+      <entry name="Class" value="org.activebpel.work.AeProcessWorkManager"/>
+   </entry>
+   <entry name="QueueManager">
+      <entry name="InvokeHandlerFactory">
+         <entry name="Protocols">
+            <entry name="process"
+                   value="org.activebpel.rt.bpel.server.engine.invoke.AeProcessHandlerFactory"/>
+            <entry name="default" value="org.activebpel.rt.axis.bpel.AeAxisInvokeHandlerFactory"/>
+            <entry name="policy" value="org.activebpel.rt.axis.bpel.AePolicyInvokeHandlerFactory"/>
+            <entry name="java"
+                   value="org.activebpel.rt.bpel.server.engine.invoke.AePojoHandlerFactory"/>
+         </entry>
+         <entry name="Class"
+                value="org.activebpel.rt.bpel.server.engine.invoke.AeDelegatingInvokeHandlerFactory"/>
+      </entry>
+      <entry name="Class"
+             value="org.activebpel.rt.bpel.server.engine.AeInMemoryQueueManager"/>
+      <entry name="UnmatchedReceivesCount" value="50"/>
+      <entry name="ReceiveHandlerFactory">
+         <entry name="Protocols">
+            <entry name="default"
+                   value="org.activebpel.rt.bpel.server.engine.receive.AeBPELReceiveHandlerFactory"/>
+            <entry name="soap"
+                   value="org.activebpel.rt.axis.bpel.receivers.AeAxisReceiveHandlerFactory"/>
+         </entry>
+         <entry name="Class"
+                value="org.activebpel.rt.bpel.server.engine.receive.AeDelegatingReceiveHandlerFactory"/>
+      </entry>
+   </entry>
+   <entry name="ValidateServiceMessages" value="true"/>
+   <entry name="Catalog">
+      <entry name="Class" value="org.activebpel.rt.bpel.server.catalog.AeCatalog"/>
+      <entry name="replace.existing" value="false"/>
+      <entry name="cache.max" value="100"/>
+   </entry>
+   <entry name="WorkManager">
+      <entry name="DefaultWorkManager.ThreadPool.Min" value="10"/>
+      <entry name="ChildWorkManagers">
+         <entry name="Alarm">
+            <entry name="MaxWorkCount" value="5"/>
+         </entry>
+      </entry>
+      <entry name="DefaultWorkManager.ThreadPool.Max" value="50"/>
+   </entry>
+   <entry name="TransactionManagerFactory">
+      <entry name="Class"
+             value="org.activebpel.rt.bpel.server.engine.transaction.AeNoopTransactionManagerFactory"/>
+   </entry>
+   <entry name="Description" value="ActiveBPEL In-Memory Configuration"/>
+   <entry name="ProcessLogger">
+      <entry name="Class" value="org.activebpel.rt.bpel.server.logging.AeFileLogger"/>
+   </entry>
+
+   <entry name="FunctionContexts">
+        <entry name="Funciones de monitorizacion">
+             <entry name="Prefix"    value="uca"/>
+	     <entry name="Namespace" value="http://www.uca.es/xpath/2007/11"/>
+	     <entry name="Class"
+                    value="es.uca.webservices.xpath.ContextoFunciones"/>
+        </entry>
+  </entry>
+
+   <entry name="ExpressionLanguageFactory">
+      <entry name="Factories">
+         <entry name="http://schemas.xmlsoap.org/ws/2003/03/business-process/">
+            <entry name="DefaultLanguage" value="http://www.w3.org/TR/1999/REC-xpath-19991116"/>
+            <entry name="Class"
+                   value="org.activebpel.rt.bpel.expr.AeBPWSExpressionLanguageFactory"/>
+            <entry name="Languages">
+               <entry name="XPath1.0">
+                  <entry name="Analyzer"
+                         value="org.activebpel.rt.bpel.def.expr.xpath.AeBPWSXPathExpressionAnalyzer"/>
+                  <entry name="Runner"
+                         value="org.activebpel.rt.bpel.impl.expr.xpath.AeBPWSXPathExpressionRunner"/>
+                  <entry name="Validator"
+                         value="org.activebpel.rt.bpel.def.validation.expr.xpath.AeBPWSXPathExpressionValidator"/>
+                  <entry name="Uri" value="http://www.w3.org/TR/1999/REC-xpath-19991116"/>
+               </entry>
+               <entry name="JavaScript1.5">
+                  <entry name="Analyzer"
+                         value="org.activebpel.rt.bpel.ext.expr.def.javascript.AeBPWSJavaScriptExpressionAnalyzer"/>
+                  <entry name="Runner"
+                         value="org.activebpel.rt.bpel.ext.expr.impl.javascript.AeBPWSJavaScriptExpressionRunner"/>
+                  <entry name="Validator"
+                         value="org.activebpel.rt.bpel.ext.expr.def.validation.javascript.AeBPWSJavaScriptExpressionValidator"/>
+                  <entry name="Uri" value="urn:active-endpoints:expression-language:javascript1.5"/>
+               </entry>
+               <entry name="XQuery1.0">
+                  <entry name="Analyzer"
+                         value="org.activebpel.rt.bpel.ext.expr.def.xquery.AeBPWSXQueryExpressionAnalyzer"/>
+                  <entry name="Runner"
+                         value="org.activebpel.rt.bpel.ext.expr.impl.xquery.AeBPWSXQueryExpressionRunner"/>
+                  <entry name="Validator"
+                         value="org.activebpel.rt.bpel.ext.expr.def.validation.xquery.AeBPWSXQueryExpressionValidator"/>
+                  <entry name="Uri" value="urn:active-endpoints:expression-language:xquery1.0"/>
+               </entry>
+            </entry>
+         </entry>
+         <entry name="http://docs.oasis-open.org/wsbpel/2.0/process/executable">
+            <entry name="DefaultLanguage" value="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"/>
+            <entry name="Class"
+                   value="org.activebpel.rt.bpel.expr.AeWSBPELExpressionLanguageFactory"/>
+            <entry name="Languages">
+               <entry name="XPath1.0">
+                  <entry name="Analyzer"
+                         value="org.activebpel.rt.bpel.def.expr.xpath.AeWSBPELXPathExpressionAnalyzer"/>
+                  <entry name="Runner"
+                         value="org.activebpel.rt.bpel.impl.expr.xpath.AeWSBPELXPathExpressionRunner"/>
+                  <entry name="Validator"
+                         value="org.activebpel.rt.bpel.def.validation.expr.xpath.AeWSBPELXPathExpressionValidator"/>
+                  <entry name="Uri" value="urn:oasis:names:tc:wsbpel:2.0:sublang:xpath1.0"/>
+               </entry>
+               <entry name="JavaScript1.5">
+                  <entry name="Analyzer"
+                         value="org.activebpel.rt.bpel.ext.expr.def.javascript.AeWSBPELJavaScriptExpressionAnalyzer"/>
+                  <entry name="Runner"
+                         value="org.activebpel.rt.bpel.ext.expr.impl.javascript.AeWSBPELJavaScriptExpressionRunner"/>
+                  <entry name="Validator"
+                         value="org.activebpel.rt.bpel.ext.expr.def.validation.javascript.AeWSBPELJavaScriptExpressionValidator"/>
+                  <entry name="Uri" value="urn:active-endpoints:expression-language:javascript1.5"/>
+               </entry>
+               <entry name="XQuery1.0">
+                  <entry name="Analyzer"
+                         value="org.activebpel.rt.bpel.ext.expr.def.xquery.AeWSBPELXQueryExpressionAnalyzer"/>
+                  <entry name="Runner"
+                         value="org.activebpel.rt.bpel.ext.expr.impl.xquery.AeWSBPELXQueryExpressionRunner"/>
+                  <entry name="Validator"
+                         value="org.activebpel.rt.bpel.ext.expr.def.validation.xquery.AeWSBPELXQueryExpressionValidator"/>
+                  <entry name="Uri" value="urn:active-endpoints:expression-language:xquery1.0"/>
+               </entry>
+            </entry>
+         </entry>
+      </entry>
+      <entry name="Class" value="org.activebpel.rt.bpel.AeExpressionLanguageFactory"/>
+   </entry>
+   <entry name="PolicyMapper">
+      <entry name="AXIS_CRED"
+             value="org.activebpel.rt.axis.bpel.deploy.AeCredentialPolicyMapper"/>
+      <entry name="Class" value="org.activebpel.rt.bpel.server.deploy.AeMasterPolicyMapper"/>
+      <entry name="AXIS_XPATH"
+             value="org.activebpel.rt.axis.bpel.deploy.AeAxisXPathPolicyMapper"/>
+   </entry>
+   <entry name="ProcessManager">
+      <entry name="Class" value="org.activebpel.rt.bpel.impl.AeInMemoryProcessManager"/>
+   </entry>
+   <entry name="WebServiceTimeout" value="600"/>
+   <entry name="DeploymentHandler">
+      <entry name="DeploymentFactory">
+         <entry name="PdefDeployer">
+            <entry name="Class" value="org.activebpel.rt.bpel.server.deploy.AePdefDeployer"/>
+         </entry>
+         <entry name="Class"
+                value="org.activebpel.rt.bpel.server.deploy.AeDeploymentFactoryImpl"/>
+         <entry name="ValidationHandler">
+            <entry name="Class"
+                   value="org.activebpel.rt.bpel.server.deploy.validate.AeDefaultValidationHandler"/>
+         </entry>
+         <entry name="WebServicesDeployer">
+            <entry name="Protocols">
+               <entry name="bpel"
+                      value="org.activebpel.rt.axis.bpel.web.deploy.AeAxisWebServicesDeployer"/>
+               <entry name="default"
+                      value="org.activebpel.rt.axis.bpel.web.deploy.AeAxisWebServicesDeployer"/>
+               <entry name="wsdd"
+                      value="org.activebpel.rt.axis.bpel.web.deploy.AeAxisWebServicesDeployer"/>
+            </entry>
+            <entry name="Class"
+                   value="org.activebpel.rt.bpel.server.deploy.AeDelegatingWebServiceDeployer"/>
+         </entry>
+         <entry name="CatalogDeployer">
+            <entry name="Class" value="org.activebpel.rt.bpel.server.deploy.AeCatalogDeployer"/>
+         </entry>
+         <entry name="BpelDeployer">
+            <entry name="Class" value="org.activebpel.rt.bpel.server.deploy.AeBpelDeployer"/>
+         </entry>
+      </entry>
+      <entry name="Class"
+             value="org.activebpel.rt.bpel.server.deploy.AeDeploymentHandlerFactory"/>
+   </entry>
+   <entry name="SecurityProvider">
+      <entry name="Class" value="org.activebpel.rt.bpel.server.security.AeSecurityProvider"/>
+      <entry name="AuthorizationProvider">
+         <entry name="Class"
+                value="org.activebpel.rt.bpel.server.security.AePrincipalAuthProvider"/>
+      </entry>
+   </entry>
+   <entry name="URNResolver">
+      <entry name="Storage">
+         <entry name="File" value="urn.properties"/>
+         <entry name="Class"
+                value="org.activebpel.rt.bpel.server.engine.invoke.AeFileBasedURNStorage"/>
+      </entry>
+      <entry name="Class"
+             value="org.activebpel.rt.bpel.server.addressing.AeStorageBackedURNResolver"/>
+   </entry>
+   <entry name="AllowCreateXPath" value="false"/>
+   <entry name="SOAPMessageFactory">
+     <entry name="Class" value="org.apache.axis.soap.MessageFactoryImpl"/>
+   </entry>
+</config>
