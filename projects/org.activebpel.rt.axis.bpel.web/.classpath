@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.activebpel.rt"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.activebpel.rt.axis"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.activebpel.rt.axis.bpel"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.activebpel.rt.bpel"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.activebpel.rt.bpel.server"/>
+	<classpathentry exported="true" kind="lib" path="/home/antonio/src/activebpel-4.1/lib/axis.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/antonio/src/activebpel-4.1/lib/commonj-twm.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/antonio/src/activebpel-4.1/lib/jaxrpc.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/antonio/src/activebpel-4.1/lib/qname.jar"/>
+	<classpathentry exported="true" kind="lib" path="/home/antonio/src/activebpel-4.1/lib/servlet-api.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/activation.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/axis.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/castor-1.0-xml.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/commons-httpclient-3.0-rc3.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/commons-logging.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/jaxen-1.1-beta-8.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/jaxrpc.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/mail.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/qname.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/wsdl4j.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.axis"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.axis.bpel.admin"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.bpel"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.bpel.server"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.wsio"/>
+	<classpathentry kind="var" path="AESAMPLES_LIB/saaj-api.jar"/>
+	<classpathentry kind="var" path="AESAMPLES_LIB/saaj-impl.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

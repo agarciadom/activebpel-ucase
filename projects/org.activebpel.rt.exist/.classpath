@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.bpel"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.bpel.server"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.activebpel.rt.xmldb"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/antlr-2.7.6.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/commons-pool-1.2.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/exist.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/exist-modules.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/jgroups-all.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/log4j-1.2.14.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/resolver.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/sax2.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/sunxacml.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/xmldb.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/exist/xmlrpc-1.2-patched.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/jaxen-1.1-beta-8.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/qname.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="/home/antonio/src/activebpel-4.1/lib/xmlParserAPIs.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
