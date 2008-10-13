@@ -32,15 +32,27 @@ import org.activebpel.rt.bpel.impl.AeFaultFactory;
 import org.activebpel.rt.bpel.impl.AeProcessInfoEvent;
 import org.activebpel.rt.bpel.impl.IAeActivityParent;
 import org.activebpel.rt.bpel.impl.activity.assign.AeAtomicCopyOperationContext;
+import org.activebpel.rt.bpel.impl.activity.assign.AeCopyOperationBase;
+import org.activebpel.rt.bpel.impl.activity.assign.AeCopyOperationContext;
 import org.activebpel.rt.bpel.impl.activity.assign.IAeAssignOperation;
 import org.activebpel.rt.bpel.impl.activity.assign.IAeCopyOperationContext;
+import org.activebpel.rt.bpel.impl.activity.assign.IAeTo;
+import org.activebpel.rt.bpel.impl.activity.assign.to.AeToBase;
+import org.activebpel.rt.bpel.impl.activity.assign.to.AeToVariableMessagePart;
 import org.activebpel.rt.bpel.impl.visitors.IAeImplVisitor;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Implementation of the BPEL assign activity.
  */
 public class AeActivityAssignImpl extends AeActivityImpl
 {
+    private static final String XML_NAMESPACE = "http://www.w3.org/2000/xmlns/";
+
    /** list of copy operations to get executed */
    private List mCopyOperations = new LinkedList();
    
@@ -125,7 +137,22 @@ public class AeActivityAssignImpl extends AeActivityImpl
          for (Iterator iter = getCopyOperations().iterator(); iter.hasNext(); index++)
          {
             IAeAssignOperation operation = (IAeAssignOperation) iter.next();
+
+            // Log copy start
+            AeProcessInfoEvent evtI = new AeProcessInfoEvent(getProcess().getProcessId(),
+                    String.format("%s/copy[%d]", getLocationPath(), index),
+                    IAeProcessInfoEvent.GENERIC_INFO_EVENT,
+                    "", " : Executing");
+            getProcess().getEngine().fireInfoEvent(evtI);
+
             operation.execute();
+
+            // ... and log copy completion
+            AeProcessInfoEvent evtF = new AeProcessInfoEvent(getProcess().getProcessId(),
+                    String.format("%s/copy[%d]", getLocationPath(), index),
+                    IAeProcessInfoEvent.GENERIC_INFO_EVENT,
+                    "", String.format(" : Completed normally assignment to '%s'", path));
+            getProcess().getEngine().fireInfoEvent(evtF);
          }
       }
       catch(Throwable t)
