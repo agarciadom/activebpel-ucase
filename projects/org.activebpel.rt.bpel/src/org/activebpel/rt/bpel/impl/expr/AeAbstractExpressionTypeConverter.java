@@ -59,8 +59,8 @@ public abstract class AeAbstractExpressionTypeConverter implements IAeExpression
                else
                   rvalList.add(convertToExpressionType(item));
             }
-            rval = rvalList;
          }
+         rval = rvalList;
       }
       else if (aEngineType instanceof Document)
       {
