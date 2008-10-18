@@ -39,7 +39,7 @@ do
 
       if [ -d "$CATALINA_HOME/work" ]
       then
-     `find "$CATALINA_HOME/work" -name $shortname -print | xargs rm -rf` > nul
+     `find "$CATALINA_HOME/work" -name $shortname -print | xargs rm -rf` > /dev/null
       fi
 done
 
