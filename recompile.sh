@@ -1,7 +1,8 @@
 #!/bin/bash
 
-CATALINA_USER=antonio  # Tomcat user
-CATALINA_GROUP=antonio # Tomcat group
+CATALINA_USER=tomcat5  # Tomcat user
+CATALINA_GROUP=tomcat5 # Tomcat group
+export CATALINA_HOME=/opt/tomcat5
 
 # Configuration file which should be backed up and restored, if existing
 CONF_FILE=${CATALINA_HOME}/bpr/aeEngineConfig.xml
@@ -11,8 +12,8 @@ FIRST_CONF_FILE=aeEngineConfig.xml
 LIB_DIR=${CATALINA_HOME}/shared/lib
 
 # Commands to be run to start and stop the server
-CMD_START_TOMCAT="Tomcat5.sh start"
-CMD_STOP_TOMCAT="Tomcat5.sh stop"
+CMD_START_TOMCAT="sudo /etc/init.d/tomcat5 start"
+CMD_STOP_TOMCAT="sudo /etc/init.d/tomcat5 stop"
 
 ### END CONFIGURATION
 
@@ -29,25 +30,25 @@ ${CMD_STOP_TOMCAT}
 # Backups old conf and installs the new ActiveBPEL
 TMPCONF_FILE=""
 if [ -f "${CONF_FILE}" ]; then
-    TMPCONF_FILE=`mktemp`
-    sudo cp "${CONF_FILE}" "${TMPCONF_FILE}"
+    TMPCONF_FILE=`sudo -u "${CATALINA_USER}" mktemp`
+    sudo -u "${CATALINA_USER}" cp "${CONF_FILE}" "${TMPCONF_FILE}"
 fi
 sudo -E true
 if [ "$?" = "0" ]; then
-  sudo -E ./install.sh
+  sudo -E -u "${CATALINA_USER}" ./install.sh
 else
-  sudo ./install.sh
+  sudo -u "${CATALINA_USER}" ./install.sh
 fi
 
 # Restores the backup or uses the default configuration instead
 if [ -f "${TMPCONF_FILE}" ]; then
-    sudo cp "${TMPCONF_FILE}" "${CONF_FILE}";
+    sudo -u "${CATALINA_USER}" cp "${TMPCONF_FILE}" "${CONF_FILE}";
 else
-    sudo cp "${FIRST_CONF_FILE}" "${CONF_FILE}";
+    sudo -u "${CATALINA_USER}" cp "${FIRST_CONF_FILE}" "${CONF_FILE}";
 fi
 
 # Installs the XPath logging extensions
-sudo cp *.jar "${LIB_DIR}"
+sudo -u "${CATALINA_USER}" cp *.jar "${LIB_DIR}"
 
 # Sets the proper permissions
 sudo chown -R ${CATALINA_USER}.${CATALINA_GROUP} ${CATALINA_HOME}
