@@ -61,23 +61,11 @@ public class AeJpegImageEncoderImpl implements IAeImageEncoder
     */
    public void encode(BufferedImage aImage, OutputStream aOutputStream) throws IOException, AeException
    {
-      try
-      {
-         JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(aOutputStream);
-         JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(aImage);
-         param.setQuality(0.9f, true);
-         encoder.setJPEGEncodeParam(param);
-         encoder.encode(aImage);
-      }
-      catch(IOException io)
-      {
-         throw io;
-      }
-      catch(Throwable t)
-      {
-         throw new AeException(t);
-      }
-      
+      // STUB: do nothing
+      //
+      // com.sun.image.codec package is a propietary Sun interface
+      // and does not work in OpenJDK, Harmony, etc. Since we do not
+      // need it, just strip it away.
    }
 
 }
