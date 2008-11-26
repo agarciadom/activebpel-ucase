@@ -2,3 +2,5 @@
 *.html
 *.xsd
 bin/
+classes
+dist/
