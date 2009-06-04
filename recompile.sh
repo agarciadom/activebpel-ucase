@@ -12,8 +12,8 @@ FIRST_CONF_FILE=aeEngineConfig.xml
 LIB_DIR=${CATALINA_HOME}/shared/lib
 
 # Commands to be run to start and stop the server
-CMD_START_TOMCAT="sudo /etc/init.d/tomcat5 start"
-CMD_STOP_TOMCAT="sudo /etc/init.d/tomcat5 stop"
+CMD_START_TOMCAT="ActiveBPEL.sh start"
+CMD_STOP_TOMCAT="ActiveBPEL.sh full-stop"
 
 ### END CONFIGURATION
 

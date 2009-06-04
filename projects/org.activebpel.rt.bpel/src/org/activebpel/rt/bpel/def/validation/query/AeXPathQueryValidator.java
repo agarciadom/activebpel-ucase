@@ -188,7 +188,7 @@ public class AeXPathQueryValidator extends AeXPathSyntaxValidator
       // Validate the local part
       if(! AeUtil.compareObjects(aLocalName, mRootName.getLocalPart()))
       {
-         throw new SAXPathException(AeMessages.getString("AeXPathQueryValidator.ERROR_0") + aLocalName); //$NON-NLS-1$
+         throw new SAXPathException(AeMessages.getString("AeXPathQueryValidator.ERROR_0") + aLocalName + " != " + mRootName.getLocalPart()); //$NON-NLS-1$
       }
 
       // Validate the namespace.
