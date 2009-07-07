@@ -17,12 +17,12 @@ LIB_DIR=${CATALINA_HOME}/shared/lib
 
 # Commands to be run to start and stop the server
 CMD_START_TOMCAT="ActiveBPEL.sh start"
-CMD_STOP_TOMCAT="ActiveBPEL.sh full-stop"
+CMD_STOP_TOMCAT="ActiveBPEL.sh stop"
 
 ### END CONFIGURATION
 
-# Stops ActiveBPEL
-${CMD_STOP_TOMCAT}
+# Stops ActiveBPEL if running
+${CMD_STOP_TOMCAT} || true
 
 # Compiles ActiveBPEL
 {
