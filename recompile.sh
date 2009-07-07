@@ -1,8 +1,7 @@
 #!/bin/bash
 
-CATALINA_USER=tomcat5  # Tomcat user
-CATALINA_GROUP=tomcat5 # Tomcat group
-export CATALINA_HOME=/opt/tomcat5
+CATALINA_USER=`whoami` # Tomcat user
+CATALINA_GROUP=`whoami` # Tomcat group
 
 # Configuration file which should be backed up and restored, if existing
 CONF_FILE=${CATALINA_HOME}/bpr/aeEngineConfig.xml
