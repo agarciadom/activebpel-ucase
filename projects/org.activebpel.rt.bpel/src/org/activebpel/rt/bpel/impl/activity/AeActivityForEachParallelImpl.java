@@ -114,7 +114,7 @@ public class AeActivityForEachParallelImpl extends AeActivityForEachImpl impleme
    protected void startLoop() throws AeBusinessProcessException
    {
       // we only have work to do if the counter value is w/in range
-      if (isCounterWithinRange())
+      if (isCounterWithinRange() && !this.isTerminating())
       {
          // creates all of the children
          int startInstance = getInstanceValue();

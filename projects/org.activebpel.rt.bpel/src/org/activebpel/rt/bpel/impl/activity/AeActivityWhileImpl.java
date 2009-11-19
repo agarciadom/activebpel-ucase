@@ -113,7 +113,7 @@ public class AeActivityWhileImpl extends AeLoopActivity
       getProcess().getEngine().fireEvaluationEvent(getProcess().getProcessId(), conditionDef.getExpression(),
             IAeProcessInfoEvent.INFO_WHILE, getLocationPath(), Boolean.toString(isConditionTrue));
 
-      if(isConditionTrue)
+      if(isConditionTrue && !this.isTerminating())
       {
          // Queue the activity to execute
          getChild().setState(AeBpelState.INACTIVE);

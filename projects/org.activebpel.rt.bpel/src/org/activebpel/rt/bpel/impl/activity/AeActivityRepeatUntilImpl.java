@@ -73,7 +73,7 @@ public class AeActivityRepeatUntilImpl extends AeActivityWhileImpl
                conditionDef.getExpression(), IAeProcessInfoEvent.INFO_REPEAT_UNTIL, getLocationPath(),
                Boolean.toString(isConditionTrue));
 
-         if(isConditionTrue)
+         if(isConditionTrue || this.isTerminating())
          {
             // condition is true so we are done
             objectCompleted();

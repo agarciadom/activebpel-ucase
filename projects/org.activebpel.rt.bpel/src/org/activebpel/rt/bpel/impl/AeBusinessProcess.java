@@ -574,7 +574,7 @@ public class AeBusinessProcess extends AeActivityScopeImpl implements IAeBusines
     */
    protected void readyToExecuteObject(IAeBpelObject aObject) throws AeBusinessProcessException
    {
-      if(aObject.isNotDeadPath())
+      if(aObject.isNotDeadPath() && !this.isTerminating())
       {
          aObject.setState(AeBpelState.READY_TO_EXECUTE);
          executeObject(aObject);
@@ -1428,48 +1428,49 @@ public class AeBusinessProcess extends AeActivityScopeImpl implements IAeBusines
    /**
     * @see org.activebpel.rt.bpel.impl.IAeBusinessProcess#terminate()
     */
-   public synchronized void terminate() throws AeBusinessProcessException
+   public void terminate() throws AeBusinessProcessException
    {
-      // Only terminate if the process is not completed
-      if (isFinalState())
-      {
-         return;
-      }
+       // Antonio García: running sequences might produce livelock, leaving
+       // us unable to terminate the process. Tell them we're terminating the
+       // process, so they can't queue new activities anymore.
+       this.setTerminating(true);
 
-      // Clear any faulting locations to avoid process interpreting the
-      // termination of a faulting activity as a signal to retry the activity
-      getFaultingActivityLocationPaths().clear();
+       synchronized (this) {
+          // Clear any faulting locations to avoid process interpreting the
+          // termination of a faulting activity as a signal to retry the activity
+          getFaultingActivityLocationPaths().clear();
 
-      // terminate process iff process's bpel state is *not* final. Otherwise,
-      // there may be race conditions where the process has completed and
-      // unwinding when the termination is applied.
-      if ( getState().isTerminatable() )
-      {
-         setExiting(true);
-         startTermination();
-         // in case we were suspended when asked to terminate
-         resume(true);
-      }
-      else if ( getState().isFinal() )
-      {
-         // Coordinated Subprocess's instance compensation:
-         // If this activity was executed in a process level compensation
-         // handler (process instance compensation), the process will not
-         // terminate since at this point the process has already completed.
-         // (i.e. process is not terminatable. The thread then unwinds - but
-         // without the AeCompensationHandler object/child completing. Hence,
-         // the compHandler callback does not get notified and therefore the
-         // coordinator will not get the call back that the subprocess is done
-         // with the instance compensation. At this point, we should check if a
-         // process instance compensantion handler is running, and if so, fault
-         // it so that that call back is invoked.
-         AeCompensationHandler compHandler = getCompensationHandler();
-         if (compHandler != null && compHandler.getCallback() != null && compHandler.getState().isTerminatable())
-         {
-            compHandler.terminate();
-            // TODO (PJ/Mark): defect 1558: if a subprocess is terminated while its compensating, the process state is "Completed"  - it should be "Faulted". (will be resolved in BPEL 2.0)
-         }
-      }
+          // terminate process iff process's bpel state is *not* final. Otherwise,
+          // there may be race conditions where the process has completed and
+          // unwinding when the termination is applied.
+          if ( getState().isTerminatable() )
+          {
+              setExiting(true);
+              startTermination();
+              // in case we were suspended when asked to terminate
+              resume(true);
+          }
+          else if ( getState().isFinal() )
+          {
+              // Coordinated Subprocess's instance compensation:
+              // If this activity was executed in a process level compensation
+              // handler (process instance compensation), the process will not
+              // terminate since at this point the process has already completed.
+              // (i.e. process is not terminatable. The thread then unwinds - but
+              // without the AeCompensationHandler object/child completing. Hence,
+              // the compHandler callback does not get notified and therefore the
+              // coordinator will not get the call back that the subprocess is done
+              // with the instance compensation. At this point, we should check if a
+              // process instance compensantion handler is running, and if so, fault
+              // it so that that call back is invoked.
+              AeCompensationHandler compHandler = getCompensationHandler();
+              if (compHandler != null && compHandler.getCallback() != null && compHandler.getState().isTerminatable())
+              {
+                  compHandler.terminate();
+                  // TODO (PJ/Mark): defect 1558: if a subprocess is terminated while its compensating, the process state is "Completed"  - it should be "Faulted". (will be resolved in BPEL 2.0)
+              }
+          }
+       }
    }
 
    /**

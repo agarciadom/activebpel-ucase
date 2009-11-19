@@ -76,7 +76,7 @@ abstract public class AeAbstractBpelObject implements IAeExecutableBpelObject, I
     * flag that indicates we're in the process of terminating. Gets set to true
     * in terminate method and then set back to false once the object's state changes. 
     */
-   private boolean mTerminating;
+   private volatile boolean mTerminating;
 
    /** stores the custom location path */
    private String mLocationPath;

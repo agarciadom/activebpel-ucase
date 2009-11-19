@@ -257,7 +257,7 @@ public class AeActivityForEachImpl extends AeLoopActivity implements IAeActivity
     */
    protected void startLoop() throws AeBusinessProcessException
    {
-      if (isCounterWithinRange())
+      if (isCounterWithinRange() && !this.isTerminating())
       {
          AeActivityScopeImpl scope = getChildScope();
 

@@ -82,7 +82,7 @@ public class AeActivitySequenceImpl extends AeActivityImpl implements IAeActivit
    {
       // Queues the first activity to execute
       IAeBpelObject child = getNextObject();
-      if (child != null)
+      if (child != null && !this.isTerminating())
       {
          getProcess().queueObjectToExecute(child);
       }
