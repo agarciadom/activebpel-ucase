@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-CATALINA_USER=`whoami` # Tomcat user
-CATALINA_GROUP=`whoami` # Tomcat group
+CATALINA_USER=`id -un` # Tomcat user
+CATALINA_GROUP=`id -gn` # Tomcat group
 if test -z "$CATALINA_HOME"; then
   echo "Please set the environment variable CATALINA_HOME to the full path to your Tomcat 5.5 installation."
   exit 1
