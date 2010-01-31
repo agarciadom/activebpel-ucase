@@ -51,9 +51,6 @@ else
     sudo -u "${CATALINA_USER}" cp "${FIRST_CONF_FILE}" "${CONF_FILE}";
 fi
 
-# Installs the XPath logging extensions
-sudo -u "${CATALINA_USER}" cp *.jar "${LIB_DIR}"
-
 # Sets the proper permissions
 sudo chown -R ${CATALINA_USER}.${CATALINA_GROUP} ${CATALINA_HOME}
 
