@@ -1,0 +1,28 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.activebpel</groupId>
+    <artifactId>engine</artifactId>
+    <version>4.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>rt.bpel</artifactId>
+  <version>4.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>ActiveBPEL::RT-BPEL</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>wsio</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+
+</project>
