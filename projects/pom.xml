@@ -15,6 +15,7 @@
     <module>org.activebpel.rt.bpel.ext.expr.bsf</module>
     <module>org.activebpel.rt.bpel.server</module>
     <module>org.activebpel.rt.xmldb</module>
+    <module>org.activebpel.rt.tamino</module>
   </modules>
 
   <properties>

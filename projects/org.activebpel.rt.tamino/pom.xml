@@ -7,21 +7,27 @@
     <version>4.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>rt.bpel.ext.expr</artifactId>
+  <artifactId>rt.tamino</artifactId>
   <version>4.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>ActiveBPEL::Expression Engines (XPath)</name>
+  <name>ActiveBPEL::Tamino</name>
 
   <dependencies>
     <dependency>
       <groupId>org.activebpel</groupId>
-      <artifactId>rt.bpel</artifactId>
+      <artifactId>rt.xmldb</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>saxon</artifactId>
-      <version>8.7.3-activebpel</version>
+      <groupId>com.softwareag</groupId>
+      <artifactId>tamino-api4j</artifactId>
+      <version>4.4.1.9</version>
+    </dependency>
+    <dependency>
+      <groupId>com.softwareag</groupId>
+      <artifactId>tamino-jca</artifactId>
+      <version>4.2.0.4</version>
     </dependency>
   </dependencies>
+
 </project>
