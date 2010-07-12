@@ -1,0 +1,22 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.activebpel</groupId>
+    <artifactId>engine</artifactId>
+    <version>4.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>rt.xmldb</artifactId>
+  <version>4.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>ActiveBPEL::XMLDB</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt.bpel.server</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+  </dependencies>
+</project>
