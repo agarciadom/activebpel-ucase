@@ -11,6 +11,7 @@
     <module>org.activebpel.wsio</module>
     <module>org.activebpel.rt</module>
     <module>org.activebpel.rt.bpel</module>
+    <module>org.activebpel.rt.bpel.ext.expr</module>
   </modules>
 
   <properties>
