@@ -40,9 +40,9 @@
       <version>2.6.2</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-commonj_1.1_spec</artifactId>
-      <version>1.0</version>
+      <groupId>commonj</groupId>
+      <artifactId>twm</artifactId>
+      <version>1.1</version>
     </dependency>
     <dependency>
       <groupId>castor</groupId>

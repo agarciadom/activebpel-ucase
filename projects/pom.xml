@@ -13,6 +13,7 @@
     <module>org.activebpel.rt.bpel</module>
     <module>org.activebpel.rt.bpel.ext.expr</module>
     <module>org.activebpel.rt.bpel.ext.expr.bsf</module>
+    <module>org.activebpel.rt.bpel.server</module>
   </modules>
 
   <properties>
