@@ -8,19 +8,20 @@
   <name>ActiveBPEL::Engine</name>
 
   <modules>
-    <module>org.activebpel.wsio</module>
-    <module>org.activebpel.rt</module>
-    <module>org.activebpel.rt.bpel</module>
-    <module>org.activebpel.rt.bpel.ext.expr</module>
-    <module>org.activebpel.rt.bpel.ext.expr.bsf</module>
-    <module>org.activebpel.rt.bpel.server</module>
-    <module>org.activebpel.rt.xmldb</module>
-    <module>org.activebpel.rt.tamino</module>
-    <module>org.activebpel.rt.exist</module>
     <module>ddl.org.activebpel</module>
-    <module>org.activebpel.rt.axis</module>
-    <module>org.activebpel.rt.axis.bpel</module>
     <module>org.activebpel.rt.axis.bpel.admin</module>
+    <module>org.activebpel.rt.axis.bpel.web</module>
+    <module>org.activebpel.rt.axis.bpel</module>
+    <module>org.activebpel.rt.axis</module>
+    <module>org.activebpel.rt.bpel.ext.expr.bsf</module>
+    <module>org.activebpel.rt.bpel.ext.expr</module>
+    <module>org.activebpel.rt.bpel.server</module>
+    <module>org.activebpel.rt.bpel</module>
+    <module>org.activebpel.rt.exist</module>
+    <module>org.activebpel.rt.tamino</module>
+    <module>org.activebpel.rt.xmldb</module>
+    <module>org.activebpel.rt</module>
+    <module>org.activebpel.wsio</module>
   </modules>
 
   <properties>
