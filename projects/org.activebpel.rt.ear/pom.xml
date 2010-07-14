@@ -32,19 +32,27 @@
       <type>war</type>
     </dependency>
 
-    <!-- For including the transitive dependencies. See:
-         http://www.coderoshi.com/2009/03/maven-hack-simple-skinny-wars.html -->
+    <!--
+        Transitive dependencies of rt.war and rt.bpeladmin.war. The
+        workaround at the following page makes maven-release-plugin
+        stop working:
+
+        http://www.coderoshi.com/2009/03/maven-hack-simple-skinny-wars.html
+    -->
     <dependency>
       <groupId>org.activebpel</groupId>
-      <artifactId>rt.war</artifactId>
+      <artifactId>rt.tamino</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
     </dependency>
     <dependency>
       <groupId>org.activebpel</groupId>
-      <artifactId>rt.bpeladmin.war</artifactId>
+      <artifactId>rt.war.tags</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.0</version>
     </dependency>
   </dependencies>
 

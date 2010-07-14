@@ -12,6 +12,7 @@
   <packaging>war</packaging>
   <name>ActiveBPEL::Main WAR</name>
 
+  <!-- If you change this, do not forget to update the POM for rt.ear! -->
   <dependencies>
     <dependency>
       <groupId>org.activebpel</groupId>
