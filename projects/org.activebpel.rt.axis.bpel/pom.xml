@@ -7,25 +7,27 @@
     <version>4.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>rt.axis</artifactId>
+  <artifactId>rt.axis.bpel</artifactId>
   <version>4.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>ActiveBPEL::RT-AXIS</name>
+  <name>ActiveBPEL::RT-AXIS-BPEL</name>
 
   <dependencies>
     <dependency>
       <groupId>org.activebpel</groupId>
-      <artifactId>rt.bpel.server</artifactId>
+      <artifactId>rt.axis</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.axis</groupId>
-      <artifactId>axis</artifactId>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt.axis.bpel.admin</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.3</version>
+      <groupId>commons-httpclient</groupId>
+      <artifactId>commons-httpclient</artifactId>
+      <version>3.0-rc3</version>
     </dependency>
   </dependencies>
+
 </project>

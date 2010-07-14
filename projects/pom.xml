@@ -19,11 +19,28 @@
     <module>org.activebpel.rt.exist</module>
     <module>ddl.org.activebpel</module>
     <module>org.activebpel.rt.axis</module>
+    <module>org.activebpel.rt.axis.bpel</module>
+    <module>org.activebpel.rt.axis.bpel.admin</module>
   </modules>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.axis</groupId>
+        <artifactId>axis</artifactId>
+        <version>1.4</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.geronimo.specs</groupId>
+        <artifactId>geronimo-jaxrpc_1.1_spec</artifactId>
+        <version>1.1</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <pluginManagement>
