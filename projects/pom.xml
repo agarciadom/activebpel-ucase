@@ -18,6 +18,7 @@
     <module>org.activebpel.rt.tamino</module>
     <module>org.activebpel.rt.exist</module>
     <module>ddl.org.activebpel</module>
+    <module>org.activebpel.rt.axis</module>
   </modules>
 
   <properties>
