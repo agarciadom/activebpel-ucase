@@ -1,0 +1,23 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.activebpel</groupId>
+    <artifactId>engine</artifactId>
+    <version>4.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>rt.bpeladmin.help.war</artifactId>
+  <version>4.1</version>
+  <packaging>war</packaging>
+  <name>ActiveBPEL::BpelAdmin Help WAR</name>
+
+  <!-- NOTE: this project CANNOT be built, as it requires FrameMaker
+       7.0. Just deploy this POM and the BpelAdminHelp.war to your
+       Maven repository, with:
+
+       mvn deploy:deploy-file -DpomFile=pom.xml -Dfile=BpelAdminHelp.war \
+           -Durl=(url for your repo) -DrepositoryId=(id for auth credentials)
+  -->
+
+</project>

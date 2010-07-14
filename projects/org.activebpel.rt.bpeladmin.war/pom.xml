@@ -7,24 +7,27 @@
     <version>4.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>rt.axis</artifactId>
+  <artifactId>rt.bpeladmin.war</artifactId>
   <version>4.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
-  <name>ActiveBPEL::RT-AXIS</name>
+  <packaging>war</packaging>
+  <name>ActiveBPEL::BpelAdmin WAR</name>
 
   <dependencies>
     <dependency>
       <groupId>org.activebpel</groupId>
-      <artifactId>rt.bpel.server</artifactId>
+      <artifactId>rt.tamino</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.axis</groupId>
-      <artifactId>axis</artifactId>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt.war.tags</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.0</version>
     </dependency>
   </dependencies>
+
 </project>
