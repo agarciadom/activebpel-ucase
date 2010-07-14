@@ -18,6 +18,7 @@
     <module>org.activebpel.rt.bpel.server</module>
     <module>org.activebpel.rt.bpel</module>
     <module>org.activebpel.rt.bpeladmin.war</module>
+    <module>org.activebpel.rt.ear</module>
     <module>org.activebpel.rt.exist</module>
     <module>org.activebpel.rt.tamino</module>
     <module>org.activebpel.rt.war.tags</module>
@@ -59,6 +60,20 @@
           <configuration>
             <source>1.5</source>
             <target>1.5</target>
+          </configuration>
+        </plugin>
+
+        <!-- Create skinny WARs by default -->
+        <plugin>
+          <artifactId>maven-war-plugin</artifactId>
+          <configuration>
+            <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+            <archive>
+              <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>lib/</classpathPrefix>
+              </manifest>
+            </archive>
           </configuration>
         </plugin>
       </plugins>
