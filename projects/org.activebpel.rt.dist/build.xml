@@ -17,6 +17,7 @@
     <genconfig type="InMemory"/>
     <genconfig type="Persistent"/>
     <genconfig type="Tamino"/>
+    <genconfig type="Takuan"/>
   </target>
 
 </project>
