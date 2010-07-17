@@ -31,6 +31,12 @@
       <version>4.1</version>
       <type>war</type>
     </dependency>
+    <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt.axis.bpel.wsr</artifactId>
+      <version>${project.version}</version>
+      <type>wsr</type>
+    </dependency>
 
     <!--
         Transitive dependencies of rt.war and rt.bpeladmin.war. The
@@ -58,12 +64,15 @@
 
   <build>
     <plugins>
+      <!-- Pack everything as an EAR (except config files) -->
       <plugin>
         <artifactId>maven-ear-plugin</artifactId>
         <configuration>
           <defaultLibBundleDir>lib</defaultLibBundleDir>
         </configuration>
       </plugin>
+
+      <!-- Generate the sample configuration files -->
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
         <dependencies>
@@ -81,6 +90,22 @@
               <tasks>
                 <ant target="genconfig"/>
               </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-tomcat-dist</id>
+            <phase>package</phase>
+            <goals><goal>single</goal></goals>
+            <configuration>
+              <descriptors>
+                <descriptor>src/main/assembly/tomcat.xml</descriptor>
+              </descriptors>
             </configuration>
           </execution>
         </executions>

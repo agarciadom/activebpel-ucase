@@ -1,0 +1,34 @@
+<assembly>
+  <id>tomcat</id>
+  <formats>
+    <format>tar.gz</format>
+    <format>zip</format>
+  </formats>
+  <dependencySets>
+    <dependencySet>
+      <outputDirectory>shared/lib</outputDirectory>
+      <includes>
+        <include>*:jar</include>
+      </includes>
+    </dependencySet>
+    <dependencySet>
+      <outputDirectory>webapps</outputDirectory>
+      <includes>
+        <include>*:war</include>
+      </includes>
+    </dependencySet>
+    <dependencySet>
+      <outputDirectory>bpr</outputDirectory>
+      <includes>
+        <include>*:wsr</include>
+      </includes>
+    </dependencySet>
+  </dependencySets>
+  <files>
+    <file>
+      <source>target/generated-sources/config/aeEngineConfig-Takuan.xml</source>
+      <outputDirectory>bpr</outputDirectory>
+      <destName>aeEngineConfig.xml</destName>
+    </file>
+  </files>
+</assembly>
