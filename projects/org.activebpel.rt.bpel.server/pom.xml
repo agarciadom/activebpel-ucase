@@ -27,5 +27,19 @@
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-jaxrpc_1.1_spec</artifactId>
     </dependency>
+
+    <!-- Extra expression engines: can be excluded safely if desired -->
+    <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt.bpel.ext.expr</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt.bpel.ext.expr.bsf</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
 </project>

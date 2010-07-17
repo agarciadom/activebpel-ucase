@@ -10,7 +10,7 @@
   <artifactId>rt.bpel.ext.expr.bsf</artifactId>
   <version>4.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>ActiveBPEL::Expression Engines (BSF, Jython)</name>
+  <name>ActiveBPEL::Extra Expression Engines (Jython)</name>
 
   <dependencies>
     <dependency>

@@ -10,7 +10,7 @@
   <artifactId>rt.bpel.ext.expr</artifactId>
   <version>4.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>ActiveBPEL::Expression Engines (XPath)</name>
+  <name>ActiveBPEL::Extra Expression Engines (XQuery, JS)</name>
 
   <dependencies>
     <dependency>

@@ -10,7 +10,7 @@
   <artifactId>rt.bpel</artifactId>
   <version>4.1-SNAPSHOT</version>
   <packaging>jar</packaging>
-  <name>ActiveBPEL::RT-BPEL</name>
+  <name>ActiveBPEL::BPEL Runtime</name>
 
   <dependencies>
     <dependency>
@@ -22,6 +22,12 @@
       <groupId>org.activebpel</groupId>
       <artifactId>wsio</artifactId>
       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.activation</groupId>
+      <artifactId>activation</artifactId>
+      <version>1.0.2</version>
+      <scope>runtime</scope>
     </dependency>
   </dependencies>
 

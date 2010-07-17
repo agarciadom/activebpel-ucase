@@ -25,6 +25,12 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt.exist</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>commons-fileupload</groupId>
       <artifactId>commons-fileupload</artifactId>
       <version>1.0</version>

@@ -18,9 +18,5 @@
       <artifactId>rt.axis.bpel</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
-      <groupId>org.apache.axis</groupId>
-      <artifactId>axis</artifactId>
-    </dependency>
   </dependencies>
 </project>
