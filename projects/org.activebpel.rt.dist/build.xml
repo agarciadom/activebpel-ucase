@@ -1,0 +1,22 @@
+<!-- Ant tasks required for some parts of the Maven build. Do not delete! -->
+<project name="org.activebpel.rt.dist">
+
+  <property name="genconfig.basedir"
+            location="target/generated-sources/config"/>
+
+  <target name="genconfig">
+    <mkdir dir="${genconfig.basedir}"/>
+    <macrodef name="genconfig">
+      <attribute name="type"/>
+      <sequential>
+        <xslt in="src/main/templates/aeEngineConfig-ActiveBPEL.xml"
+              out="${genconfig.basedir}/aeEngineConfig-@{type}.xml"
+              style="src/main/xslt/aeEngineConfig-@{type}.xsl"/>
+      </sequential>
+    </macrodef>
+    <genconfig type="InMemory"/>
+    <genconfig type="Persistent"/>
+    <genconfig type="Tamino"/>
+  </target>
+
+</project>
