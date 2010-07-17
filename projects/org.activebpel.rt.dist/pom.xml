@@ -7,10 +7,10 @@
     <version>4.1-SNAPSHOT</version>
   </parent>
 
-  <artifactId>rt.ear</artifactId>
+  <artifactId>rt.dist</artifactId>
   <version>4.1-SNAPSHOT</version>
   <packaging>ear</packaging>
-  <name>ActiveBPEL::EAR</name>
+  <name>ActiveBPEL::Distributions</name>
 
   <dependencies>
     <dependency>

@@ -18,7 +18,7 @@
     <module>org.activebpel.rt.bpel.server</module>
     <module>org.activebpel.rt.bpel</module>
     <module>org.activebpel.rt.bpeladmin.war</module>
-    <module>org.activebpel.rt.ear</module>
+    <module>org.activebpel.rt.dist</module>
     <module>org.activebpel.rt.exist</module>
     <module>org.activebpel.rt.tamino</module>
     <module>org.activebpel.rt.war.tags</module>
