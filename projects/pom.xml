@@ -10,6 +10,7 @@
   <modules>
     <module>ddl.org.activebpel</module>
     <module>org.activebpel.rt.axis.bpel.admin</module>
+    <module>org.activebpel.rt.axis.bpel.web.war</module>
     <module>org.activebpel.rt.axis.bpel.web</module>
     <module>org.activebpel.rt.axis.bpel</module>
     <module>org.activebpel.rt.axis</module>
