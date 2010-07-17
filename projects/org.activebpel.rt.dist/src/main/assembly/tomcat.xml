@@ -4,6 +4,7 @@
     <format>tar.gz</format>
     <format>zip</format>
   </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
   <dependencySets>
     <dependencySet>
       <outputDirectory>shared/lib</outputDirectory>
@@ -16,12 +17,14 @@
       <includes>
         <include>*:war</include>
       </includes>
+      <outputFileNameMapping>${artifact.artifactId}</outputFileNameMapping>
     </dependencySet>
     <dependencySet>
       <outputDirectory>bpr</outputDirectory>
       <includes>
         <include>*:wsr</include>
       </includes>
+      <outputFileNameMapping>${artifact.artifactId}</outputFileNameMapping>
     </dependencySet>
   </dependencySets>
   <files>
