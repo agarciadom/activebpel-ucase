@@ -28,6 +28,14 @@
       <artifactId>geronimo-jaxrpc_1.1_spec</artifactId>
     </dependency>
 
+    <!-- Not required for compiling, but ActiveBPEL won't start without it -->
+    <dependency>
+      <groupId>commons-discovery</groupId>
+      <artifactId>commons-discovery</artifactId>
+      <version>0.2</version>
+      <scope>runtime</scope>
+    </dependency>
+
     <!-- Extra expression engines: can be excluded safely if desired -->
     <dependency>
       <groupId>org.activebpel</groupId>

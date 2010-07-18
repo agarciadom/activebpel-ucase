@@ -23,8 +23,6 @@
     <module>org.activebpel.rt.dist</module>
     <module>org.activebpel.rt.exist</module>
     <module>org.activebpel.rt.tamino</module>
-    <module>org.activebpel.rt.war.tags</module>
-    <module>org.activebpel.rt.war</module>
     <module>org.activebpel.rt.xmldb</module>
     <module>org.activebpel.rt</module>
     <module>org.activebpel.wsio</module>
@@ -70,12 +68,6 @@
           <artifactId>maven-war-plugin</artifactId>
           <configuration>
             <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
-            <archive>
-              <manifest>
-                <addClasspath>true</addClasspath>
-                <classpathPrefix>lib/</classpathPrefix>
-              </manifest>
-            </archive>
           </configuration>
         </plugin>
       </plugins>
