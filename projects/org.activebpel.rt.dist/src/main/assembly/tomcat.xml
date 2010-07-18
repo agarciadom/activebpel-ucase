@@ -39,5 +39,10 @@
       <outputDirectory>bpr</outputDirectory>
       <destName>aeEngineConfig.xml</destName>
     </file>
+    <file>
+      <source>src/main/bash/ActiveBPEL.sh</source>
+      <outputDirectory>bin</outputDirectory>
+      <fileMode>755</fileMode>
+    </file>
   </files>
 </assembly>
