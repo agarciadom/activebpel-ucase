@@ -14,17 +14,23 @@
     </dependencySet>
     <dependencySet>
       <outputDirectory>webapps</outputDirectory>
-      <includes>
-        <include>*:war</include>
-      </includes>
-      <outputFileNameMapping>${artifact.artifactId}</outputFileNameMapping>
+      <includes><include>org.activebpel:rt.bpeladmin.war:*</include></includes>
+      <outputFileNameMapping>BpelAdmin.war</outputFileNameMapping>
+    </dependencySet>
+    <dependencySet>
+      <outputDirectory>webapps</outputDirectory>
+      <includes><include>org.activebpel:rt.bpeladmin.help.war:*</include></includes>
+      <outputFileNameMapping>BpelAdminHelp.war</outputFileNameMapping>
+    </dependencySet>
+    <dependencySet>
+      <outputDirectory>webapps</outputDirectory>
+      <includes><include>org.activebpel:rt.axis.bpel.web.war:*</include></includes>
+      <outputFileNameMapping>active-bpel.war</outputFileNameMapping>
     </dependencySet>
     <dependencySet>
       <outputDirectory>bpr</outputDirectory>
-      <includes>
-        <include>*:wsr</include>
-      </includes>
-      <outputFileNameMapping>${artifact.artifactId}</outputFileNameMapping>
+      <includes><include>*:wsr</include></includes>
+      <outputFileNameMapping>AeEngineAdmin.wsr</outputFileNameMapping>
     </dependencySet>
   </dependencySets>
   <files>
