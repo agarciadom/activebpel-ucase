@@ -39,7 +39,7 @@
     </dependency>
 
     <!--
-        Direct dependencies the WARs. The workaround at the following
+        Direct dependencies of the WARs. The workaround at the following
         page makes maven-release-plugin stop working:
 
         http://www.coderoshi.com/2009/03/maven-hack-simple-skinny-wars.html
@@ -62,6 +62,12 @@
       <groupId>org.activebpel</groupId>
       <artifactId>rt.exist</artifactId>
       <version>${project.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>commons-fileupload</groupId>
