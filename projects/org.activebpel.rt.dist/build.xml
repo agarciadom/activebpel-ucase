@@ -18,6 +18,7 @@
     <genconfig type="Persistent"/>
     <genconfig type="Tamino"/>
     <genconfig type="Takuan"/>
+    <genconfig type="Exist"/>
   </target>
 
 </project>
