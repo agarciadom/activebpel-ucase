@@ -1,6 +1,1 @@
-*.class
-*.html
-*.xsd
-bin/
-classes
-dist/
+target
