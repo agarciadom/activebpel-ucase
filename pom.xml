@@ -110,4 +110,17 @@
   <scm>
     <connection>scm:git:https://neptuno.uca.es/git/activebpel</connection>
   </scm>
+
+  <distributionManagement>
+    <repository>
+      <id>neptuno-thirdparty</id>
+      <name>Neptuno Third-Party Repository</name>
+      <url>https://neptuno.uca.es/nexus/content/repositories/thirdparty</url>
+    </repository>
+    <snapshotRepository>
+      <id>neptuno-snapshots</id>
+      <name>Neptuno Snapshot Repository</name>
+      <url>https://neptuno.uca.es/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 </project>
