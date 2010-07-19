@@ -106,4 +106,8 @@
       <snapshots><enabled>false</enabled></snapshots>
     </repository>
   </repositories>
+
+  <scm>
+    <connection>scm:git:https://neptuno.uca.es/git/activebpel</connection>
+  </scm>
 </project>
