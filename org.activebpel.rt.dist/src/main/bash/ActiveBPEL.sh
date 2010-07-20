@@ -83,7 +83,7 @@ function start_tomcat() {
         return 0
     else
         CATALINA_LOG=$CATALINA_HOME/logs/catalina.out
-        JAVA_FLAGS="-server -Xmx1000m"
+        JAVA_FLAGS="-server -Xmx500m"
         RDB_STATUS="OFF"
 
         # Enable remote debugging with the -debug option
@@ -249,6 +249,7 @@ EOF
 
 ########## MAIN SCRIPT #########################################################
 
+set -e
 check_env
 
 SUBCMD="$1"
