@@ -12,6 +12,38 @@
   <packaging>war</packaging>
   <name>ActiveBPEL::Server Web Service WAR</name>
 
+  <properties>
+    <jetty.version>7.1.5.v20100705</jetty.version>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>${jetty.version}</version>
+        <configuration>
+          <webAppConfig>
+            <contextPath>/active-bpel</contextPath>
+            <overrideDescriptor>
+              src/test/webapp/WEB-INF/web-overrides.xml
+            </overrideDescriptor>
+          </webAppConfig>
+          <loginServices>
+            <loginService implementation="org.eclipse.jetty.security.HashLoginService"/>
+          </loginServices>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-security</artifactId>
+            <version>${jetty.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+
   <dependencies>
     <dependency>
       <groupId>org.activebpel</groupId>

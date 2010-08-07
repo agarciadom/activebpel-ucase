@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE web-app PUBLIC
+"-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+"http://java.sun.com/dtd/web-app_2_3.dtd">
+<web-app>
+  <servlet>
+    <servlet-name>AeProcessEngineServlet</servlet-name>
+    <servlet-class>
+      org.activebpel.rt.axis.bpel.web.AeProcessEngineServlet
+    </servlet-class>
+
+    <init-param>
+      <param-name>servlet.home</param-name>
+      <param-value>target</param-value>
+    </init-param>
+    <init-param>
+      <param-name>engine.config</param-name>
+      <param-value>../../src/test/webapp/aeEngineConfig.xml</param-value>
+    </init-param>
+  </servlet>
+</web-app>
