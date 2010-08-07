@@ -24,7 +24,9 @@ import commonj.timers.TimerListener;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.text.MessageFormat;
 
@@ -106,35 +108,58 @@ public class AeEngineLifecycleWrapper implements IAeEngineLifecycleWrapper
       }
    }
 
+    private void dumpStreamToFile(InputStream is, File file)
+        throws IOException
+    {
+        FileOutputStream fOS = new FileOutputStream(file);
+        byte[] buffer = new byte[1024];
+        int bytesRead = 0;
+        while ((bytesRead = is.read(buffer)) != -1) {
+            fOS.write(buffer, 0, bytesRead);
+        }
+        is.close();
+        fOS.close();
+    }
+
    /**
-    * Attempt to load the engine config file using the name of 
-    * the file specified by the "engine.config" init param.
-    * If the file cannot be located, load the defaul version
-    * (aeEngineConfig.xml) from the classpath.
-    * @throws AeException 
+    * Attempt to load the engine config file using the name of the
+    * file specified by the "engine.config" init param.  If the file
+    * cannot be located, copy the default version (aeEngineConfig.xml)
+    * from the classpath into a temporary file.
+    * @throws AeException
     */
    protected File loadConfigFile() throws AeException
    {
       File configFile = AeDeploymentFileInfo.getEngineConfigFile();
-      
+
       if( !configFile.isFile() )
       {
-         logError(MessageFormat.format(AeMessages.getString("AeEngineLifecycleWrapper.ERROR_0"), //$NON-NLS-1$
-                                       new Object[] {configFile.getPath()}), null );
+         logError(MessageFormat.format(
+             AeMessages.getString("AeEngineLifecycleWrapper.ERROR_0"), //$NON-NLS-1$
+             new Object[] {configFile.getPath()}), null );
 
-         URL configResource = AeUtil.findOnClasspath( AeDefaultEngineConfiguration.DEFAULT_CONFIG_FILE, getClass() );
-         if( configResource == null )
-         {
-            throw new AeException(MessageFormat.format(AeMessages.getString("AeEngineLifecycleWrapper.ERROR_2"), //$NON-NLS-1$
-                                                       new Object[] {AeDefaultEngineConfiguration.DEFAULT_CONFIG_FILE}));
+         try {
+             InputStream is = getClass().getResourceAsStream(
+                 "/" + AeDefaultEngineConfiguration.DEFAULT_CONFIG_FILE);
+             if (is == null) {
+                 throw new AeException("Could not find default configuration");
+             }
+             File tempFile = File.createTempFile("aeEngineConfig", ".xml");
+             dumpStreamToFile(is, tempFile);
+             return tempFile;
+         } catch (Exception ex) {
+             throw new AeException(ex);
          }
-         configFile = new File(configResource.getFile());
       }
-      logInfo(MessageFormat.format(AeMessages.getString("AeEngineLifecycleWrapper.3"), new Object[] {configFile.getPath()})); //$NON-NLS-1$
-      return configFile; 
+      else {
+          logInfo(MessageFormat.format(
+              AeMessages.getString("AeEngineLifecycleWrapper.3"),
+              new Object[] {configFile.getPath()})); //$NON-NLS-1$
+      }
+      return configFile;
    }
-   
-   
+
+
    /**
     * Proceed with the engine start sequence. The start routine kicks off a timer to delay actual start.  
     * @throws AeException
