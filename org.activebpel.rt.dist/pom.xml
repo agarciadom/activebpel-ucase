@@ -22,7 +22,7 @@
     <dependency>
       <groupId>org.activebpel</groupId>
       <artifactId>rt.bpeladmin.help.war</artifactId>
-      <version>4.1</version>
+      <version>4.1-uca1</version>
       <type>war</type>
     </dependency>
     <dependency>

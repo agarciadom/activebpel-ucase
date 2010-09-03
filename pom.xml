@@ -8,6 +8,10 @@
   <name>ActiveBPEL::Engine</name>
 
   <modules>
+    <!--
+      The help WAR (o.a.bpeladmin.help.war) module is not included here, as it
+      cannot be built. See its pom.xml for details.
+    -->
     <module>ddl.org.activebpel</module>
     <module>org.activebpel.rt.axis.bpel.admin</module>
     <module>org.activebpel.rt.axis.bpel.web.war</module>

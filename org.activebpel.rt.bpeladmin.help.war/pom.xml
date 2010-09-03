@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.activebpel</groupId>
     <artifactId>engine</artifactId>
-    <version>4.1-SNAPSHOT</version>
+    <version>4.1-uca1</version>
   </parent>
 
   <artifactId>rt.bpeladmin.help.war</artifactId>
-  <version>4.1</version>
+  <version>4.1-uca1</version>
   <packaging>war</packaging>
   <name>ActiveBPEL::BpelAdmin Help WAR</name>
 
@@ -17,7 +17,11 @@
        Maven repository, with:
 
        mvn deploy:deploy-file -DpomFile=pom.xml -Dfile=BpelAdminHelp.war \
-           -Durl=(url for your repo) -DrepositoryId=(id for auth credentials)
+           -Durl=https://neptuno.uca.es/nexus/content/repositories/thirdparty/ \
+           -DrepositoryId=neptuno-thirdparty
+
+       Note that the credentials for the above repository id must be
+       correctly set in ~/.m2/settings.xml.
   -->
 
 </project>
