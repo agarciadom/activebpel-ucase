@@ -27,11 +27,6 @@
       <includes><include>org.activebpel:rt.axis.bpel.web.war:*</include></includes>
       <outputFileNameMapping>active-bpel.war</outputFileNameMapping>
     </dependencySet>
-    <dependencySet>
-      <outputDirectory>bpr</outputDirectory>
-      <includes><include>*:wsr</include></includes>
-      <outputFileNameMapping>AeEngineAdmin.wsr</outputFileNameMapping>
-    </dependencySet>
   </dependencySets>
   <files>
     <file>

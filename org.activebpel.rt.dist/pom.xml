@@ -27,12 +27,6 @@
     </dependency>
     <dependency>
       <groupId>org.activebpel</groupId>
-      <artifactId>rt.axis.bpel.wsr</artifactId>
-      <version>${project.version}</version>
-      <type>wsr</type>
-    </dependency>
-    <dependency>
-      <groupId>org.activebpel</groupId>
       <artifactId>rt.axis.bpel.web.war</artifactId>
       <version>${project.version}</version>
       <type>war</type>
