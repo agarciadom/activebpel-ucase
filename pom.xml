@@ -25,6 +25,7 @@
     <module>org.activebpel.rt.bpeladmin.war</module>
     <module>org.activebpel.rt.dist</module>
     <module>org.activebpel.rt.exist</module>
+    <module>org.activebpel.rt.jetty</module>
     <module>org.activebpel.rt.tamino</module>
     <module>org.activebpel.rt.xmldb</module>
     <module>org.activebpel.rt</module>
