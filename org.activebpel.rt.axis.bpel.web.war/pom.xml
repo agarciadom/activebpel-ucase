@@ -23,6 +23,17 @@
         <artifactId>jetty-maven-plugin</artifactId>
         <version>${jetty.version}</version>
         <configuration>
+          <systemProperties>
+            <!--
+                See this thread for conflicts between Axis' classes
+                and Sun's in JDK 6+:
+                http://forums.sun.com/thread.jspa?threadID=5334141
+            -->
+            <systemProperty>
+              <name>javax.xml.soap.MessageFactory</name>
+              <value>org.apache.axis.soap.MessageFactoryImpl</value>
+            </systemProperty>
+          </systemProperties>
           <webAppConfig>
             <contextPath>/active-bpel</contextPath>
             <overrideDescriptor>
