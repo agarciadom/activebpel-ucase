@@ -32,7 +32,6 @@
       <groupId>rhino</groupId>
       <artifactId>js</artifactId>
       <version>1.6R1</version>
-      <scope>runtime</scope>
     </dependency>
   </dependencies>
 </project>
