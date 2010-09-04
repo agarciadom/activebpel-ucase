@@ -74,34 +74,22 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addClasspath>true</addClasspath>
-              <mainClass>org.activebpel.rt.jetty.JettyRunner</mainClass>
-              </manifest>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.1</version>
         <executions>
           <execution>
-            <id>jar-with-deps</id>
-            <goals><goal>shade</goal></goals>
+            <id>dist</id>
+            <phase>package</phase>
+            <goals><goal>single</goal></goals>
             <configuration>
-              <shadedArtifactAttached>true</shadedArtifactAttached>
-              <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
-              <filters>
-                <filter>
-                  <artifact>*</artifact>
-                  <excludes>
-                    <exclude>**/*.RSA</exclude>
-                    <exclude>**/*.SF</exclude>
-                  </excludes>
-                </filter>
-              </filters>
+              <archive>
+                <manifest>
+                  <mainClass>org.activebpel.rt.jetty.JettyRunner</mainClass>
+                </manifest>
+              </archive>
+              <descriptors>
+                <descriptor>src/main/assembly/jar-with-deps.xml</descriptor>
+              </descriptors>
             </configuration>
           </execution>
         </executions>
