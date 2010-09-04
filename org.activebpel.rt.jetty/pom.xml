@@ -50,7 +50,6 @@
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
-      <version>1.2.14</version>
     </dependency>
 
     <!-- From org.mortbay.jetty:jetty-maven-plugin:7.1.5.v200100705 -->
