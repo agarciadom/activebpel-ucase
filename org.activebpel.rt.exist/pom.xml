@@ -23,5 +23,11 @@
       <artifactId>exist</artifactId>
       <version>1.1.2</version>
     </dependency>
+    <!-- We don't want 2.0.2, which has a bug -->
+    <dependency>
+      <groupId>xerces</groupId>
+      <artifactId>xercesImpl</artifactId>
+      <version>2.8.1</version>
+    </dependency>
   </dependencies>
 </project>
