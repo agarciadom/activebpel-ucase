@@ -6,6 +6,8 @@ import java.io.IOException;
 import org.activebpel.rt.bpel.server.admin.IAeEngineAdministration;
 import org.activebpel.rt.bpel.server.engine.AeEngineFactory;
 import org.activebpel.rt.bpel.server.logging.AeLoggingFilter;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.PatternLayout;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
@@ -74,6 +76,7 @@ public class JettyRunner {
 		this.fLoggingFilterName = logLevel;
 
 		ensureMainDirectoryExists();
+		configureLogging();
 		setUpServer(port, logLevel);
 	}
 
@@ -184,6 +187,20 @@ public class JettyRunner {
 		webapp.setResourceBase(JettyRunner.class.getClassLoader().getResource(
 				resourcePath).toExternalForm());
 		return webapp;
+	}
+
+	/**
+	 * Adds a FileAppender to the root Log4J logger, so everything gets saved to
+	 * a file, in addition to whatever the existing log4j.properties provides.
+	 */
+	private void configureLogging() throws IOException {
+		org.apache.log4j.Logger rootLogger = org.apache.log4j.Logger
+				.getRootLogger();
+		FileAppender fileAppender = new FileAppender(
+				new PatternLayout("%d{yyyy-MM-dd HH:mm:ss} %-40c{1} [%5p] %m%n"),
+				fMainDirectory.getCanonicalPath() + File.separator + "jetty.log",
+				false, false, 8192);
+		rootLogger.addAppender(fileAppender);
 	}
 
 	private void ensureMainDirectoryExists() throws IOException {
