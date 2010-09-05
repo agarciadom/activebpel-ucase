@@ -1,13 +1,18 @@
 package org.activebpel.rt.jetty;
 
 import java.io.File;
+import java.io.IOException;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.activebpel.rt.bpel.server.admin.IAeEngineAdministration;
+import org.activebpel.rt.bpel.server.engine.AeEngineFactory;
+import org.activebpel.rt.bpel.server.logging.AeLoggingFilter;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.webapp.WebAppContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  * Wrapper which allows for easily starting and stopping ActiveBPEL inside a
@@ -23,6 +28,22 @@ public class JettyRunner {
 		// http://forums.sun.com/thread.jspa?threadID=5334141
 		System.setProperty("javax.xml.soap.MessageFactory",
 				"org.apache.axis.soap.MessageFactoryImpl");
+		installBridgeFromJULtoSLF4J();
+	}
+
+	/**
+	 * Installs a bridge from {@link java.util.logging} calls to SLF4J calls, so
+	 * we can have a single log4j.properties file controlling all logging, and
+	 * we don't miss important messages.
+	 */
+	private static void installBridgeFromJULtoSLF4J() {
+		java.util.logging.Logger rootLogger = java.util.logging.Logger.getLogger("");
+		rootLogger.setLevel(java.util.logging.Level.ALL);
+		java.util.logging.Handler[] handlers = rootLogger.getHandlers();
+		for (int i = 0; i < handlers.length; i++) {
+			rootLogger.removeHandler(handlers[i]);
+		}
+		SLF4JBridgeHandler.install();
 	}
 
 	private File fMainDirectory;
@@ -128,9 +149,7 @@ public class JettyRunner {
 	 *             or starting Jetty.
 	 */
 	public static void main(String[] args) throws Exception {
-		Logger.getRootLogger().setLevel(Level.INFO);
-		final Logger logger = Logger.getLogger(JettyRunner.class);
-
+		final Logger logger = LoggerFactory.getLogger(JettyRunner.class);
 		final JettyRunner runner = new JettyRunner(new File("/tmp/activebpel"),
 				8080, AeLoggingFilter.FULL, logger);
 
