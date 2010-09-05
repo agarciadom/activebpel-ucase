@@ -207,9 +207,15 @@ public class JettyRunner {
 				"webapps/BpelAdmin");
 		WebAppContext mainWebapp = addWebappHandler("/active-bpel",
 				"webapps/active-bpel");
-		mainWebapp.getServletContext().setInitParameter("servlet.home",
-				this.fMainDirectory.getCanonicalPath());
 		mainWebapp.getSecurityHandler().setLoginService(new HashLoginService());
+
+		// Normally, we'd like to set the servlet.home init parameter to the
+		// value of fMainDirectory. However, we can't do it directly, as the
+		// web.xml in o.a.rt.axis.bpel.web.war sets it to ${catalina.home}, and
+		// we'd need to create a temporary web-override.xml and have Jetty use
+		// it. We'll just set the catalina.home system property to the right
+		// value, then.
+		System.setProperty("catalina.home", fMainDirectory.getCanonicalPath());
 
 		HandlerList handlerList = new HandlerList();
 		handlerList.addHandler(adminHandler);
