@@ -43,6 +43,14 @@
       <artifactId>commons-fileupload</artifactId>
       <version>1.0</version>
     </dependency>
+
+    <!-- Ugly workaround for MNG-1323 (Maven bug) until Maven 3.0 arrives -->
+    <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>subdir-webapp-assembly</artifactId>
+      <version>1-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
