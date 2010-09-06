@@ -20,11 +20,45 @@
       <version>${project.version}</version>
       <type>jar</type>
       <classifier>subdir-webapp</classifier>
-      <!-- Jetty7's JSP implementation conflicts with this JAR-->
       <exclusions>
+        <!-- Jetty7's JSP implementation conflicts with this JAR-->
         <exclusion>
           <groupId>tomcat</groupId>
           <artifactId>servlet</artifactId>
+        </exclusion>
+
+        <!-- Remove optional cruft of ActiveBPEL -->
+        <exclusion>
+          <groupId>commons-dbutils</groupId>
+          <artifactId>commons-dbutils</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.activebpel</groupId>
+          <artifactId>rt.tamino</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.activebpel</groupId>
+          <artifactId>rt.exist</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.activebpel</groupId>
+          <artifactId>rt.bpel.ext.expr.bsf</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>jython</groupId>
+          <artifactId>jython</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>rhino</groupId>
+          <artifactId>js</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.geronimo.javamail</groupId>
+          <artifactId>geronimo-javamail_1.3.1_mail</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>ant</groupId>
+          <artifactId>ant</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -46,12 +80,20 @@
       <artifactId>jetty-jsp-2.1</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.eclipse.jetty</groupId>
-      <artifactId>jetty-server</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>jsp-2.1-glassfish</artifactId>
+      <exclusions>
+        <!-- NOTE: this exclusion means that the .jar needs to be run
+             by a JDK. A JRE will *not* work! -->
+        <exclusion>
+          <groupId>org.eclipse.jdt.core.compiler</groupId>
+          <artifactId>ecj</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>ant</groupId>
+          <artifactId>ant</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <!-- We want to use the Log4J bindings for the SLF4J bridge used
          by Jetty, as it's easier to configure. -->
@@ -69,21 +111,33 @@
   <build>
     <plugins>
       <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>org.activebpel.rt.jetty.JettyRunner</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
         <executions>
           <execution>
-            <id>dist</id>
-            <phase>package</phase>
-            <goals><goal>single</goal></goals>
+            <id>jar-with-deps</id>
+            <goals><goal>shade</goal></goals>
             <configuration>
-              <archive>
-                <manifest>
-                  <mainClass>org.activebpel.rt.jetty.JettyRunner</mainClass>
-                </manifest>
-              </archive>
-              <descriptorRefs>
-                <descriptorRef>jar-with-dependencies</descriptorRef>
-              </descriptorRefs>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <shadedClassifierName>jar-with-dependencies</shadedClassifierName>
+              <filters>
+                <filter>
+                  <artifact>*</artifact>
+                  <excludes>
+                    <exclude>**/*.RSA</exclude>
+                    <exclude>**/*.SF</exclude>
+                  </excludes>
+                </filter>
+              </filters>
             </configuration>
           </execution>
         </executions>

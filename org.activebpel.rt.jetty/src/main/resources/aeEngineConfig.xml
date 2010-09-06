@@ -197,18 +197,6 @@
                   <entry name="Runner" value="org.activebpel.rt.bpel.impl.expr.xpath.AeBPWSXPathExpressionRunner"/>
                   <entry name="Analyzer" value="org.activebpel.rt.bpel.def.expr.xpath.AeBPWSXPathExpressionAnalyzer"/>
                </entry>
-               <entry name="XQuery1.0">
-                  <entry name="Uri" value="urn:active-endpoints:expression-language:xquery1.0"/>
-                  <entry name="Validator" value="org.activebpel.rt.bpel.ext.expr.def.validation.xquery.AeBPWSXQueryExpressionValidator"/>
-                  <entry name="Runner" value="org.activebpel.rt.bpel.ext.expr.impl.xquery.AeBPWSXQueryExpressionRunner"/>
-                  <entry name="Analyzer" value="org.activebpel.rt.bpel.ext.expr.def.xquery.AeBPWSXQueryExpressionAnalyzer"/>
-               </entry>
-               <entry name="JavaScript1.5">
-                  <entry name="Uri" value="urn:active-endpoints:expression-language:javascript1.5"/>
-                  <entry name="Validator" value="org.activebpel.rt.bpel.ext.expr.def.validation.javascript.AeBPWSJavaScriptExpressionValidator"/>
-                  <entry name="Runner" value="org.activebpel.rt.bpel.ext.expr.impl.javascript.AeBPWSJavaScriptExpressionRunner"/>
-                  <entry name="Analyzer" value="org.activebpel.rt.bpel.ext.expr.def.javascript.AeBPWSJavaScriptExpressionAnalyzer"/>
-               </entry>
             </entry>
          </entry>
          <!-- WSBPEL2.0 Factory -->
@@ -221,18 +209,6 @@
                   <entry name="Validator" value="org.activebpel.rt.bpel.def.validation.expr.xpath.AeWSBPELXPathExpressionValidator"/>
                   <entry name="Runner" value="org.activebpel.rt.bpel.impl.expr.xpath.AeWSBPELXPathExpressionRunner"/>
                   <entry name="Analyzer" value="org.activebpel.rt.bpel.def.expr.xpath.AeWSBPELXPathExpressionAnalyzer"/>
-               </entry>
-               <entry name="XQuery1.0">
-                  <entry name="Uri" value="urn:active-endpoints:expression-language:xquery1.0"/>
-                  <entry name="Validator" value="org.activebpel.rt.bpel.ext.expr.def.validation.xquery.AeWSBPELXQueryExpressionValidator"/>
-                  <entry name="Runner" value="org.activebpel.rt.bpel.ext.expr.impl.xquery.AeWSBPELXQueryExpressionRunner"/>
-                  <entry name="Analyzer" value="org.activebpel.rt.bpel.ext.expr.def.xquery.AeWSBPELXQueryExpressionAnalyzer"/>
-               </entry>
-               <entry name="JavaScript1.5">
-                  <entry name="Uri" value="urn:active-endpoints:expression-language:javascript1.5"/>
-                  <entry name="Validator" value="org.activebpel.rt.bpel.ext.expr.def.validation.javascript.AeWSBPELJavaScriptExpressionValidator"/>
-                  <entry name="Runner" value="org.activebpel.rt.bpel.ext.expr.impl.javascript.AeWSBPELJavaScriptExpressionRunner"/>
-                  <entry name="Analyzer" value="org.activebpel.rt.bpel.ext.expr.def.javascript.AeWSBPELJavaScriptExpressionAnalyzer"/>
                </entry>
             </entry>
          </entry>

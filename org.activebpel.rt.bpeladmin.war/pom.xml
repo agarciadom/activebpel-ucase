@@ -24,6 +24,17 @@
       <version>${project.version}</version>
     </dependency>
     <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt.bpel.server</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt.exist</artifactId>
+      <version>${project.version}</version>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
     </dependency>
@@ -31,12 +42,6 @@
       <groupId>tomcat</groupId>
       <artifactId>servlet</artifactId>
       <version>4.0.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.activebpel</groupId>
-      <artifactId>rt.exist</artifactId>
-      <version>${project.version}</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>commons-fileupload</groupId>
