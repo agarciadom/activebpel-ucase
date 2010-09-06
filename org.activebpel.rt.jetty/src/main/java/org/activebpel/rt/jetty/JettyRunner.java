@@ -166,7 +166,8 @@ public class JettyRunner {
 	 */
 	public static void main(String[] args) throws Exception {
 		final Logger logger = LoggerFactory.getLogger(JettyRunner.class);
-		final JettyRunner runner = new JettyRunner(new File("/tmp/activebpel"),
+		final JettyRunner runner = new JettyRunner(new File(
+				System.getProperty("java.io.tmpdir"), "activebpel"),
 				8080, AeLoggingFilter.FULL, logger);
 
 		/*
