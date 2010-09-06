@@ -60,7 +60,13 @@ public class JettyRunner {
 	 * 
 	 * @param mainDir
 	 *            Directory where the logs and the deployed processes will be
-	 *            saved to.
+	 *            saved to. If <code>null</code>, a temporary directory will be
+	 *            used. If the directory does not exist yet, it will be created.
+	 *            Otherwise, it will be used as-is: the process logs will *not*
+	 *            be cleaned up, as ActiveBPEL performs the cleanup before we
+	 *            can change the base logging directory. You will have to clean
+	 *            it up yourself, or use a different temporary directory each
+	 *            time.
 	 * @param port
 	 *            Port on which Jetty (and thus ActiveBPEL) should listen.
 	 * @param logLevel
@@ -186,6 +192,20 @@ public class JettyRunner {
 
 	/* PRIVATE METHODS */
 
+	/** Creates a temporary directory. */
+	private static File createTemporaryDirectory() throws IOException {
+		File tmp = File.createTempFile("activebpel", "dir");
+		if (!tmp.delete()) {
+			throw new IOException("Could not delete temporary file: "
+					+ tmp.getCanonicalPath());
+		}
+		if (!tmp.mkdir()) {
+			throw new IOException("Could not create temporary dir: "
+					+ tmp.getCanonicalPath());
+		}
+		return tmp;
+	}
+
 	private WebAppContext addWebappHandler(String contextPath,
 			String resourcePath) {
 		WebAppContext webapp = new WebAppContext();
@@ -211,7 +231,9 @@ public class JettyRunner {
 	}
 
 	private void ensureMainDirectoryExists() throws IOException {
-		if (fMainDirectory.exists()) {
+		if (fMainDirectory == null) {
+			fMainDirectory = createTemporaryDirectory();
+		} else if (fMainDirectory.exists()) {
 			if (fMainDirectory.isFile()) {
 				throw new IllegalArgumentException(fMainDirectory
 						.getCanonicalPath()
