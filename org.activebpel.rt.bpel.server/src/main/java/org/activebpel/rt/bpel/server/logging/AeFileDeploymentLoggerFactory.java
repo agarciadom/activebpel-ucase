@@ -34,6 +34,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.activebpel.rt.AeException;
+import org.activebpel.rt.bpel.config.IAeConfigChangeListener;
+import org.activebpel.rt.bpel.config.IAeUpdatableEngineConfig;
 import org.activebpel.rt.bpel.server.AeMessages;
 import org.activebpel.rt.bpel.server.engine.AeEngineFactory;
 import org.activebpel.rt.util.AeCloser;
@@ -42,22 +44,11 @@ import org.activebpel.rt.util.AeUtil;
 /**
  * Factory for returning instances of the deployment logger that write to a file. 
  */
-public class AeFileDeploymentLoggerFactory implements IAeDeploymentLoggerFactory
+public class AeFileDeploymentLoggerFactory implements IAeDeploymentLoggerFactory, IAeConfigChangeListener
 {
    /** file that we're writing to */
    private File mFile;
 
-   /** pattern to use when printing date/time stamp in log file */
-   private String mDatePattern = AeMessages.getString("AeFileDeploymentLoggerFactory.0"); //$NON-NLS-1$
-   
-   /**
-    * Creates a new factory with the init parameters from the map.
-    * @param aMap
-    */
-   public AeFileDeploymentLoggerFactory(Map aMap)
-   {
-      initLogFile(aMap);
-   }
    
    /**
     * @see org.activebpel.rt.bpel.server.logging.IAeDeploymentLoggerFactory#getDeploymentLog()
@@ -93,15 +84,25 @@ public class AeFileDeploymentLoggerFactory implements IAeDeploymentLoggerFactory
 
    /**
     * Create the log directory and the log file object.
-    * @param aParams
     */
-   protected void initLogFile( Map aParams )
+   protected void initLogFile()
    {
       File dir = new File( new File(AeEngineFactory.getEngineConfig().getLoggingBaseDir()), "deployment-logs" ); //$NON-NLS-1$
       dir.mkdirs();
       mFile = new File( dir, "aeDeployment.log" ); //$NON-NLS-1$
       mFile.delete();
    }
+
+	/**
+	 * Creates a new factory with the init parameters from the map.
+	 * 
+	 * @param aMap Currently ignored.
+	 */
+	public AeFileDeploymentLoggerFactory(Map aMap) {		
+		IAeUpdatableEngineConfig config = AeEngineFactory.getEngineConfig().getUpdatableEngineConfig();
+		updateConfig(config);		
+		config.addConfigChangeListener( this );
+	}
 
    /**
     * @see org.activebpel.rt.bpel.server.logging.IAeDeploymentLoggerFactory#createLogger()
@@ -140,6 +141,8 @@ public class AeFileDeploymentLoggerFactory implements IAeDeploymentLoggerFactory
    {
       /** buffer that we keep */
       private StringWriter mStringWriter;
+      /** pattern to use when printing date/time stamp in log file */
+      private String mDatePattern = AeMessages.getString("AeFileDeploymentLoggerFactory.0"); //$NON-NLS-1$
       /** used to format the dates/times of the log statements */
       private SimpleDateFormat mDateFormat = new SimpleDateFormat(mDatePattern);
       
@@ -172,5 +175,9 @@ public class AeFileDeploymentLoggerFactory implements IAeDeploymentLoggerFactory
          }
       }
    }
+
+	public void updateConfig(IAeUpdatableEngineConfig aConfig) {
+		initLogFile();
+	}
 }
  

@@ -73,7 +73,7 @@ public class AeFileLogger extends AeInMemoryProcessLogger
     */
    protected void deleteLogFiles()
    {
-      File dir = new File(AeEngineFactory.getEngineConfig().getLoggingBaseDir(), "process-logs/"); //$NON-NLS-1$
+      File dir = getProcessLogBaseDirectory();
       File[] files = dir.listFiles(new FileFilter()
       {
 
@@ -87,8 +87,14 @@ public class AeFileLogger extends AeInMemoryProcessLogger
          files[i].delete();
       }
    }
-   
-   
+
+   /**
+    * Returns the directory where all the process logs reside.
+    */
+   public File getProcessLogBaseDirectory() {
+	   return new File(AeEngineFactory.getEngineConfig().getLoggingBaseDir(), "process-logs/"); //$NON-NLS-1$
+   }
+
 
    /**
     * Reads the file into a String
@@ -125,7 +131,7 @@ public class AeFileLogger extends AeInMemoryProcessLogger
     */
    protected File getFile(long aPid) throws IOException
    {
-      File file = new File(AeEngineFactory.getEngineConfig().getLoggingBaseDir(), "process-logs/"+aPid+".log"); //$NON-NLS-1$ //$NON-NLS-2$
+      File file = new File(getProcessLogBaseDirectory(), aPid + ".log"); //$NON-NLS-1$
       file.getParentFile().mkdirs();
       return file;
    }

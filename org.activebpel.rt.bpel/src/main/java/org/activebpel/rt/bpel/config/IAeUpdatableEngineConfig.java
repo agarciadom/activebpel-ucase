@@ -60,7 +60,13 @@ public interface IAeUpdatableEngineConfig extends IAeEngineConfiguration
     * The details can be found in Issue 33 of the WS-BPEL issues list.
     */
    public void setUnmatchedCorrelatedReceiveTimeout( int aTime );
-   
+
+   /**
+    * Setter for the logging base dir.
+    * @param aBaseDir The base directory for all system log files.
+    */
+   public void setLoggingBaseDir( String aBaseDir );
+
    /**
     * Setter for the logging filter
     * @param aFilterName

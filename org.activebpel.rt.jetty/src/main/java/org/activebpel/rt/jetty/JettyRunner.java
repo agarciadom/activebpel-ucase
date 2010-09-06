@@ -3,8 +3,10 @@ package org.activebpel.rt.jetty;
 import java.io.File;
 import java.io.IOException;
 
+import org.activebpel.rt.bpel.config.IAeUpdatableEngineConfig;
 import org.activebpel.rt.bpel.server.admin.IAeEngineAdministration;
 import org.activebpel.rt.bpel.server.engine.AeEngineFactory;
+import org.activebpel.rt.bpel.server.logging.AeFileLogger;
 import org.activebpel.rt.bpel.server.logging.AeLoggingFilter;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.PatternLayout;
@@ -102,9 +104,14 @@ public class JettyRunner {
 			}
 		}
 
+		IAeUpdatableEngineConfig config = admin.getEngineConfig()
+				.getUpdatableEngineConfig();
 		// Switch to the desired logging level
-		admin.getEngineConfig().getUpdatableEngineConfig().setLoggingFilter(
-				fLoggingFilterName);
+		config.setLoggingFilter(fLoggingFilterName);
+		// Place the deployment and process logs inside the work directory
+		config.setLoggingBaseDir(fMainDirectory.getCanonicalPath());
+		// Tell all other components to update their configuration accordingly
+		config.update();
 	}
 
 	/**

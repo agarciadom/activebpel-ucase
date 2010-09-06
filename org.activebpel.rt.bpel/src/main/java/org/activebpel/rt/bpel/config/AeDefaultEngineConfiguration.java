@@ -533,7 +533,7 @@ public class AeDefaultEngineConfiguration extends AeConfiguration implements IAe
     * Setter for the logging base dir.
     * @param aBaseDir The base directory for all system log files.
     */
-   protected void setLoggingBaseDir( String aBaseDir )
+   public void setLoggingBaseDir( String aBaseDir )
    {
       setEntry( LOGGING_DIR_ENTRY, aBaseDir );
    }
