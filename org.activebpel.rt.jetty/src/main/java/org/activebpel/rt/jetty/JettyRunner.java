@@ -97,8 +97,7 @@ public class JettyRunner {
 	public void start() throws Exception {
 		fLogger.info(String.format(
 				"Starting ActiveBPEL with main directory %s on port %d",
-				fMainDirectory.getCanonicalPath(), fServer.getConnectors()[0]
-						.getPort()));
+				fMainDirectory.getCanonicalPath(), getPort()));
 		fServer.start();
 
 		// Wait for ActiveBPEL to be really running
@@ -153,6 +152,29 @@ public class JettyRunner {
 	 */
 	public IAeEngineAdministration getEngineAdmin() {
 		return AeEngineFactory.getEngineAdministration();
+	}
+
+	/**
+	 * Returns the main directory for all ActiveBPEL files.
+	 */
+	public File getMainDirectory() {
+		return fMainDirectory;
+	}
+
+	/**
+	 * Returns the port number that the server is listening on to.
+	 */
+	public int getPort() {
+		return fServer.getConnectors()[0].getPort();
+	}
+
+	/**
+	 * Returns the directory for the process log files. If the server is not
+	 * running yet, this method has undefined behavior.
+	 */
+	public File getProcessLogDirectory() {
+		return ((AeFileLogger) AeEngineFactory.getLogger())
+				.getProcessLogBaseDirectory();
 	}
 
 	/**
