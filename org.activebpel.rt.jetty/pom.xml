@@ -18,19 +18,8 @@
       <groupId>org.activebpel</groupId>
       <artifactId>rt.bpeladmin.war</artifactId>
       <version>${project.version}</version>
-      <type>war</type>
-    </dependency>
-    <dependency>
-      <groupId>org.activebpel</groupId>
-      <artifactId>rt.axis.bpel.web.war</artifactId>
-      <version>${project.version}</version>
-      <type>war</type>
-    </dependency>
-    <dependency>
-      <groupId>org.activebpel</groupId>
-      <artifactId>rt.bpeladmin.war</artifactId>
-      <version>${project.version}</version>
-      <type>pom</type>
+      <type>jar</type>
+      <classifier>subdir-webapp</classifier>
       <!-- Jetty7's JSP implementation conflicts with this JAR-->
       <exclusions>
         <exclusion>
@@ -43,7 +32,8 @@
       <groupId>org.activebpel</groupId>
       <artifactId>rt.axis.bpel.web.war</artifactId>
       <version>${project.version}</version>
-      <type>pom</type>
+      <type>jar</type>
+      <classifier>subdir-webapp</classifier>
     </dependency>
 
     <!-- From org.mortbay.jetty:jetty-maven-plugin:7.1.5.v200100705 -->
@@ -80,7 +70,6 @@
     <plugins>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.1</version>
         <executions>
           <execution>
             <id>dist</id>
@@ -92,9 +81,9 @@
                   <mainClass>org.activebpel.rt.jetty.JettyRunner</mainClass>
                 </manifest>
               </archive>
-              <descriptors>
-                <descriptor>src/main/assembly/jar-with-deps.xml</descriptor>
-              </descriptors>
+              <descriptorRefs>
+                <descriptorRef>jar-with-dependencies</descriptorRef>
+              </descriptorRefs>
             </configuration>
           </execution>
         </executions>

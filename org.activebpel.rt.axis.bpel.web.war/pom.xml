@@ -12,6 +12,10 @@
   <packaging>war</packaging>
   <name>ActiveBPEL::Server Web Service WAR</name>
 
+  <properties>
+    <subdir.name>active-bpel</subdir.name>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
@@ -39,6 +43,28 @@
             <loginService implementation="org.eclipse.jetty.security.HashLoginService"/>
           </loginServices>
         </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.activebpel</groupId>
+            <artifactId>subdir-webapp-assembly</artifactId>
+            <version>1-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>subdir-webapp</id>
+            <phase>package</phase>
+            <goals><goal>single</goal></goals>
+            <configuration>
+              <descriptors>
+                <descriptor>subdir-webapp.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

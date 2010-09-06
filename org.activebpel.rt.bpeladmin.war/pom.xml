@@ -12,6 +12,10 @@
   <packaging>war</packaging>
   <name>ActiveBPEL::BpelAdmin WAR</name>
 
+  <properties>
+    <subdir.name>BpelAdmin</subdir.name>
+  </properties>
+
   <!-- If you change this, do not forget to update the POM for rt.ear! -->
   <dependencies>
     <dependency>
@@ -40,5 +44,32 @@
       <version>1.0</version>
     </dependency>
   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <dependencies>
+          <dependency>
+            <groupId>org.activebpel</groupId>
+            <artifactId>subdir-webapp-assembly</artifactId>
+            <version>1-SNAPSHOT</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>subdir-webapp</id>
+            <phase>package</phase>
+            <goals><goal>single</goal></goals>
+            <configuration>
+              <descriptors>
+                <descriptor>subdir-webapp.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
 </project>
