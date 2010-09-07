@@ -138,6 +138,15 @@
                   </excludes>
                 </filter>
               </filters>
+              <!-- We need to shade Saxon 8.7 to a different package,
+                   so it does not conflict with the Saxon 9.1 used in
+                   the SPIFM code -->
+              <relocations>
+                <relocation>
+                  <pattern>net.sf.saxon</pattern>
+                  <shadedPattern>net.sf.saxon8</shadedPattern>
+                </relocation>
+              </relocations>
             </configuration>
           </execution>
         </executions>
