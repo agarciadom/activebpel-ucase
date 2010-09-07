@@ -50,7 +50,6 @@ import org.activebpel.rt.IAeConstants;
 import org.activebpel.rt.xml.AeElementBasedNamespaceContext;
 import org.activebpel.rt.xml.AeXMLParserBase;
 import org.activebpel.rt.xml.IAeMutableNamespaceContext;
-import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.exolab.castor.xml.schema.XMLType;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
@@ -1451,23 +1450,6 @@ public class AeXmlUtil
       // Do the transform.
       TransformerFactory factory = TransformerFactory.newInstance();
       String factoryName = factory.getClass().getName();
-      // Check for the JDK 1.5 or Saxon transformer.
-      if (factoryName.startsWith("com.sun.org.apache.xalan")   //$NON-NLS-1$
-            || factoryName.startsWith("net.sf.saxon") || factoryName.startsWith("weblogic.xml.jaxp") ) //$NON-NLS-1$ //$NON-NLS-2$
-      {
-         // Instantiate the Xalan transformer directly, since the impl we use
-         // actually matters (the JDK1.5 transformer has some problems with Elements
-         // as stylesheet parameters; the Saxon transformer works, but emits
-         // spurious messages to stdout).
-         
-         // 9/10/2007/PJ: Defect 3112. Also added check for classname starts with 'weblogic.xml.jaxp'.
-         // When using the aetasks.war app in weblogic, the weblogic uses an older
-         // version of the xsl transformer which its parser lexer causes NPE when it
-         // handles a comment. See http://issues.apache.org/jira/browse/XALANJ-2023.
-         // Work around is to use included xalan transformer factory.
-         
-         factory = new TransformerFactoryImpl();
-      }
       return doTransform(factory, aXslSource, aXmlSource, aParams, aResolver);
    }
 

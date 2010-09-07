@@ -29,6 +29,12 @@
       <artifactId>jaxen</artifactId>
       <version>1.1-beta-8</version>
       <exclusions>
+        <!-- JDK6 includes JAXP -->
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xmlParserAPIs</artifactId>
+        </exclusion>
+        <!-- We don't use these XPath engines here -->
         <exclusion>
           <groupId>dom4j</groupId>
           <artifactId>dom4j</artifactId>
@@ -42,11 +48,6 @@
           <artifactId>xom</artifactId>
         </exclusion>
       </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>xalan</groupId>
-      <artifactId>xalan</artifactId>
-      <version>2.6.0</version>
     </dependency>
     <dependency>
       <groupId>commonj</groupId>
