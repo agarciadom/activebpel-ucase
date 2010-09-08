@@ -99,7 +99,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.activebpel.rt.jetty.JettyRunner</mainClass>
+              <mainClass>org.activebpel.rt.jetty.AeJettyForker</mainClass>
             </manifest>
           </archive>
         </configuration>

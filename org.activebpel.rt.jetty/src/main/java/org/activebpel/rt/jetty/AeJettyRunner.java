@@ -6,7 +6,6 @@ import java.io.IOException;
 import org.activebpel.rt.bpel.config.IAeUpdatableEngineConfig;
 import org.activebpel.rt.bpel.server.admin.IAeEngineAdministration;
 import org.activebpel.rt.bpel.server.engine.AeEngineFactory;
-import org.activebpel.rt.bpel.server.logging.AeFileLogger;
 import org.activebpel.rt.bpel.server.logging.AeLoggingFilter;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.PatternLayout;
@@ -20,16 +19,22 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 
 /**
  * Wrapper which allows for easily starting and stopping ActiveBPEL inside a
- * Jetty instance.
+ * Jetty instance. Note: if you need to run more than one instance, you'll have
+ * to fork each of them into their separate JVMs. See {@link AeJettyForker} for
+ * details.
  * 
+ * @see AeJettyForker
  * @author Antonio García Domínguez
  */
-public class JettyRunner {
+public class AeJettyRunner {
 
 	static {
-		// Set the correct system property so we use the shaded Saxon8 TransformerFactory
-		System.setProperty("urn:active-endpoints:java:system-property:transformer-factory-impl",
-				"net.sf.saxon.TransformerFactoryImpl");
+		// Set the correct system property so we use the shaded Saxon8
+		// TransformerFactory
+		System
+				.setProperty(
+						"urn:active-endpoints:java:system-property:transformer-factory-impl",
+						"net.sf.saxon.TransformerFactoryImpl");
 
 		installBridgeFromJULtoSLF4J();
 	}
@@ -40,7 +45,8 @@ public class JettyRunner {
 	 * we don't miss important messages.
 	 */
 	private static void installBridgeFromJULtoSLF4J() {
-		java.util.logging.Logger rootLogger = java.util.logging.Logger.getLogger("");
+		java.util.logging.Logger rootLogger = java.util.logging.Logger
+				.getLogger("");
 		rootLogger.setLevel(java.util.logging.Level.ALL);
 		java.util.logging.Handler[] handlers = rootLogger.getHandlers();
 		for (int i = 0; i < handlers.length; i++) {
@@ -76,13 +82,12 @@ public class JettyRunner {
 	 * @throws IOException
 	 *             There was a problem while accessing the main directory.
 	 */
-	public JettyRunner(File mainDir, int port, String logLevel, Logger logger)
+	public AeJettyRunner(File mainDir, int port, String logLevel, Logger logger)
 			throws IOException {
 		this.fLogger = logger;
 		this.fMainDirectory = mainDir;
 		this.fLoggingFilterName = logLevel;
 
-		ensureMainDirectoryExists();
 		configureLogging();
 		setUpServer(port, logLevel);
 	}
@@ -144,7 +149,7 @@ public class JettyRunner {
 	/**
 	 * Returns the engine administration object for the ActiveBPEL webapp
 	 * running in this Jetty instance.
-	 *
+	 * 
 	 * @param IAeEngineAdministration
 	 *            Admin object, or <code>null</code> if Jetty hasn't been
 	 *            started yet.
@@ -168,28 +173,31 @@ public class JettyRunner {
 	}
 
 	/**
-	 * Returns the directory for the process log files. If the server is not
-	 * running yet, this method has undefined behavior.
-	 */
-	public File getProcessLogDirectory() {
-		return ((AeFileLogger) AeEngineFactory.getLogger())
-				.getProcessLogBaseDirectory();
-	}
-
-	/**
 	 * Entry point from the command line.
 	 * 
 	 * @param args
-	 *            Arguments received through the command line.
+	 *            Arguments received through the command line: work directory
+	 *            for ActiveBPEL, port on which it should listen, and its
+	 *            logging level ("none" or "full").
 	 * @throws Exception
 	 *             There was a problem while accessing the main work directory
 	 *             or starting Jetty.
 	 */
 	public static void main(String[] args) throws Exception {
-		final Logger logger = LoggerFactory.getLogger(JettyRunner.class);
-		final JettyRunner runner = new JettyRunner(new File(
-				System.getProperty("java.io.tmpdir"), "activebpel"),
-				8080, AeLoggingFilter.FULL, logger);
+		if (args.length != 3 || (!"none".equals(args[2]) && !"full".equals(args[2]))) {
+			System.err.println("Usage: java "
+					+ AeJettyRunner.class.getCanonicalName()
+					+ " workdir port none|full");
+			System.exit(1);
+		}
+		final String workdir = args[0];
+		final int port = Integer.parseInt(args[1]);
+		final String loggingLevel = "full".equals(args[2]) ? AeLoggingFilter.FULL
+				: AeLoggingFilter.NONE;
+
+		final Logger logger = LoggerFactory.getLogger(AeJettyRunner.class);
+		final AeJettyRunner runner = new AeJettyRunner(new File(workdir), port,
+				loggingLevel, logger);
 
 		/*
 		 * Stop the server when the user presses Ctrl+C or otherwise interrupts
@@ -214,27 +222,13 @@ public class JettyRunner {
 
 	/* PRIVATE METHODS */
 
-	/** Creates a temporary directory. */
-	private static File createTemporaryDirectory() throws IOException {
-		File tmp = File.createTempFile("activebpel", "dir");
-		if (!tmp.delete()) {
-			throw new IOException("Could not delete temporary file: "
-					+ tmp.getCanonicalPath());
-		}
-		if (!tmp.mkdir()) {
-			throw new IOException("Could not create temporary dir: "
-					+ tmp.getCanonicalPath());
-		}
-		return tmp;
-	}
-
 	private WebAppContext addWebappHandler(String contextPath,
 			String resourcePath) {
 		WebAppContext webapp = new WebAppContext();
 		webapp.setServer(fServer);
 		webapp.setContextPath(contextPath);
-		webapp.setResourceBase(JettyRunner.class.getClassLoader().getResource(
-				resourcePath).toExternalForm());
+		webapp.setResourceBase(AeJettyRunner.class.getClassLoader()
+				.getResource(resourcePath).toExternalForm());
 		return webapp;
 	}
 
@@ -245,26 +239,11 @@ public class JettyRunner {
 	private void configureLogging() throws IOException {
 		org.apache.log4j.Logger rootLogger = org.apache.log4j.Logger
 				.getRootLogger();
-		FileAppender fileAppender = new FileAppender(
-				new PatternLayout("%d{yyyy-MM-dd HH:mm:ss} %-40c{1} [%5p] %m%n"),
-				fMainDirectory.getCanonicalPath() + File.separator + "jetty.log",
-				false, false, 8192);
+		FileAppender fileAppender = new FileAppender(new PatternLayout(
+				"%d{yyyy-MM-dd HH:mm:ss} %-40c{1} [%5p] %m%n"), fMainDirectory
+				.getCanonicalPath()
+				+ File.separator + "jetty.log", false, false, 8192);
 		rootLogger.addAppender(fileAppender);
-	}
-
-	private void ensureMainDirectoryExists() throws IOException {
-		if (fMainDirectory == null) {
-			fMainDirectory = createTemporaryDirectory();
-		} else if (fMainDirectory.exists()) {
-			if (fMainDirectory.isFile()) {
-				throw new IllegalArgumentException(fMainDirectory
-						.getCanonicalPath()
-						+ " already exists and is a file");
-			}
-		} else if (!fMainDirectory.mkdir()) {
-			throw new IllegalArgumentException("Could not create directory "
-					+ fMainDirectory.getCanonicalPath());
-		}
 	}
 
 	private void setUpServer(int port, String logLevel) throws IOException {
