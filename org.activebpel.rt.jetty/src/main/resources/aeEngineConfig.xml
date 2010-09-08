@@ -226,4 +226,9 @@
       -->
       <entry name="ProcessWorkCount" value="10"/>
    </entry>
+
+   <!-- Ensure we use the Axis SOAP message factory (skip the Sun SAAJ implementation) -->
+   <entry name="SOAPMessageFactory">
+     <entry name="Class" value="org.apache.axis.soap.MessageFactoryImpl"/>
+   </entry>
 </config>

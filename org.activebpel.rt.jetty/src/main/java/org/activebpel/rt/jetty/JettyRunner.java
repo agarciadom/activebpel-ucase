@@ -27,12 +27,6 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 public class JettyRunner {
 
 	static {
-		// Set the correct system property so the Axis factories are used in
-		// JDK6+. See this for details:
-		// http://forums.sun.com/thread.jspa?threadID=5334141
-		System.setProperty("javax.xml.soap.MessageFactory",
-				"org.apache.axis.soap.MessageFactoryImpl");
-
 		// Set the correct system property so we use the shaded Saxon8 TransformerFactory
 		System.setProperty("urn:active-endpoints:java:system-property:transformer-factory-impl",
 				"net.sf.saxon.TransformerFactoryImpl");
