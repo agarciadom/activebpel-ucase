@@ -1448,7 +1448,7 @@ public class AeXmlUtil
    {
 
       // Do the transform.
-      TransformerFactory factory = TransformerFactory.newInstance();
+      TransformerFactory factory = AeXMLParserBase.getTransformerFactory();
       String factoryName = factory.getClass().getName();
       return doTransform(factory, aXslSource, aXmlSource, aParams, aResolver);
    }

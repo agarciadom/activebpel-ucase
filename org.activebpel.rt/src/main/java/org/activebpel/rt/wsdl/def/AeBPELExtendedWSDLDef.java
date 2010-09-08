@@ -86,6 +86,7 @@ import org.activebpel.rt.wsdl.def.castor.AeSchemaParserUtil;
 import org.activebpel.rt.wsdl.def.castor.AeWSDLSchemaResolver;
 import org.activebpel.rt.wsdl.def.policy.AePolicyImpl;
 import org.activebpel.rt.wsdl.def.policy.IAePolicy;
+import org.activebpel.rt.xml.AeXMLParserBase;
 import org.activebpel.rt.xml.IAeMutableNamespaceContext;
 import org.activebpel.rt.xml.schema.AeSchemaUtil;
 import org.exolab.castor.xml.Namespaces;
@@ -1342,7 +1343,7 @@ public class AeBPELExtendedWSDLDef implements IAeBPELExtendedWSDLConst, IAeMutab
                   Element element = AeSchemaParserUtil.extractSchemaElement(extElement);
                   StringWriter sw = new StringWriter(2048);
                   StreamResult result = new StreamResult(sw);
-                  TransformerFactory transFactory = TransformerFactory.newInstance();
+                  TransformerFactory transFactory = AeXMLParserBase.getTransformerFactory();
                   Transformer transformer = transFactory.newTransformer();
                   transformer.transform(new DOMSource(element), result);
 

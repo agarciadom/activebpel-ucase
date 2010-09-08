@@ -32,6 +32,11 @@ public class JettyRunner {
 		// http://forums.sun.com/thread.jspa?threadID=5334141
 		System.setProperty("javax.xml.soap.MessageFactory",
 				"org.apache.axis.soap.MessageFactoryImpl");
+
+		// Set the correct system property so we use the shaded Saxon8 TransformerFactory
+		System.setProperty("urn:active-endpoints:java:system-property:transformer-factory-impl",
+				"net.sf.saxon.TransformerFactoryImpl");
+
 		installBridgeFromJULtoSLF4J();
 	}
 
