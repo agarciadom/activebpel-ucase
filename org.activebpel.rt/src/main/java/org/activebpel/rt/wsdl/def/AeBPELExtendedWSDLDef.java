@@ -404,7 +404,7 @@ public class AeBPELExtendedWSDLDef implements IAeBPELExtendedWSDLConst, IAeMutab
          reader.setExtensionRegistry(getExtensionRegistry());
 
          // Read in the WSDL DOM document into a WSDL definition.
-         Definition def = reader.readWSDL(null, aWSDLElement);
+         Definition def = reader.readWSDL((String)null, aWSDLElement);
          processExtElements(def);
 
          // Save the WSDL definition.

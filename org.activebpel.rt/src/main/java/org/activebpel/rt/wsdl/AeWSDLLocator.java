@@ -103,4 +103,8 @@ public class AeWSDLLocator implements WSDLLocator
 
       return inSource;
    }
+
+   public void close() {
+	   // Nothing to do here: input streams are used and closed elsewhere
+   }
 }

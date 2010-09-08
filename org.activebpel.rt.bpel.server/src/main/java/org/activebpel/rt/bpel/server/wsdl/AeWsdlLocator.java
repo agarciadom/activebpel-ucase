@@ -205,4 +205,8 @@ public class AeWsdlLocator implements WSDLLocator
    {
       return mResolver;
    }
+
+   public void close() {
+       // Nothing to do here: input streams are used and closed elsewhere
+   }
 }

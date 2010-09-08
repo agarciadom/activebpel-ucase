@@ -172,4 +172,11 @@ public class AePolicyImpl implements IAePolicy, IAePolicyConstants
       }
       return mExtElements;
    }
+
+   public ExtensibilityElement removeExtensibilityElement(ExtensibilityElement arg0) {
+	   if (mExtElements != null && mExtElements.remove(arg0))
+		   return arg0;
+	   else
+		   return null;
+   }
 }
