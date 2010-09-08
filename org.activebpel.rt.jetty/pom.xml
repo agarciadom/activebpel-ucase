@@ -56,10 +56,6 @@
           <groupId>org.apache.geronimo.javamail</groupId>
           <artifactId>geronimo-javamail_1.3.1_mail</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>ant</groupId>
-          <artifactId>ant</artifactId>
-        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -82,18 +78,6 @@
     <dependency>
       <groupId>org.mortbay.jetty</groupId>
       <artifactId>jsp-2.1-glassfish</artifactId>
-      <exclusions>
-        <!-- NOTE: this exclusion means that the .jar needs to be run
-             by a JDK. A JRE will *not* work! -->
-        <exclusion>
-          <groupId>org.eclipse.jdt.core.compiler</groupId>
-          <artifactId>ecj</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>ant</groupId>
-          <artifactId>ant</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <!-- We want to use the Log4J bindings for the SLF4J bridge used
          by Jetty, as it's easier to configure. -->
