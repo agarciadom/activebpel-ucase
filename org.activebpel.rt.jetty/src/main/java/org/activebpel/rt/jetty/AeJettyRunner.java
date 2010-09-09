@@ -55,8 +55,8 @@ public class AeJettyRunner {
 		SLF4JBridgeHandler.install();
 	}
 
+	private static Logger fLogger = LoggerFactory.getLogger(AeJettyRunner.class);
 	private File fMainDirectory;
-	private Logger fLogger;
 	private Server fServer;
 	private String fLoggingFilterName;
 
@@ -82,9 +82,8 @@ public class AeJettyRunner {
 	 * @throws IOException
 	 *             There was a problem while accessing the main directory.
 	 */
-	public AeJettyRunner(File mainDir, int port, String logLevel, Logger logger)
+	public AeJettyRunner(File mainDir, int port, String logLevel)
 			throws IOException {
-		this.fLogger = logger;
 		this.fMainDirectory = mainDir;
 		this.fLoggingFilterName = logLevel;
 
@@ -195,9 +194,8 @@ public class AeJettyRunner {
 		final String loggingLevel = "full".equals(args[2]) ? AeLoggingFilter.FULL
 				: AeLoggingFilter.NONE;
 
-		final Logger logger = LoggerFactory.getLogger(AeJettyRunner.class);
 		final AeJettyRunner runner = new AeJettyRunner(new File(workdir), port,
-				loggingLevel, logger);
+				loggingLevel);
 
 		/*
 		 * Stop the server when the user presses Ctrl+C or otherwise interrupts
@@ -208,7 +206,7 @@ public class AeJettyRunner {
 				try {
 					runner.stop();
 				} catch (Exception e) {
-					logger.error("Error while stopping Jetty", e);
+					fLogger.error("Error while stopping Jetty", e);
 				}
 			}
 		});

@@ -41,6 +41,8 @@ public class AeJettyForker {
 	private Process fProcess;
 	private int fExitStatus = UNKNOWN_STATUS;
 
+	private static Logger fLogger = LoggerFactory.getLogger(AeJettyForker.class);
+
 	/**
 	 * Creates a new instance, but does not start it.
 	 * 
