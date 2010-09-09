@@ -113,6 +113,17 @@ public class AeJettyForker {
 		final String javaClasspath = System.getProperty("java.class.path");
 		final String javaClassname = AeJettyRunner.class.getCanonicalName();
 
+		// Print debugging information: java exec, java classpath and name of the main class
+		fLogger.debug("java executable: ", javaPath);
+		if (fLogger.isDebugEnabled()) {
+			fLogger.debug("current classpath is: ");
+			String[] javaClasspathElements = javaClasspath.split(File.pathSeparator);
+			for (String s : javaClasspathElements) {
+				fLogger.debug(" - " + s);
+			}
+		}
+		fLogger.debug("java classname: ", javaClassname);
+
 		ProcessBuilder builder = new ProcessBuilder(javaPath, "-cp",
 				javaClasspath, javaClassname,
 				fMainDirectory.getCanonicalPath(), Integer.toString(fPort),
