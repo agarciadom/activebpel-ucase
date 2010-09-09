@@ -28,6 +28,8 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
  */
 public class AeJettyRunner {
 
+	final static String RUNNING_MSG = "ActiveBPEL is now RUNNING";
+
 	static {
 		// Set the correct system property so we use the shaded Saxon8
 		// TransformerFactory
@@ -120,6 +122,12 @@ public class AeJettyRunner {
 		config.setLoggingBaseDir(fMainDirectory.getCanonicalPath());
 		// Tell all other components to update their configuration accordingly
 		config.update();
+
+		// We need to print the "running" message through
+		// stderr, so it will never be filtered away, in
+		// addition to logging it
+		System.err.println(RUNNING_MSG);
+		fLogger.info(RUNNING_MSG);
 	}
 
 	/**

@@ -139,7 +139,7 @@ public class AeJettyForker {
 		final BufferedReader is = new BufferedReader(new InputStreamReader(
 				fProcess.getInputStream()));
 		String line;
-		while ((line = is.readLine()) != null && !line.contains("Started")) {
+		while ((line = is.readLine()) != null && !line.contains(AeJettyRunner.RUNNING_MSG)) {
 			System.out.println(line);
 		}
 
