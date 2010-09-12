@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.activebpel</groupId>
     <artifactId>engine</artifactId>
-    <version>4.1-uca2-SNAPSHOT</version>
+    <version>4.1-uca2</version>
   </parent>
 
   <artifactId>rt.xmldb</artifactId>
-  <version>4.1-uca2-SNAPSHOT</version>
+  <version>4.1-uca2</version>
   <packaging>jar</packaging>
   <name>ActiveBPEL::XMLDB</name>
 
