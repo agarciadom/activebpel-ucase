@@ -118,7 +118,7 @@ function stop_tomcat() {
         while tomcat_running; do sleep 0.1s; done
         if pgrep -f bootstrap.jar &>/dev/null; then
           echo -n " process still running: killing..."
-          kill -9 `pgrep -f bootstrap.jar`
+          kill -9 `pgrep -f bootstrap.jar` || true
         fi
         echo " done."
     fi
