@@ -14,12 +14,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>castor</groupId>
-      <artifactId>castor</artifactId>
-      <version>1.0</version>
-      <classifier>xml</classifier>
-    </dependency>
-    <dependency>
       <groupId>wsdl4j</groupId>
       <artifactId>wsdl4j</artifactId>
       <version>1.6.2</version>
