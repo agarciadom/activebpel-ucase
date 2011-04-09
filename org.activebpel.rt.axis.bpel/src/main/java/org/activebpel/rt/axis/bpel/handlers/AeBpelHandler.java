@@ -40,12 +40,14 @@ import org.activebpel.rt.axis.bpel.AeMessages;
 import org.activebpel.rt.bpel.AeBusinessProcessException;
 import org.activebpel.rt.bpel.def.AePartnerLinkDef;
 import org.activebpel.rt.bpel.def.AePartnerLinkDefKey;
+import org.activebpel.rt.bpel.impl.IAeReceiveHandler;
 import org.activebpel.rt.bpel.impl.addressing.IAeAddressingHeaders;
 import org.activebpel.rt.bpel.impl.reply.IAeDurableReplyInfo;
 import org.activebpel.rt.bpel.server.IAeProcessDeployment;
 import org.activebpel.rt.bpel.server.deploy.IAeWsddConstants;
 import org.activebpel.rt.bpel.server.engine.AeEngineFactory;
 import org.activebpel.rt.bpel.server.engine.receive.AeExtendedMessageContext;
+import org.activebpel.rt.bpel.server.engine.receive.AeSOAPReceiveHandler;
 import org.activebpel.rt.util.AeCloser;
 import org.activebpel.rt.util.AeUtil;
 import org.activebpel.wsio.AeWebServiceMessageData;
@@ -59,6 +61,8 @@ import org.apache.axis.constants.Style;
 import org.apache.axis.constants.Use;
 import org.apache.axis.description.ServiceDesc;
 import org.apache.axis.handlers.soap.SOAPService;
+import org.apache.axis.message.SOAPEnvelope;
+import org.apache.axis.message.SOAPHeaderElement;
 import org.w3c.dom.Element;
 
 /**
@@ -190,7 +194,8 @@ public abstract class AeBpelHandler extends AeHandler implements IAePolicyConsta
     */
    public void invoke(MessageContext aContext) throws AxisFault
    {
-      try
+	  AeExtendedMessageContext context = null;
+	  try
       {
          // The expected input data for AeSOAPReceiveHandler is a single document containing
          // the entire SOAP envelope from the request
@@ -202,7 +207,7 @@ public abstract class AeBpelHandler extends AeHandler implements IAePolicyConsta
          data.setAttachments(AeAttachmentUtil.soap2wsioAttachments(aContext.getCurrentMessage()));
          
          // Invoke the BPEL engine
-         AeExtendedMessageContext context = getExtendedContext(aContext);
+         context = getExtendedContext(aContext);
          IAeWebServiceResponse wsResponse = AeEngineFactory.getEngine().queueReceiveData(context, data);
          aContext.setPastPivot(true);
          
@@ -215,23 +220,42 @@ public abstract class AeBpelHandler extends AeHandler implements IAePolicyConsta
             aContext.setResponseMessage(getSOAPMessage(wsResponse));
          }
       }
-      catch (AeTimeoutException te)
-      {
-         AeException.logError(te, te.getLocalizedMessage());
-         throw AxisFault.makeFault(te);
-      }
-      catch (AeException ae)
-      {
-         AeException.logError(ae, ae.getLocalizedMessage());
-         throw AxisFault.makeFault(ae);
-      }
       catch (Exception ex)
       {
          AeException.logError(ex, ex.getLocalizedMessage());
-         throw AxisFault.makeFault(ex);
+         throw makeFault(context, ex);
       }
    }
-   
+
+	@SuppressWarnings("unchecked")
+	private AxisFault makeFault(AeExtendedMessageContext context, Exception te) {
+		final AxisFault f = AxisFault.makeFault(te);
+		final String rHName = context.getReceiveHandler();
+		try {
+			final IAeReceiveHandler rH = AeEngineFactory.getEngine()
+					.getQueueManager().getReceiveHandler(rHName);
+			if (rH instanceof AeSOAPReceiveHandler) {
+				// Reuse existing code for computing the WS-A headers in the response
+				final AeSOAPReceiveHandler soapRH = (AeSOAPReceiveHandler) rH;
+				SOAPEnvelope dummyEnvelope = new SOAPEnvelope();
+				soapRH.mapResponseAddressing(dummyEnvelope,
+						context.getWsAddressingHeaders());
+
+				// Move the WS-A headers in the SOAP envelope to the AxisFault
+				Iterator<SOAPHeaderElement> itHeaderElement
+					= (Iterator<SOAPHeaderElement>) dummyEnvelope.getHeader().extractAllHeaderElements();
+				while (itHeaderElement.hasNext()) {
+					final SOAPHeaderElement hElem = (SOAPHeaderElement) itHeaderElement
+							.next();
+					f.addHeader(hElem);
+				}
+			}
+		} catch (Exception ex) {
+			AeException.logError(ex);
+		}
+		return f;
+	}
+
    /**
     * Creates and populates the AeExtendedMessageContext with properties from the Axis message context
     * 

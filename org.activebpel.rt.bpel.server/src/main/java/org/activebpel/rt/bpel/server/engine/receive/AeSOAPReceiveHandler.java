@@ -119,7 +119,7 @@ public abstract class AeSOAPReceiveHandler extends AeAbstractReceiveHandler
     * @param aInboundHeaders
     * @throws AeBusinessProcessException
     */
-   protected void mapResponseAddressing(SOAPEnvelope aResponseEnv, IAeWsAddressingHeaders aInboundHeaders) throws AeBusinessProcessException
+   public void mapResponseAddressing(SOAPEnvelope aResponseEnv, IAeWsAddressingHeaders aInboundHeaders) throws AeBusinessProcessException
    {
       if (aInboundHeaders == null)
          return;
@@ -234,6 +234,8 @@ public abstract class AeSOAPReceiveHandler extends AeAbstractReceiveHandler
                }
             }
          }
+
+         mapResponseAddressing(env, aContext.getWsAddressingHeaders());
          
          return createWsResponse(aResponse, env);
       }
