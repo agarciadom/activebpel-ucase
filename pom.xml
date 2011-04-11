@@ -3,7 +3,7 @@
 
   <groupId>org.activebpel</groupId>
   <artifactId>engine</artifactId>
-  <version>4.1-uca3</version>
+  <version>4.1-uca4-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>ActiveBPEL::Engine</name>
 
