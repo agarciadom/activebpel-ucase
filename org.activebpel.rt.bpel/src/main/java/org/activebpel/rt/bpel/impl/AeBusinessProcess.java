@@ -31,6 +31,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 
@@ -188,6 +189,8 @@ public class AeBusinessProcess extends AeActivityScopeImpl implements IAeBusines
       /*  Terminated */       IAeProcessEvent.TERMINATED,
       /*  Faulting   */       IAeProcessEvent.FAULTING
    };
+
+   private static final Logger LOGGER = Logger.getLogger(AeBusinessProcess.class.getName());
 
    /**
     * Construct a new business process from a definition object and associated
@@ -472,6 +475,10 @@ public class AeBusinessProcess extends AeActivityScopeImpl implements IAeBusines
     */
    public synchronized void queueObjectToExecute(IAeBpelObject aObject) throws AeBusinessProcessException
    {
+	   if (this.isTerminating()) {
+		   LOGGER.warning("Dropping object " + aObject + " due to early termination");
+		   return;
+	   }
       aObject.setState(AeBpelState.QUEUED_BY_PARENT);
       if(aObject.isReadyToExecute())
       {
@@ -484,6 +491,10 @@ public class AeBusinessProcess extends AeActivityScopeImpl implements IAeBusines
     */
    public synchronized void queueObjectToExecute(Runnable aRunnable) throws AeBusinessProcessException
    {
+	   if (this.isTerminating()) {
+		   LOGGER.warning("Dropping object " + aRunnable + " due to early termination");
+		   return;
+	   }
       if (aRunnable != null)
       {
          getExecutionQueue().addRunnable(aRunnable);
@@ -892,6 +903,10 @@ public class AeBusinessProcess extends AeActivityScopeImpl implements IAeBusines
    public void queueMessageReceiver(IAeMessageReceiverActivity aMessageReceiver, int aGroupId)
          throws AeBusinessProcessException
    {
+	   if (this.isTerminating()) {
+		   LOGGER.warning("Dropping message receiver " + aMessageReceiver + " due to early termination");
+		   return;
+	   }
       IAeIMACorrelations receiveCorrelations = aMessageReceiver.getCorrelations();
       Map correlation = receiveCorrelations != null? receiveCorrelations.getInitiatedProperties() : new HashMap();
 
@@ -969,6 +984,10 @@ public class AeBusinessProcess extends AeActivityScopeImpl implements IAeBusines
     */
    public void queueAlarm(IAeAlarmReceiver aAlarm, Date aDeadline) throws AeBusinessProcessException
    {
+	   if (this.isTerminating()) {
+		   LOGGER.warning("Dropping alarm " + aAlarm + " due to early termination");
+		   return;
+	   }
       // assign a new alarm id iff needed.
       if (aAlarm.getAlarmId() == -1)
       {
@@ -1032,6 +1051,11 @@ public class AeBusinessProcess extends AeActivityScopeImpl implements IAeBusines
          // reply not found.
          throw new AeBpelException(AeMessages.getString("AeBusinessProcess.MissingRequest"), getFaultFactory().getMissingRequest()); //$NON-NLS-1$
       }
+      else if (this.isTerminating())
+      {
+          LOGGER.warning("Dropping reply to " + aInputMessage + " due to early termination");
+          return;
+      }
 
       IAeReplyReceiver replyReceiver = aOpenMessageActivity.getDurableReplyReceiver();
       AeReply replyObject = new AeReply(getProcessId(), aOpenMessageActivity.getReplyId(), replyReceiver);
@@ -1045,6 +1069,10 @@ public class AeBusinessProcess extends AeActivityScopeImpl implements IAeBusines
          IAePartnerLink aPartnerLink, AePartnerLinkOpImplKey aPartnerLinkKey)
          throws AeBusinessProcessException
    {
+	   if (this.isTerminating()) {
+		   LOGGER.warning("Dropping invoke " + aInvoke + " due to early termination");
+		   return;
+	   }
       AeInvoke messageQueueObject = createInvokeQueueObject(aInvoke, aInputMessage, aPartnerLink, aPartnerLinkKey);
       getEngine().addInvoke(getProcessPlan(), messageQueueObject);
    }
