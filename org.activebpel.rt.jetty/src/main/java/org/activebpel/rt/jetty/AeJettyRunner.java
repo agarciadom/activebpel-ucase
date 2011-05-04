@@ -1,7 +1,11 @@
 package org.activebpel.rt.jetty;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import org.activebpel.rt.bpel.config.IAeUpdatableEngineConfig;
 import org.activebpel.rt.bpel.server.admin.IAeEngineAdministration;
@@ -27,6 +31,8 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
  * @author Antonio García Domínguez
  */
 public class AeJettyRunner {
+
+	private static final String ENGINE_CONFIG_NAME = "aeEngineConfig.xml";
 
 	final static String RUNNING_MSG = "ActiveBPEL is now RUNNING";
 
@@ -61,6 +67,10 @@ public class AeJettyRunner {
 	private File fMainDirectory;
 	private Server fServer;
 	private String fLoggingFilterName;
+
+	static final String PROCESSLOG_SUBDIR_NAME = "process-logs";
+
+	static final String DEPLOYMENT_SUBDIR_NAME = "bpr";
 
 	/**
 	 * Creates a new instance of the runner.
@@ -256,6 +266,9 @@ public class AeJettyRunner {
 		// Set up Jetty
 		this.fServer = new Server(port);
 
+		// Copy the default configuration into the bpr/ directory so ActiveBPEL does not complain
+		copyEngineConfiguration();
+
 		WebAppContext adminHandler = addWebappHandler("/BpelAdmin",
 				"webapps/BpelAdmin");
 		WebAppContext mainWebapp = addWebappHandler("/active-bpel",
@@ -274,6 +287,29 @@ public class AeJettyRunner {
 		handlerList.addHandler(adminHandler);
 		handlerList.addHandler(mainWebapp);
 		fServer.setHandler(handlerList);
+	}
+
+	private void copyEngineConfiguration() throws FileNotFoundException, IOException {
+		final File bprDir = new File(fMainDirectory, DEPLOYMENT_SUBDIR_NAME);
+		bprDir.mkdir();
+		InputStream is = null;
+		OutputStream os = null;
+		try {
+			final File destFile = new File(bprDir, ENGINE_CONFIG_NAME);
+
+			is = getClass().getResourceAsStream("/" + ENGINE_CONFIG_NAME);
+			os = new FileOutputStream(destFile);
+			final byte[] buf = new byte[2048];
+			int count = 0;
+			while ((count = is.read(buf)) != -1) {
+				os.write(buf, 0, count);
+			}
+
+			fLogger.debug("Copied default " + ENGINE_CONFIG_NAME + " to " + destFile);
+		} finally {
+			if (is != null) is.close();
+			if (os != null) os.close();
+		}
 	}
 
 }

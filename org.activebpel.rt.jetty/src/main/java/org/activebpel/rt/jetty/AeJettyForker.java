@@ -74,14 +74,14 @@ public class AeJettyForker {
 	 * Returns the directory where the .bpr files are held.
 	 */
 	public File getBPRDirectory() {
-		return new File(fMainDirectory, "bpr");
+		return new File(fMainDirectory, AeJettyRunner.DEPLOYMENT_SUBDIR_NAME);
 	}
 
 	/**
 	 * Returns the directory where the process logs are held.
 	 */
 	public File getProcessLogDirectory() {
-		return new File(fMainDirectory, "process-logs");
+		return new File(fMainDirectory, AeJettyRunner.PROCESSLOG_SUBDIR_NAME);
 	}
 
 	/**
