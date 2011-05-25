@@ -14,7 +14,7 @@
 
   <properties>
     <subdir.name>active-bpel</subdir.name>
-    <subdir.version>3-SNAPSHOT</subdir.version>
+    <subdir.version>4-SNAPSHOT</subdir.version>
   </properties>
 
   <build>
