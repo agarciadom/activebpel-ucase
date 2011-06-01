@@ -130,6 +130,8 @@ public class AeJettyRunner {
 		config.setLoggingFilter(fLoggingFilterName);
 		// Place the deployment and process logs inside the work directory
 		config.setLoggingBaseDir(fMainDirectory.getCanonicalPath());
+		// Store unmatched correlated receives for only 5 seconds
+		config.setUnmatchedCorrelatedReceiveTimeout(5);
 		// Tell all other components to update their configuration accordingly
 		config.update();
 

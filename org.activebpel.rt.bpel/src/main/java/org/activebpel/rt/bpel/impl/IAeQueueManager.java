@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
 import org.activebpel.rt.bpel.AeBusinessProcessException;
 import org.activebpel.rt.bpel.IAeFault;
 import org.activebpel.rt.bpel.impl.list.AeAlarmFilter;
@@ -194,4 +196,11 @@ public interface IAeQueueManager extends IAeManager
     * @param aProtocol
     */
    public IAeReceiveHandler getReceiveHandler(String aProtocol) throws AeBusinessProcessException;
+
+   /**
+    * Removes all unmatched receives from the process with QName <code>processName</code>. This is
+    * useful when we deploy a new version of a composition: we want unmatched receives to be discarded
+    * in this case, as they may have unwanted consequences.
+    */
+   public void removeUnmatchedReceivesFor(QName processName);
 }

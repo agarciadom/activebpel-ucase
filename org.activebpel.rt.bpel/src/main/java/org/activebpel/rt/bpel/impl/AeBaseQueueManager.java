@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
+import javax.xml.namespace.QName;
+
 import org.activebpel.rt.AeException;
 import org.activebpel.rt.bpel.AeBusinessProcessException;
 import org.activebpel.rt.bpel.AeMessages;
@@ -1002,4 +1004,17 @@ public abstract class AeBaseQueueManager extends AeManagerAdapter implements IAe
          return result;
       }
    }
+
+	@SuppressWarnings("unchecked")
+	public void removeUnmatchedReceivesFor(QName processName) {
+		synchronized(getUnmatchedReceives()) {
+			final Iterator<AeUnmatchedReceive> it = getUnmatchedReceives().iterator();
+			while (it.hasNext()) {
+				final AeUnmatchedReceive unmatched = it.next();
+				if (processName.equals(unmatched.getInboundReceive().getProcessName())) {
+					it.remove();
+				}
+			}
+		}
+	}
 }

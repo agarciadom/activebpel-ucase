@@ -26,6 +26,7 @@ import java.util.Iterator;
 import org.activebpel.rt.AeException;
 import org.activebpel.rt.bpel.def.AeProcessDef;
 import org.activebpel.rt.bpel.server.AeMessages;
+import org.activebpel.rt.bpel.server.engine.AeEngineFactory;
 import org.activebpel.rt.bpel.server.logging.IAeDeploymentLogger;
 import org.activebpel.rt.bpel.server.logging.IAeLogWrapper;
 import org.activebpel.rt.util.AeUtil;
@@ -194,6 +195,9 @@ public class AeDeploymentHandler extends AeAbstractDeploymentHandler
 
             if( !getDeploymentLogger().hasErrors() )
             {
+            	// Clean the unmatched receive list
+            	AeEngineFactory.getEngine().getQueueManager().removeUnmatchedReceivesFor(source.getProcessName());
+
                // Get the service info for undeployment
                IAeServiceDeploymentInfo[] services = getServiceInfo(source);
                aContainer.addServiceDeploymentInfo(services);
