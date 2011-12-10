@@ -20,6 +20,7 @@
  */
 package org.activebpel.rt.bpel.impl.expr.xpath;
 
+import org.activebpel.rt.bpel.def.AeBaseDef;
 import org.activebpel.rt.bpel.function.IAeFunctionExecutionContext;
 import org.activebpel.rt.bpel.function.IAeFunctionFactory;
 import org.activebpel.rt.bpel.impl.AeAbstractBpelObject;
@@ -136,5 +137,9 @@ public class AeXPathContext implements IAeFunctionExecutionContext
    protected void setFunctionExecContext(IAeFunctionExecutionContext aFunctionExecContext)
    {
       mFunctionExecContext = aFunctionExecContext;
+   }
+
+   public AeBaseDef getDef() {
+     return getFunctionExecContext().getDef();
    }
 }

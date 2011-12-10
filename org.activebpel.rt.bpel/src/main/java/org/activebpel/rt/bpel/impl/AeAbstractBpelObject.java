@@ -730,7 +730,7 @@ abstract public class AeAbstractBpelObject implements IAeExecutableBpelObject, I
     */
    protected IAeExpressionRunnerContext createExpressionRunnerContext(String aLanguageURI, Object aContext, IAeExpressionDef aExpressionDef)
    {
-      return new AeExpressionRunnerContext(this, aContext, aLanguageURI, this, this, aExpressionDef);
+      return new AeExpressionRunnerContext(this, aContext, aLanguageURI, this, this, (AeBaseDef)aExpressionDef);
    }
 
    /**

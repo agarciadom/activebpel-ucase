@@ -179,7 +179,7 @@ public class AeCopyOperationContext implements IAeCopyOperationContext
    public IAeFunctionExecutionContext createFunctionExecutionContext(Object aContext, AeXPathHelper aXPathHelper)
    {
       IAeExpressionTypeConverter typeConverter = new AeXPathExpressionTypeConverter(aXPathHelper);
-      return new AeFunctionExecutionContext(getContextBase(), aContext, getContextBase(), getContextBase(), typeConverter);
+      return new AeFunctionExecutionContext(getContextBase(), aContext, getContextBase(), getContextBase(), typeConverter, mContextBase.getDefinition());
    }
 
    /**

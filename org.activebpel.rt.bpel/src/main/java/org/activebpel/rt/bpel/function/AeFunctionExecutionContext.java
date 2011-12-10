@@ -20,6 +20,7 @@
  */
 package org.activebpel.rt.bpel.function;
 
+import org.activebpel.rt.bpel.def.AeBaseDef;
 import org.activebpel.rt.bpel.impl.AeAbstractBpelObject;
 import org.activebpel.rt.bpel.impl.IAeFaultFactory;
 import org.activebpel.rt.bpel.impl.expr.IAeExpressionTypeConverter;
@@ -40,7 +41,10 @@ public class AeFunctionExecutionContext implements IAeFunctionExecutionContext
    private IAeFunctionFactory mFunctionFactory;
    /** The type converter. */
    private IAeExpressionTypeConverter mExpressionTypeConverter;
+   /** The definition node. */
+   private AeBaseDef mDef;
 
+   
    /**
     * Constructs a function execution context.
     * 
@@ -52,13 +56,14 @@ public class AeFunctionExecutionContext implements IAeFunctionExecutionContext
     */
    public AeFunctionExecutionContext(AeAbstractBpelObject aAbstractBpelObject, Object aEvaluationContext,
          IAeNamespaceContext aNamespaceContext, IAeFunctionFactory aFunctionFactory,
-         IAeExpressionTypeConverter aExpressionTypeConverter)
+         IAeExpressionTypeConverter aExpressionTypeConverter, AeBaseDef def)
    {
       setAbstractBpelObject(aAbstractBpelObject);
       setEvaluationContext(aEvaluationContext);
       setNamespaceContext(aNamespaceContext);
       setFunctionFactory(aFunctionFactory);
       setExpressionTypeConverter(aExpressionTypeConverter);
+      setDef(def);
    }
 
    /**
@@ -117,7 +122,11 @@ public class AeFunctionExecutionContext implements IAeFunctionExecutionContext
       return getExpressionTypeConverter();
    }
 
-   /**
+public AeBaseDef getDef() {
+	  return mDef;
+   }
+
+/**
     * @param aAbstractBpelObject The abstractBpelObject to set.
     */
    protected void setAbstractBpelObject(AeAbstractBpelObject aAbstractBpelObject)
@@ -163,5 +172,9 @@ public class AeFunctionExecutionContext implements IAeFunctionExecutionContext
    protected void setExpressionTypeConverter(IAeExpressionTypeConverter aExpressionTypeConverter)
    {
       mExpressionTypeConverter = aExpressionTypeConverter;
+   }
+
+   protected void setDef(AeBaseDef mDef) {
+	  this.mDef = mDef;
    }
 }

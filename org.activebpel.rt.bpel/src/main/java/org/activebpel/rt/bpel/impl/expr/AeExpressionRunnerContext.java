@@ -20,6 +20,7 @@
  */
 package org.activebpel.rt.bpel.impl.expr;
 
+import org.activebpel.rt.bpel.def.AeBaseDef;
 import org.activebpel.rt.bpel.def.IAeExpressionDef;
 import org.activebpel.rt.bpel.function.IAeFunctionFactory;
 import org.activebpel.rt.bpel.impl.AeAbstractBpelObject;
@@ -43,7 +44,7 @@ public class AeExpressionRunnerContext implements IAeExpressionRunnerContext
    /** The expression language URI. */
    private String mLanguageURI;
    /** The expression definition to be run. Useful for looking up variables if necessary. */
-   private IAeExpressionDef mExpressionDef;
+   private AeBaseDef mExpressionDef;
 
    
   /**
@@ -57,14 +58,14 @@ public class AeExpressionRunnerContext implements IAeExpressionRunnerContext
     * @param aExpressionDef 
     */
    public AeExpressionRunnerContext(AeAbstractBpelObject aAbstractBpelObject, Object aEvaluationContext,
-         String aLanguageURI, IAeNamespaceContext aNamespaceContext, IAeFunctionFactory aFunctionContext, IAeExpressionDef aExpressionDef)
+         String aLanguageURI, IAeNamespaceContext aNamespaceContext, IAeFunctionFactory aFunctionContext, AeBaseDef aExpressionDef)
    {
       setAbstractBpelObject(aAbstractBpelObject);
       setEvaluationContext(aEvaluationContext);
       setLanguageURI(aLanguageURI);
       setNamespaceContext(aNamespaceContext);
       setFunctionContext(aFunctionContext);
-      setExpressionDef(aExpressionDef);
+      setDef(aExpressionDef);
    }
 
    /**
@@ -124,9 +125,9 @@ public class AeExpressionRunnerContext implements IAeExpressionRunnerContext
       return mLanguageURI;
    }
 
-   public IAeExpressionDef getExpressionDef() {
+   public AeBaseDef getDef() {
     return mExpressionDef;
-  }
+   }
 
 /**
     * @param aAbstractBpelObject The abstractBpelObject to set.
@@ -168,7 +169,7 @@ public class AeExpressionRunnerContext implements IAeExpressionRunnerContext
       mLanguageURI = aLanguageURI;
    }
 
-protected void setExpressionDef(IAeExpressionDef mExpressionDef) {
-    this.mExpressionDef = mExpressionDef;
-  }
+   protected void setDef(AeBaseDef mExpressionDef) {
+      this.mExpressionDef = mExpressionDef;
+   }
 }

@@ -20,6 +20,7 @@
  */
 package org.activebpel.rt.bpel.impl.expr;
 
+import org.activebpel.rt.bpel.def.AeBaseDef;
 import org.activebpel.rt.bpel.function.IAeFunctionExecutionContext;
 import org.activebpel.rt.bpel.function.IAeFunctionFactory;
 import org.activebpel.rt.bpel.impl.AeAbstractBpelObject;
@@ -136,5 +137,9 @@ public class AeExprFunctionExecutionContext implements IAeFunctionExecutionConte
    protected void setExpressionTypeConverter(IAeExpressionTypeConverter aExpressionTypeConverter)
    {
       mExpressionTypeConverter = aExpressionTypeConverter;
+   }
+
+   public AeBaseDef getDef() {
+      return mRunnerContext.getDef();
    }
 }

@@ -20,6 +20,7 @@
  */
 package org.activebpel.rt.bpel.function;
 
+import org.activebpel.rt.bpel.def.AeBaseDef;
 import org.activebpel.rt.bpel.impl.AeAbstractBpelObject;
 import org.activebpel.rt.bpel.impl.IAeFaultFactory;
 import org.activebpel.rt.bpel.impl.expr.IAeExpressionTypeConverter;
@@ -65,4 +66,9 @@ public interface IAeFunctionExecutionContext
     * Returns the expression language-specific type converter.
     */
    public IAeExpressionTypeConverter getTypeConverter();
+
+   /**
+    * Returns the definition node.
+    */
+   public AeBaseDef getDef();
 }

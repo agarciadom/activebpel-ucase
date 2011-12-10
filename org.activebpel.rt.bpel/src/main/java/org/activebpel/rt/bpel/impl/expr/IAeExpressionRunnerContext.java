@@ -20,6 +20,7 @@
  */
 package org.activebpel.rt.bpel.impl.expr;
 
+import org.activebpel.rt.bpel.def.AeBaseDef;
 import org.activebpel.rt.bpel.function.IAeFunctionFactory;
 import org.activebpel.rt.bpel.impl.AeAbstractBpelObject;
 import org.activebpel.rt.bpel.impl.IAeFaultFactory;
@@ -67,4 +68,9 @@ public interface IAeExpressionRunnerContext
     * Gets the URI of the language being used to execute the expression.
     */
    public String getLanguageURI();
+
+   /**
+    * Gets the WS-BPEL definition node containing this expression.
+    */
+   public AeBaseDef getDef();
 }
