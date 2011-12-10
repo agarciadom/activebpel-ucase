@@ -20,6 +20,7 @@
  */
 package org.activebpel.rt.bpel.impl.expr;
 
+import org.activebpel.rt.bpel.def.IAeExpressionDef;
 import org.activebpel.rt.bpel.function.IAeFunctionFactory;
 import org.activebpel.rt.bpel.impl.AeAbstractBpelObject;
 import org.activebpel.rt.bpel.impl.IAeFaultFactory;
@@ -41,8 +42,11 @@ public class AeExpressionRunnerContext implements IAeExpressionRunnerContext
    private IAeFunctionFactory mFunctionContext;
    /** The expression language URI. */
    private String mLanguageURI;
+   /** The expression definition to be run. Useful for looking up variables if necessary. */
+   private IAeExpressionDef mExpressionDef;
 
-   /**
+   
+  /**
     * Constructs an expression runner context.
     * 
     * @param aAbstractBpelObject
@@ -50,15 +54,17 @@ public class AeExpressionRunnerContext implements IAeExpressionRunnerContext
     * @param aLanguageURI
     * @param aNamespaceContext
     * @param aFunctionContext
+    * @param aExpressionDef 
     */
    public AeExpressionRunnerContext(AeAbstractBpelObject aAbstractBpelObject, Object aEvaluationContext,
-         String aLanguageURI, IAeNamespaceContext aNamespaceContext, IAeFunctionFactory aFunctionContext)
+         String aLanguageURI, IAeNamespaceContext aNamespaceContext, IAeFunctionFactory aFunctionContext, IAeExpressionDef aExpressionDef)
    {
       setAbstractBpelObject(aAbstractBpelObject);
       setEvaluationContext(aEvaluationContext);
       setLanguageURI(aLanguageURI);
       setNamespaceContext(aNamespaceContext);
       setFunctionContext(aFunctionContext);
+      setExpressionDef(aExpressionDef);
    }
 
    /**
@@ -118,7 +124,11 @@ public class AeExpressionRunnerContext implements IAeExpressionRunnerContext
       return mLanguageURI;
    }
 
-   /**
+   public IAeExpressionDef getExpressionDef() {
+    return mExpressionDef;
+  }
+
+/**
     * @param aAbstractBpelObject The abstractBpelObject to set.
     */
    protected void setAbstractBpelObject(AeAbstractBpelObject aAbstractBpelObject)
@@ -157,4 +167,8 @@ public class AeExpressionRunnerContext implements IAeExpressionRunnerContext
    {
       mLanguageURI = aLanguageURI;
    }
+
+protected void setExpressionDef(IAeExpressionDef mExpressionDef) {
+    this.mExpressionDef = mExpressionDef;
+  }
 }

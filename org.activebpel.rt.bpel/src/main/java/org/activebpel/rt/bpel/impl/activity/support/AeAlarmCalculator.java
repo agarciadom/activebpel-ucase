@@ -166,7 +166,7 @@ public abstract class AeAlarmCalculator
     */
    protected static IAeExpressionRunnerContext createExpressionRunnerContext(String aLanguageURI, AeAbstractBpelObject aObject)
    {
-      return new AeExpressionRunnerContext(aObject, null, aLanguageURI, aObject, aObject);
+      return new AeExpressionRunnerContext(aObject, null, aLanguageURI, aObject, aObject, null);
    }
 
    /**

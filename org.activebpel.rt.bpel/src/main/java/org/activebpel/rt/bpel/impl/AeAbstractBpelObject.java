@@ -726,10 +726,11 @@ abstract public class AeAbstractBpelObject implements IAeExecutableBpelObject, I
     * 
     * @param aLanguageURI
     * @param aContext
+ * @param aExpressionDef 
     */
-   protected IAeExpressionRunnerContext createExpressionRunnerContext(String aLanguageURI, Object aContext)
+   protected IAeExpressionRunnerContext createExpressionRunnerContext(String aLanguageURI, Object aContext, IAeExpressionDef aExpressionDef)
    {
-      return new AeExpressionRunnerContext(this, aContext, aLanguageURI, this, this);
+      return new AeExpressionRunnerContext(this, aContext, aLanguageURI, this, this, aExpressionDef);
    }
 
    /**
@@ -768,7 +769,7 @@ abstract public class AeAbstractBpelObject implements IAeExecutableBpelObject, I
       {
          IAeExpressionLanguageFactory factory = getProcess().getExpressionLanguageFactory();
          IAeExpressionRunner runner = factory.createExpressionRunner(aExpressionDef.getBpelNamespace(), expressionLanguage);
-         return runner.executeExpression(createExpressionRunnerContext(expressionLanguage, aContext), aExpressionDef.getExpression());
+         return runner.executeExpression(createExpressionRunnerContext(expressionLanguage, aContext, aExpressionDef), aExpressionDef.getExpression());
       }
       catch (AeBusinessProcessException e)
       {
@@ -795,7 +796,7 @@ abstract public class AeAbstractBpelObject implements IAeExecutableBpelObject, I
       {
          IAeExpressionLanguageFactory factory = getProcess().getExpressionLanguageFactory();
          IAeExpressionRunner runner = factory.createExpressionRunner(aExpressionDef.getBpelNamespace(), expressionLanguage);
-         return runner.executeBooleanExpression(createExpressionRunnerContext(expressionLanguage, null), aExpressionDef.getExpression()).booleanValue();
+         return runner.executeBooleanExpression(createExpressionRunnerContext(expressionLanguage, null, aExpressionDef), aExpressionDef.getExpression()).booleanValue();
       }
       catch (AeBusinessProcessException e)
       {
