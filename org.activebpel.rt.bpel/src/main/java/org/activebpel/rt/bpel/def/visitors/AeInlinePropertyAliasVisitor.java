@@ -85,6 +85,14 @@ public class AeInlinePropertyAliasVisitor extends AeAbstractDefVisitor
    }
 
    /**
+    * Changes the process definition being visited manually. Useful if we start visiting from a non-root object,
+    * as we need to do when caching properties missed by ActiveBPEL's static analysis.
+    */
+   public void setProcessDef(AeProcessDef def) {
+	   mProcessDef = def;
+   }
+
+   /**
     * Finds any propertyAliases needed to resolve the correlationSets used in either
     * the input and output variables of an invoke.
     * @see org.activebpel.rt.bpel.def.visitors.IAeDefVisitor#visit(org.activebpel.rt.bpel.def.activity.AeActivityInvokeDef)
