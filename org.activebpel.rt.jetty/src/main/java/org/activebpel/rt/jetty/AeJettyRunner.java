@@ -63,10 +63,12 @@ public class AeJettyRunner {
 		SLF4JBridgeHandler.install();
 	}
 
-	private static Logger fLogger = LoggerFactory.getLogger(AeJettyRunner.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(AeJettyRunner.class);
 	private File fMainDirectory;
 	private Server fServer;
 	private String fLoggingFilterName;
+
+	private FileAppender fAppender;
 
 	static final String PROCESSLOG_SUBDIR_NAME = "process-logs";
 
@@ -110,7 +112,9 @@ public class AeJettyRunner {
 	 *             There was a problem while starting the server.
 	 */
 	public void start() throws Exception {
-		fLogger.info(String.format(
+		configureLogging();
+
+		LOGGER.info(String.format(
 				"Starting ActiveBPEL with main directory %s on port %d",
 				fMainDirectory.getCanonicalPath(), getPort()));
 		fServer.start();
@@ -118,7 +122,7 @@ public class AeJettyRunner {
 		// Wait for ActiveBPEL to be really running
 		IAeEngineAdministration admin = getEngineAdmin();
 		while (!admin.isRunning()) {
-			fLogger.debug("ActiveBPEL is not running yet, waiting 500ms...");
+			LOGGER.debug("ActiveBPEL is not running yet, waiting 500ms...");
 			synchronized (this) {
 				this.wait(500);
 			}
@@ -139,30 +143,42 @@ public class AeJettyRunner {
 		// stderr, so it will never be filtered away, in
 		// addition to logging it
 		System.err.println(RUNNING_MSG);
-		fLogger.info(RUNNING_MSG);
+		LOGGER.info(RUNNING_MSG);
 	}
 
 	/**
-	 * Waits for the server to finish its execution.
-	 * 
-	 * @throws InterruptedException
-	 *             The current thread was interrupted by a call to
-	 *             {@link java.lang.Thread#interrupt()}.
+	 * Stops the currently running server, waiting for it to finish its execution,
+	 * and uninstalls the configured file appender, so subsequent log entries are
+	 * not saved to the same file.
+	 *
+	 * @throws Exception
+	 *             There was a problem while stopping the server or waiting for
+	 *             it to finish.
 	 */
-	public void join() throws InterruptedException {
-		fLogger.info("Waiting for server to finish...");
+	public void join() throws Exception {
+		LOGGER.info("Waiting for server to finish...");
+		fServer.stop();
 		fServer.join();
+		uninstallLogging();
 	}
 
 	/**
-	 * Stops the currently running server.
+	 * Stops the currently running server without waiting for it to complete.
 	 * 
 	 * @throws Exception
 	 *             There was a problem while stopping the server.
 	 */
 	public void stop() throws Exception {
-		fLogger.info("Stopping ActiveBPEL....");
+		LOGGER.info("Stopping ActiveBPEL....");
 		fServer.stop();
+	}
+
+	/**
+	 * Uninstalls the file appender added by this runner.
+	 */
+	public void uninstallLogging() {
+		org.apache.log4j.Logger.getRootLogger().removeAppender(fAppender);
+		fAppender = null;
 	}
 
 	/**
@@ -226,7 +242,7 @@ public class AeJettyRunner {
 				try {
 					runner.stop();
 				} catch (Exception e) {
-					fLogger.error("Error while stopping Jetty", e);
+					LOGGER.error("Error while stopping Jetty", e);
 				}
 			}
 		});
@@ -255,13 +271,16 @@ public class AeJettyRunner {
 	 * a file, in addition to whatever the existing log4j.properties provides.
 	 */
 	private void configureLogging() throws IOException {
-		org.apache.log4j.Logger rootLogger = org.apache.log4j.Logger
-				.getRootLogger();
-		FileAppender fileAppender = new FileAppender(new PatternLayout(
+		if (fAppender != null) {
+			return;
+		}
+
+		org.apache.log4j.Logger rootLogger = org.apache.log4j.Logger.getRootLogger();
+		fAppender = new FileAppender(new PatternLayout(
 				"%d{yyyy-MM-dd HH:mm:ss} %-40c{1} [%5p] %m%n"), fMainDirectory
 				.getCanonicalPath()
 				+ File.separator + "jetty.log", false, false, 8192);
-		rootLogger.addAppender(fileAppender);
+		rootLogger.addAppender(fAppender);
 	}
 
 	private void setUpServer(int port, String logLevel) throws IOException {
@@ -307,7 +326,7 @@ public class AeJettyRunner {
 				os.write(buf, 0, count);
 			}
 
-			fLogger.debug("Copied default " + ENGINE_CONFIG_NAME + " to " + destFile);
+			LOGGER.debug("Copied default " + ENGINE_CONFIG_NAME + " to " + destFile);
 		} finally {
 			if (is != null) is.close();
 			if (os != null) os.close();
