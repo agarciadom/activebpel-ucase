@@ -14,7 +14,6 @@
 
   <properties>
     <subdir.name>active-bpel</subdir.name>
-    <subdir.version>5-SNAPSHOT</subdir.version>
   </properties>
 
   <build>
@@ -51,7 +50,7 @@
           <dependency>
             <groupId>org.activebpel</groupId>
             <artifactId>subdir-webapp-assembly</artifactId>
-            <version>${subdir.version}</version>
+            <version>6-SNAPSHOT</version>
           </dependency>
         </dependencies>
         <executions>
