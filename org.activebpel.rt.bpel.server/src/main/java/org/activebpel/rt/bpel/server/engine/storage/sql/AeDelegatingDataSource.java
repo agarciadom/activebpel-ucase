@@ -23,6 +23,8 @@ package org.activebpel.rt.bpel.server.engine.storage.sql;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -108,14 +110,19 @@ public class AeDelegatingDataSource implements DataSource
       mDelegate = aDelegate;
    }
 
-public boolean isWrapperFor(Class<?> arg0) throws SQLException {
-	// TODO Auto-generated method stub
-	return false;
-}
+	public boolean isWrapperFor(Class<?> arg0) throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-public <T> T unwrap(Class<T> arg0) throws SQLException {
-	// TODO Auto-generated method stub
-	return null;
-}
+	public <T> T unwrap(Class<T> arg0) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
 

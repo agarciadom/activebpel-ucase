@@ -159,14 +159,4 @@ public class AeJNDIDataSource extends AeDataSource
    {
       return mPassword;
    }
-
-public boolean isWrapperFor(Class<?> arg0) throws SQLException {
-	// TODO Auto-generated method stub
-	return false;
-}
-
-public <T> T unwrap(Class<T> arg0) throws SQLException {
-	// TODO Auto-generated method stub
-	return null;
-}
 }

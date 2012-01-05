@@ -24,6 +24,8 @@ import java.io.PrintWriter;
 import java.lang.reflect.InvocationHandler;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -355,5 +357,20 @@ public abstract class AeDataSource implements DataSource
    {
       getDelegate().setLogWriter(aWriter);
    }
+
+public boolean isWrapperFor(Class<?> arg0) throws SQLException {
+	// TODO Auto-generated method stub
+	return false;
+}
+
+public <T> T unwrap(Class<T> arg0) throws SQLException {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+	// TODO Auto-generated method stub
+	return null;
+}
 
 }
