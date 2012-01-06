@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.activebpel</groupId>
     <artifactId>engine</artifactId>
-    <version>4.1-uca8-SNAPSHOT</version>
+    <version>4.1-uca8</version>
   </parent>
 
   <artifactId>rt.tamino</artifactId>
-  <version>4.1-uca8-SNAPSHOT</version>
+  <version>4.1-uca8</version>
   <packaging>jar</packaging>
   <name>ActiveBPEL::Tamino</name>
 
