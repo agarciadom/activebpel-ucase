@@ -147,9 +147,7 @@ public class AeJettyRunner {
 	}
 
 	/**
-	 * Stops the currently running server, waiting for it to finish its execution,
-	 * and uninstalls the configured file appender, so subsequent log entries are
-	 * not saved to the same file.
+	 * Waits for the currently running server to finish its execution.
 	 *
 	 * @throws Exception
 	 *             There was a problem while stopping the server or waiting for
@@ -157,9 +155,7 @@ public class AeJettyRunner {
 	 */
 	public void join() throws Exception {
 		LOGGER.info("Waiting for server to finish...");
-		fServer.stop();
 		fServer.join();
-		uninstallLogging();
 	}
 
 	/**
