@@ -111,6 +111,7 @@
             <id>jar-with-deps</id>
             <goals><goal>shade</goal></goals>
             <configuration>
+              <createSourcesJar>true</createSourcesJar>
               <filters>
                 <filter>
                   <artifact>*</artifact>
