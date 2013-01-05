@@ -70,6 +70,10 @@ public class AeJettyRunner {
 
 	private FileAppender fAppender;
 
+	private WebAppContext fAdminHandler;
+
+	private WebAppContext fMainWebapp;
+
 	static final String PROCESSLOG_SUBDIR_NAME = "process-logs";
 
 	static final String DEPLOYMENT_SUBDIR_NAME = "bpr";
@@ -111,13 +115,21 @@ public class AeJettyRunner {
 	 * @throws Exception
 	 *             There was a problem while starting the server.
 	 */
-	public void start() throws Exception {
+	public void start() throws Throwable {
 		configureLogging();
 
 		LOGGER.info(String.format(
 				"Starting ActiveBPEL with main directory %s on port %d",
 				fMainDirectory.getCanonicalPath(), getPort()));
+
+		// Start Jetty and ensure that both contexts were successfully started
 		fServer.start();
+		if (fAdminHandler.getUnavailableException() != null) {
+			throw fAdminHandler.getUnavailableException();
+		}
+		else if (fMainWebapp.getUnavailableException() != null) {
+			throw fMainWebapp.getUnavailableException();
+		}
 
 		// Wait for ActiveBPEL to be really running
 		IAeEngineAdministration admin = getEngineAdmin();
@@ -210,11 +222,9 @@ public class AeJettyRunner {
 	 *            Arguments received through the command line: work directory
 	 *            for ActiveBPEL, port on which it should listen, and its
 	 *            logging level ("none" or "full").
-	 * @throws Exception
-	 *             There was a problem while accessing the main work directory
-	 *             or starting Jetty.
+	 * @throws Throwable 
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Throwable {
 		if (args.length != 3 || (!"none".equals(args[2]) && !"full".equals(args[2]))) {
 			System.err.println("Usage: java "
 					+ AeJettyRunner.class.getCanonicalName()
@@ -286,11 +296,9 @@ public class AeJettyRunner {
 		// Copy the default configuration into the bpr/ directory so ActiveBPEL does not complain
 		copyEngineConfiguration();
 
-		WebAppContext adminHandler = addWebappHandler("/BpelAdmin",
-				"webapps/BpelAdmin");
-		WebAppContext mainWebapp = addWebappHandler("/active-bpel",
-				"webapps/active-bpel");
-		mainWebapp.getSecurityHandler().setLoginService(new HashLoginService());
+		fAdminHandler = addWebappHandler("/BpelAdmin", "webapps/BpelAdmin");
+		fMainWebapp = addWebappHandler("/active-bpel", "webapps/active-bpel");
+		fMainWebapp.getSecurityHandler().setLoginService(new HashLoginService());
 
 		// Normally, we'd like to set the servlet.home init parameter to the
 		// value of fMainDirectory. However, we can't do it directly, as the
@@ -301,8 +309,8 @@ public class AeJettyRunner {
 		System.setProperty("catalina.home", fMainDirectory.getCanonicalPath());
 
 		HandlerList handlerList = new HandlerList();
-		handlerList.addHandler(adminHandler);
-		handlerList.addHandler(mainWebapp);
+		handlerList.addHandler(fAdminHandler);
+		handlerList.addHandler(fMainWebapp);
 		fServer.setHandler(handlerList);
 	}
 
