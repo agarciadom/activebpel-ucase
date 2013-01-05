@@ -19,16 +19,16 @@
       <version>1.6.2</version>
     </dependency>
     <dependency>
-      <groupId>jaxen</groupId>
+      <groupId>com.github.frgomes</groupId>
       <artifactId>jaxen</artifactId>
-      <version>1.1-beta-8</version>
+      <version>1.1.4.1</version>
       <exclusions>
         <!-- JDK6 includes JAXP -->
         <exclusion>
-          <groupId>xerces</groupId>
-          <artifactId>xmlParserAPIs</artifactId>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
         </exclusion>
-        <!-- We don't use these XPath engines here -->
+        <!-- We don't use these OMs -->
         <exclusion>
           <groupId>dom4j</groupId>
           <artifactId>dom4j</artifactId>
