@@ -20,6 +20,8 @@
  */
 package org.activebpel.rt.bpel.impl;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -42,20 +44,35 @@ import org.activebpel.rt.util.AeUtil;
  */
 public class AeExecutionQueue
 {
+   private static final int NS_IN_A_SECOND = 1000000000;
+
+private static final ThreadMXBean THREAD_MXBEAN = ManagementFactory.getThreadMXBean();
+
    // Note: Access to mExecutionQueue was previously synchronized but this is
    //       unnecessary now since there will only ever be a single thread in the
    //       process at any given time.
 
    /** Holds the objects that we want to execute. */
    private final LinkedList mExecutionQueue;
+
    /** flag for whether execution is suspended */
    private boolean mSuspended = false;
+
    /** Number of pending calls to <code>execute</code>. */
    private int mExecuteDepth = 0;
+
    /** Number of pending calls to <code>executeObject</code>. */
    private int mExecuteObjectDepth = 0;
+
+   /** Maximum number of CPU milliseconds that can be dedicated to executing objects in the queue. */
+   private Long mMaximumCPUNanos;
+
+   /** Total number of CPU milliseconds dedicated to executing objects in the queue. */
+   private Long mThreadCPUNanosStart;
+
    /** The owner process. */
    private IAeBusinessProcessInternal mProcess;
+
    /** Location paths to be resumed. */
    private final Set mPendingResumePaths = new HashSet();
 
@@ -179,6 +196,23 @@ public class AeExecutionQueue
       // isQuiescent() test.
       ++mExecuteObjectDepth;
 
+      if (mMaximumCPUNanos == null) {
+		mMaximumCPUNanos = new Long(mProcess.getEngine().getEngineConfiguration().getProcessCPUTimeout() * NS_IN_A_SECOND);
+      }
+      if (mThreadCPUNanosStart == null) {
+		mThreadCPUNanosStart = new Long(THREAD_MXBEAN.getCurrentThreadCpuTime());
+      }	
+      if (mMaximumCPUNanos > 0) {
+		final long elapsed = THREAD_MXBEAN.getCurrentThreadCpuTime() - mThreadCPUNanosStart;
+		if (elapsed > mMaximumCPUNanos) {
+			throw new AeBusinessProcessException(
+				String.format(
+					"CPU timeout for process %d: maximum time was %d ms, current total was %d ms",
+					mProcess.getProcessId(), mMaximumCPUNanos,
+					mThreadCPUNanosStart));
+		}
+      }
+
       try
       {
          // checking the state here because the process could have been 
@@ -186,10 +220,12 @@ public class AeExecutionQueue
          // to execute.
          if (aExecutable.getState() == AeBpelState.READY_TO_EXECUTE)
          {
-            aExecutable.setState(AeBpelState.EXECUTING);
+        	aExecutable.setState(AeBpelState.EXECUTING);
             try
             {
+               final long startingNanos = THREAD_MXBEAN.getCurrentThreadCpuTime();
                aExecutable.execute();
+               mThreadCPUNanosStart += (THREAD_MXBEAN.getCurrentThreadCpuTime() - startingNanos)/1000;
             }
             catch(Throwable ex)
             {

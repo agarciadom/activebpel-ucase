@@ -72,6 +72,8 @@ public class AeDefaultEngineConfiguration extends AeConfiguration implements IAe
    public static final int UNMATCHED_RECEIVE_TIMEOUT_DEFAULT = 30;
    /** default timeout value for web service operations */
    public static final int WEB_SERVICE_TIMEOUT_DEFAULT = 600; // 10 minutes
+   /** default timeout value for CPU time of a process */
+   public static final int PROCESS_CPU_TIMEOUT_DEFAULT = 0; // no limit
    /** default min number of threads for the work manager's thread pool */
    public static final int WORKMANAGER_THREAD_MIN_DEFAULT = 1;
    /** default max number of threads for the work manager's thread pool */
@@ -590,7 +592,14 @@ public class AeDefaultEngineConfiguration extends AeConfiguration implements IAe
 
    //----------[ MUTABLE CONFIGURATION SETTINGS ]-------------------------------
    
-   /**
+	/**
+    * @see org.activebpel.rt.bpel.config.IAeEngineConfiguration#getProcessCPUTimeout()
+    */
+	public int getProcessCPUTimeout() {
+	      return getIntegerEntry(PROCESS_CPU_TIMEOUT, PROCESS_CPU_TIMEOUT_DEFAULT);
+	}
+
+	/**
     * @see org.activebpel.rt.bpel.config.IAeEngineConfiguration#getUnmatchedCorrelatedReceiveTimeout()
     */
    public int getUnmatchedCorrelatedReceiveTimeout()
@@ -605,23 +614,29 @@ public class AeDefaultEngineConfiguration extends AeConfiguration implements IAe
    {
       return getIntegerEntry(WEB_SERVICE_TIMEOUT, WEB_SERVICE_TIMEOUT_DEFAULT);
    }
-   
-   /**
-    * @see org.activebpel.rt.bpel.config.IAeUpdatableEngineConfig#setWebServiceTimeout(int)
-    */
-   public void setWebServiceTimeout(int aTimeout)
-   {
-      setIntegerEntry(WEB_SERVICE_TIMEOUT, aTimeout);
-   }
 
-   /**
-    * Sets the timeout value for unmatched correlated receives.
-    * @param aTimeoutValue
-    */
-   public void setUnmatchedCorrelatedReceiveTimeout(int aTimeoutValue)
-   {
-      setIntegerEntry(UNMATCHED_RECEIVE_TIMEOUT_ENTRY, aTimeoutValue);
-   }
+	/**
+	 * @see org.activebpel.rt.bpel.config.IAeEngineConfiguration#getProcessCPUTimeout()
+	 */
+	public void setProcessCPUTimeout(int aTimeout) {
+		setIntegerEntry(PROCESS_CPU_TIMEOUT, aTimeout);
+	}
+
+	/**
+	 * Sets the timeout value for unmatched correlated receives.
+	 *
+	 * @param aTimeoutValue
+	 */
+	public void setUnmatchedCorrelatedReceiveTimeout(int aTimeoutValue) {
+		setIntegerEntry(UNMATCHED_RECEIVE_TIMEOUT_ENTRY, aTimeoutValue);
+	}
+
+	/**
+	 * @see org.activebpel.rt.bpel.config.IAeUpdatableEngineConfig#setWebServiceTimeout(int)
+	 */
+	public void setWebServiceTimeout(int aTimeout) {
+		setIntegerEntry(WEB_SERVICE_TIMEOUT, aTimeout);
+	}
 
    /**
     * @see org.activebpel.rt.bpel.config.IAeEngineConfiguration#getWorkManagerThreadPoolMax()
@@ -949,4 +964,5 @@ public class AeDefaultEngineConfiguration extends AeConfiguration implements IAe
    {
       return AeConfigurationUtil.createConfigSpecificClass(getMapEntry(aConfigName));
    }
+
 }

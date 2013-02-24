@@ -182,6 +182,8 @@ public interface IAeEngineConfiguration
    public static final String DURABLE_REPLY_FACTORIES = "ReplyFactories"; //$NON-NLS-1$
    /** Name of entry for the web service timeouts (both receives and invokes) */
    public static final String WEB_SERVICE_TIMEOUT = "WebServiceTimeout"; //$NON-NLS-1$
+   /** Name of entry for the process CPU time timeouts, in seconds. */
+   public static final String PROCESS_CPU_TIMEOUT = "ProcessCPUTimeout"; //$NON-NLS-1$
    /** Name of entry for the SOAP Message factory */
    public static final String SOAP_MESSAGE_FACTORY = "SOAPMessageFactory"; //$NON-NLS-1$
    /** Name of entry for scheduler manager. */
@@ -392,4 +394,9 @@ public interface IAeEngineConfiguration
     */
    public int getWebServiceTimeout();
 
+   /**
+    * Returns the maximum amount of CPU time in seconds that can be used by a process' execution
+    * queue before its execution is aborted. If 0, the process may use as much CPU time as desired.
+    */
+   public int getProcessCPUTimeout();
 }

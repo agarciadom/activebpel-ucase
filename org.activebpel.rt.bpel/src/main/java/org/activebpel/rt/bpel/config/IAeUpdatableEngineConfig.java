@@ -171,7 +171,12 @@ public interface IAeUpdatableEngineConfig extends IAeEngineConfiguration
     * @param aTimeout
     */
    public void setWebServiceTimeout(int aTimeout);
-   
+
+   /**
+    * Sets the max number of seconds to be dedicated to a process' execution queue before aborting its execution.
+    */
+   public void setProcessCPUTimeout(int aTimeout);
+
    /**
     * Retrieve the map entry from the config.
     * 

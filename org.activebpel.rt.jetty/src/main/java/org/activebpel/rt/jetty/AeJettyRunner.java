@@ -267,6 +267,7 @@ public class AeJettyRunner {
 		WebAppContext webapp = new WebAppContext();
 		webapp.setServer(fServer);
 		webapp.setContextPath(contextPath);
+		webapp.setExtractWAR(false);
 		webapp.setResourceBase(AeJettyRunner.class.getClassLoader()
 				.getResource(resourcePath).toExternalForm());
 		return webapp;
