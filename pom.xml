@@ -31,6 +31,9 @@
     <module>org.activebpel.rt</module>
     <module>org.activebpel.wsio</module>
     <module>subdir-webapp-assembly</module>
+
+    <!-- Dynamo submodules -->
+    <module>it.polimi.monitor.configurationmanager</module>
   </modules>
 
   <properties>
@@ -165,6 +168,24 @@
     <repository>
       <id>neptuno-thirdparty</id>
       <url>https://neptuno.uca.es/nexus/content/repositories/thirdparty</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+    <repository>
+      <id>jboss-releases</id>
+      <url>https://neptuno.uca.es/nexus/content/repositories/jboss-releases</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+    <repository>
+      <id>jboss-thirdparty-releases</id>
+      <url>https://neptuno.uca.es/nexus/content/repositories/jboss-thirdparty-releases</url>
+      <releases><enabled>true</enabled></releases>
+      <snapshots><enabled>false</enabled></snapshots>
+    </repository>
+    <repository>
+      <id>jboss-deprecated</id>
+      <url>https://neptuno.uca.es/nexus/content/repositories/jboss-deprecated</url>
       <releases><enabled>true</enabled></releases>
       <snapshots><enabled>false</enabled></snapshots>
     </repository>
