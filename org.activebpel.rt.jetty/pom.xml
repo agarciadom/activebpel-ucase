@@ -124,7 +124,7 @@
                           <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
                           <Bundle-Name>Embedded ActiveBPEL (Jetty)</Bundle-Name>
                           <Bundle-Vendor>University of Cádiz</Bundle-Vendor>
-                          <Bundle-Version>4.1.11.qualifier</Bundle-Version>
+                          <Bundle-Version>4.1.12.${timestamp}</Bundle-Version>
                           <Bundle-SymbolicName>org.activebpel.rt.jetty</Bundle-SymbolicName>
                           <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
                           <Export-Package>org.activebpel.rt.jetty</Export-Package>
@@ -155,6 +155,22 @@
             </configuration>
           </execution>
         </executions>
+      </plugin>
+      <plugin>
+          <groupId>com.keyboardsamurais.maven</groupId>
+          <artifactId>maven-timestamp-plugin</artifactId>
+          <version>1.0</version>
+          <configuration>
+              <propertyName>timestamp</propertyName>
+              <timestampPattern>yyyyMMddHHmm</timestampPattern>
+          </configuration>
+          <executions>
+              <execution>
+                  <goals>
+                      <goal>create</goal>
+                  </goals>
+              </execution>
+          </executions>
       </plugin>
     </plugins>
   </build>
