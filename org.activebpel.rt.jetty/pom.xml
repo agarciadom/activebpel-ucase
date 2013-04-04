@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.activebpel</groupId>
     <artifactId>engine</artifactId>
-    <version>4.1-uca11-SNAPSHOT</version>
+    <version>4.1-uca11</version>
   </parent>
 
   <artifactId>rt.jetty</artifactId>
-  <version>4.1-uca11-SNAPSHOT</version>
+  <version>4.1-uca11</version>
   <packaging>jar</packaging>
   <name>ActiveBPEL::Embedded (Jetty)</name>
 
@@ -119,8 +119,7 @@
               <createSourcesJar>true</createSourcesJar>
 
               <transformers>
-                  <transformer
-                      implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                  <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                       <manifestEntries>
                           <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
                           <Bundle-Name>Embedded ActiveBPEL (Jetty)</Bundle-Name>
