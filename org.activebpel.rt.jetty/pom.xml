@@ -117,6 +117,23 @@
             <goals><goal>shade</goal></goals>
             <configuration>
               <createSourcesJar>true</createSourcesJar>
+
+              <transformers>
+                  <transformer
+                      implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                      <manifestEntries>
+                          <Bundle-ManifestVersion>2</Bundle-ManifestVersion>
+                          <Bundle-Name>Embedded ActiveBPEL (Jetty)</Bundle-Name>
+                          <Bundle-Vendor>University of Cádiz</Bundle-Vendor>
+                          <Bundle-Version>4.1.11.qualifier</Bundle-Version>
+                          <Bundle-SymbolicName>org.activebpel.rt.jetty</Bundle-SymbolicName>
+                          <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+                          <Export-Package>org.activebpel.rt.jetty</Export-Package>
+                          <Bundle-ClassPath>.</Bundle-ClassPath>
+                      </manifestEntries>
+                  </transformer>
+              </transformers>
+
               <filters>
                 <filter>
                   <artifact>*</artifact>
@@ -126,6 +143,7 @@
                   </excludes>
                 </filter>
               </filters>
+
               <!-- We need to shade Saxon 8.7 to a different package,
                    so it does not conflict with the Saxon 9.1 used in
                    the SPIFM code -->
