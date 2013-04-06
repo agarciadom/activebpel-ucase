@@ -50,7 +50,7 @@
           <dependency>
             <groupId>org.activebpel</groupId>
             <artifactId>subdir-webapp-assembly</artifactId>
-            <version>8-SNAPSHOT</version>
+            <version>${project.version}</version>
           </dependency>
         </dependencies>
         <executions>
@@ -75,14 +75,6 @@
       <artifactId>rt.axis.bpel.web</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
-    </dependency>
-
-    <!-- Ugly workaround for MNG-1323 (Maven bug) until Maven 3.0 arrives -->
-    <dependency>
-      <groupId>org.activebpel</groupId>
-      <artifactId>subdir-webapp-assembly</artifactId>
-      <version>11-SNAPSHOT</version>
-      <scope>provided</scope>
     </dependency>
   </dependencies>
 </project>

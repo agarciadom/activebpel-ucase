@@ -9,8 +9,8 @@
 
   <artifactId>rt.bpeladmin.war</artifactId>
   <version>4.1-uca12-SNAPSHOT</version>
-  <packaging>war</packaging>
-  <name>ActiveBPEL::BpelAdmin WAR</name>
+  <packaging>jar</packaging>
+  <name>ActiveBPEL::BpelAdmin</name>
 
   <properties>
     <subdir.name>BpelAdmin</subdir.name>

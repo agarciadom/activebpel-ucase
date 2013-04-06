@@ -8,6 +8,6 @@
   </parent>
 
   <artifactId>subdir-webapp-assembly</artifactId>
-  <version>11-SNAPSHOT</version>
+  <version>4.1-uca12-SNAPSHOT</version>
   <name>ActiveBPEL::webapp Subdirectory Assembly</name>
 </project>
