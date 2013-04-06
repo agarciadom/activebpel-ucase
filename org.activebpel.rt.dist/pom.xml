@@ -73,6 +73,11 @@
       <artifactId>rt.axis.bpel.web</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.activebpel</groupId>
+      <artifactId>rt.bpeladmin</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
 
   <build>

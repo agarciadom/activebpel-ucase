@@ -22,6 +22,7 @@
     <module>org.activebpel.rt.bpel.ext.expr</module>
     <module>org.activebpel.rt.bpel.server</module>
     <module>org.activebpel.rt.bpel</module>
+    <module>org.activebpel.rt.bpeladmin</module>
     <module>org.activebpel.rt.bpeladmin.war</module>
     <module>org.activebpel.rt.dist</module>
     <module>org.activebpel.rt.exist</module>

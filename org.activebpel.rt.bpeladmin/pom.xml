@@ -7,14 +7,10 @@
     <version>4.1-uca12-SNAPSHOT</version>
   </parent>
 
-  <artifactId>rt.bpeladmin.war</artifactId>
+  <artifactId>rt.bpeladmin</artifactId>
   <version>4.1-uca12-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ActiveBPEL::BpelAdmin</name>
-
-  <properties>
-    <subdir.name>BpelAdmin</subdir.name>
-  </properties>
 
   <!-- If you change this, do not forget to update the POM for rt.ear! -->
   <dependencies>
@@ -49,32 +45,4 @@
       <version>1.0</version>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>org.activebpel</groupId>
-            <artifactId>subdir-webapp-assembly</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-        </dependencies>
-        <executions>
-          <execution>
-            <id>subdir-webapp</id>
-            <phase>package</phase>
-            <goals><goal>single</goal></goals>
-            <configuration>
-              <descriptors>
-                <descriptor>subdir-webapp.xml</descriptor>
-              </descriptors>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-
 </project>
