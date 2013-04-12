@@ -20,49 +20,49 @@ package it.polimi.monitor.invoker.service;
 
 public class Element
 {
-	private String elementName;
-	private String elementTypeNamespacePrefix;
-	private String elementType;
-	
-	public void SetName(String name)
-	{
-		elementName = name;
-	}
+        private String elementName;
+        private String elementTypeNamespacePrefix;
+        private String elementType;
 
-	public void SetType(String type)
-	{
-		if(type.indexOf(":") > 0)
-		{
-			elementType = type.substring(type.indexOf(":") + 1);
-			elementTypeNamespacePrefix = type.substring(0, type.indexOf(":"));
-		}
-		else
-		{
-			elementTypeNamespacePrefix = null;
-			elementType = type;
-		}
-	}
-	
-	public String GetName()
-	{
-		return elementName;
-	}
-	
-	public boolean hasNamespacePrefix()
-	{
-		if(elementTypeNamespacePrefix != null)
-			return true;
-		
-		return false;
-	}
-	
-	public String GetTypeNamespacePrefix()
-	{
-		return elementTypeNamespacePrefix;
-	}
-	
-	public String GetType()
-	{
-		return elementType;
-	}
+        public void SetName(String name)
+        {
+                elementName = name;
+        }
+
+        public void SetType(String type)
+        {
+                if(type.indexOf(":") > 0)
+                {
+                        elementType = type.substring(type.indexOf(":") + 1);
+                        elementTypeNamespacePrefix = type.substring(0, type.indexOf(":"));
+                }
+                else
+                {
+                        elementTypeNamespacePrefix = null;
+                        elementType = type;
+                }
+        }
+
+        public String GetName()
+        {
+                return elementName;
+        }
+
+        public boolean hasNamespacePrefix()
+        {
+                if(elementTypeNamespacePrefix != null)
+                        return true;
+
+                return false;
+        }
+
+        public String GetTypeNamespacePrefix()
+        {
+                return elementTypeNamespacePrefix;
+        }
+
+        public String GetType()
+        {
+                return elementType;
+        }
 }

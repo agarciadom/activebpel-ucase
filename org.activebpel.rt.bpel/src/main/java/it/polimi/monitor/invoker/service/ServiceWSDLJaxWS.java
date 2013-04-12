@@ -50,119 +50,119 @@ import com.sun.xml.ws.wsdl.parser.WSDLDocument;
 
 public class ServiceWSDLJaxWS
 {
-	private String wsdlLocation;
-	
-	private WSDLContext wsdlContext;
-	
-	private WSDLDocument wsdlDocument;
+        private String wsdlLocation;
 
-	public ServiceWSDLJaxWS(String wsdlLoc) throws MalformedURLException, IOException, XMLStreamException, SAXException
-	{
-		this.wsdlLocation = wsdlLoc;
-		
-		Map<String, DocInfo> map = new HashMap<String, DocInfo>();
-		
-		EntityResolver entityResolver = new EndpointEntityResolver(map);
-		
-		this.wsdlContext = new WSDLContext(new URL(this.wsdlLocation), entityResolver);
-		
-		this.wsdlDocument = this.wsdlContext.getWsdlDocument();
-	}
-	
-	public String GetTargetNamespace()
-	{
-		String targetNS = this.wsdlContext.getTargetNamespace();
-		
-		if(targetNS != null)
-		{
-			return targetNS;
-		}
-		
-		return this.wsdlContext.getServiceQName().getNamespaceURI();
-	}
-	
-	public QName GetServiceQName() throws ServiceWSDLExcpetion
-	{
-		if(!this.isThereOnlyOneServiceName())
-		{
-			throw new ServiceWSDLExcpetion("More than one Service present in the wsdl:" + this.wsdlLocation);
-		}
-		
-		return this.wsdlContext.getServiceQName();
-	}
-	
-	public QName GetPortQName()
-	{
-		return this.wsdlContext.getPortName();
-	}
+        private WSDLContext wsdlContext;
 
-	public boolean isThereOnlyOneServiceName()
-	{
-		Set<QName> serviceNameList = this.wsdlContext.getAllServiceNames();
-		
-		if(serviceNameList.size() == 1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+        private WSDLDocument wsdlDocument;
+
+        public ServiceWSDLJaxWS(String wsdlLoc) throws MalformedURLException, IOException, XMLStreamException, SAXException
+        {
+                this.wsdlLocation = wsdlLoc;
+
+                Map<String, DocInfo> map = new HashMap<String, DocInfo>();
+
+                EntityResolver entityResolver = new EndpointEntityResolver(map);
+
+                this.wsdlContext = new WSDLContext(new URL(this.wsdlLocation), entityResolver);
+
+                this.wsdlDocument = this.wsdlContext.getWsdlDocument();
+        }
+
+        public String GetTargetNamespace()
+        {
+                String targetNS = this.wsdlContext.getTargetNamespace();
+
+                if(targetNS != null)
+                {
+                        return targetNS;
+                }
+
+                return this.wsdlContext.getServiceQName().getNamespaceURI();
+        }
+
+        public QName GetServiceQName() throws ServiceWSDLExcpetion
+        {
+                if(!this.isThereOnlyOneServiceName())
+                {
+                        throw new ServiceWSDLExcpetion("More than one Service present in the wsdl:" + this.wsdlLocation);
+                }
+
+                return this.wsdlContext.getServiceQName();
+        }
+
+        public QName GetPortQName()
+        {
+                return this.wsdlContext.getPortName();
+        }
+
+        public boolean isThereOnlyOneServiceName()
+        {
+                Set<QName> serviceNameList = this.wsdlContext.getAllServiceNames();
+
+                if(serviceNameList.size() == 1)
+                {
+                        return true;
+                }
+                else
+                {
+                        return false;
+                }
+        }
 
     public QName RetreiveInMessageName(String operation, QName service, QName port)
     {
-    	Binding serviceBinding = this.wsdlContext.getWsdlBinding(service, port);
-    	
-    	QName portTypeQName = serviceBinding.getPortTypeName();
-    	PortType portType = this.wsdlDocument.getPortType(portTypeQName);
-    	
-    	Set<Entry<String, PortTypeOperation>> ptoSet = portType.entrySet();
-    	
-    	Iterator iterator = ptoSet.iterator();
-    	
-    	Entry entry;
-    	
-    	while(iterator.hasNext())
-    	{
-    		entry = (Entry) iterator.next();
-    		
-    		if(((String)entry.getKey()).equals(operation))
-    		{
-    			PortTypeOperation result = (PortTypeOperation) entry.getValue();
-    			
-    			return result.getInputMessage();
-    		}
-    	}
-    	
-    	return null;
+        Binding serviceBinding = this.wsdlContext.getWsdlBinding(service, port);
+
+        QName portTypeQName = serviceBinding.getPortTypeName();
+        PortType portType = this.wsdlDocument.getPortType(portTypeQName);
+
+        Set<Entry<String, PortTypeOperation>> ptoSet = portType.entrySet();
+
+        Iterator iterator = ptoSet.iterator();
+
+        Entry entry;
+
+        while(iterator.hasNext())
+        {
+                entry = (Entry) iterator.next();
+
+                if(((String)entry.getKey()).equals(operation))
+                {
+                        PortTypeOperation result = (PortTypeOperation) entry.getValue();
+
+                        return result.getInputMessage();
+                }
+        }
+
+        return null;
     }
 
     public Iterator GetMessageParts(QName messageName)
     {
-		//Retreive message definition from the WSDL
-		Message message = this.wsdlDocument.getMessage(messageName);
+                //Retreive message definition from the WSDL
+                Message message = this.wsdlDocument.getMessage(messageName);
 
-		return message.iterator();
+                return message.iterator();
     }
-    
+
     public Vector<Element> GetComplexTypeDefinition(String operation, QName service, QName port, Iterator messageParts)
     {
-    	Binding serviceBinding = this.wsdlContext.getWsdlBinding(service, port);
+        Binding serviceBinding = this.wsdlContext.getWsdlBinding(service, port);
 
-    	BindingOperation bindingOperation = serviceBinding.get(operation);
-    	
-    	Element element;
-    	String temp;
-    	
-    	while(messageParts.hasNext())
-    	{
-    		element = new Element();
-    		temp = (String)messageParts.next();
-    		
-    		System.out.println("Part: " + temp + " - MimeType: " + bindingOperation.getPart(temp, Mode.IN));
-    	}
-    	
-    	return null;
+        BindingOperation bindingOperation = serviceBinding.get(operation);
+
+        Element element;
+        String temp;
+
+        while(messageParts.hasNext())
+        {
+                element = new Element();
+                temp = (String)messageParts.next();
+
+                System.out.println("Part: " + temp + " - MimeType: " + bindingOperation.getPart(temp, Mode.IN));
+        }
+
+        return null;
     }
 }

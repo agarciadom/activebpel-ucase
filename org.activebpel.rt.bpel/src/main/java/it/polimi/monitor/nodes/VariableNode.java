@@ -24,89 +24,89 @@ import it.polimi.monitor.InputMonitor;
 
 
 public class VariableNode extends NodeWSCoL {
-	
-	private static final long serialVersionUID = 345501908200925896L;
-	private SimpleAST identifier;
-	private XPath_ExpressionNode xpath=null;
-	private String extraPath;
-	private AliasNodeInfo aliasNodeInfo=null;
-	private Alias alias=null;
-	
-	@Override	
-	public void evaluate(InputMonitor inputMonitor, Aliases aliases , AliasNodes tempAliases) throws WSCoLException {
-		//The first child represents the identifier of the Variable
-		identifier = (SimpleAST)getFirstChild();
-		identifier.evaluate(inputMonitor, aliases, tempAliases);
-		//controllo se id è un'alias temporaneo
-		String id=identifier.getMonitoringValue();
-		if (tempAliases.isKnowAliasNode(id)){
-			AliasNode aliasNode=tempAliases.getAliasNode(id);
-			String x="";
-			if(this.getNextSibling()!=null) { 
-				xpath = ((XPath_ExpressionNode)this.getNextSibling());
-				xpath.evaluate(inputMonitor,  aliases,  tempAliases);
-				x=xpath.getMonitoringValue();
-			}
-			switch (aliasNode.getTypeOfExtraction()) {
-				case AliasNode.EXTRACTALLTOGETHER:
-					aliasNodeInfo=new AliasNodeInfo(AliasNode.EXTRACTALLTOGETHER,aliasNode.getRootXml()+x,aliasNode.getMonitoringValue(),aliasNode.getNumberOfCurrentChildren());
-					break;
-				case AliasNode.EXTRACTSTEPBYSTEP:
-					aliasNodeInfo=new AliasNodeInfo(AliasNode.EXTRACTSTEPBYSTEP,aliasNode.getRootXml()+x,aliasNode.getMonitoringValue(),aliasNode.getNumberOfCurrentChildren());
-					break;
-				default:
-					aliasNodeInfo=new AliasNodeInfo(AliasNode.EXTRACTSTEPBYSTEP,aliasNode.getRootXml()+x,aliasNode.getMonitoringValue(),aliasNode.getNumberOfCurrentChildren());
-					break;
-			}
-		} else if(aliases.isKnowAlias(id)){
-			//			controllo se id è un'alias 
-			alias=aliases.getAlias(id);
-			String x="";
-			if(this.getNextSibling()!=null && alias.getAliasType() == Alias.ALIAS_VAR) { 
-				xpath = ((XPath_ExpressionNode)this.getNextSibling());
-				xpath.evaluate(inputMonitor,  aliases ,  tempAliases);
-				x=xpath.getMonitoringValue();
-				alias.setExtraPath(x);
-			}
-		} else {//the second child represents the Xpath of the Variable. The Xpath of the variable could be null
-			if(this.getNextSibling()!=null) { 
-				xpath = ((XPath_ExpressionNode)this.getNextSibling());
-				xpath.evaluate(inputMonitor,  aliases, tempAliases);
-			}
-		}
-	}
-	
-	@Override
-	public Object getMonitoringValue() throws WSCoLException {
-		if (aliasNodeInfo!=null) {
-		//	aliasNodeInfo
-			return aliasNodeInfo;
-		} else if (alias!=null) {
-			//	alias
-			return alias;
-		} else {
-			//non alias
-			if (xpath==null)
-				return identifier.getMonitoringValue();
-			else
-				return (String)identifier.getMonitoringValue()+xpath.getMonitoringValue();
-		}
-	}
 
-	public String getAllXpath() throws WSCoLException {
-		if (extraPath != null) 
-			return getMonitoringValue()+extraPath;
-		else 
-			return (String)getMonitoringValue();
-		
-	}
-	@Override
-	public String toString(){
-		return "Variable";
-	}
-	
-	public String getIdentifier() throws WSCoLException{
-		return identifier.getMonitoringValue();
-	}
+        private static final long serialVersionUID = 345501908200925896L;
+        private SimpleAST identifier;
+        private XPath_ExpressionNode xpath=null;
+        private String extraPath;
+        private AliasNodeInfo aliasNodeInfo=null;
+        private Alias alias=null;
+
+        @Override
+        public void evaluate(InputMonitor inputMonitor, Aliases aliases , AliasNodes tempAliases) throws WSCoLException {
+                //The first child represents the identifier of the Variable
+                identifier = (SimpleAST)getFirstChild();
+                identifier.evaluate(inputMonitor, aliases, tempAliases);
+                //controllo se id Ã¨ un'alias temporaneo
+                String id=identifier.getMonitoringValue();
+                if (tempAliases.isKnowAliasNode(id)){
+                        AliasNode aliasNode=tempAliases.getAliasNode(id);
+                        String x="";
+                        if(this.getNextSibling()!=null) {
+                                xpath = ((XPath_ExpressionNode)this.getNextSibling());
+                                xpath.evaluate(inputMonitor,  aliases,  tempAliases);
+                                x=xpath.getMonitoringValue();
+                        }
+                        switch (aliasNode.getTypeOfExtraction()) {
+                                case AliasNode.EXTRACTALLTOGETHER:
+                                        aliasNodeInfo=new AliasNodeInfo(AliasNode.EXTRACTALLTOGETHER,aliasNode.getRootXml()+x,aliasNode.getMonitoringValue(),aliasNode.getNumberOfCurrentChildren());
+                                        break;
+                                case AliasNode.EXTRACTSTEPBYSTEP:
+                                        aliasNodeInfo=new AliasNodeInfo(AliasNode.EXTRACTSTEPBYSTEP,aliasNode.getRootXml()+x,aliasNode.getMonitoringValue(),aliasNode.getNumberOfCurrentChildren());
+                                        break;
+                                default:
+                                        aliasNodeInfo=new AliasNodeInfo(AliasNode.EXTRACTSTEPBYSTEP,aliasNode.getRootXml()+x,aliasNode.getMonitoringValue(),aliasNode.getNumberOfCurrentChildren());
+                                        break;
+                        }
+                } else if(aliases.isKnowAlias(id)){
+                        //			controllo se id Ã¨ un'alias
+                        alias=aliases.getAlias(id);
+                        String x="";
+                        if(this.getNextSibling()!=null && alias.getAliasType() == Alias.ALIAS_VAR) {
+                                xpath = ((XPath_ExpressionNode)this.getNextSibling());
+                                xpath.evaluate(inputMonitor,  aliases ,  tempAliases);
+                                x=xpath.getMonitoringValue();
+                                alias.setExtraPath(x);
+                        }
+                } else {//the second child represents the Xpath of the Variable. The Xpath of the variable could be null
+                        if(this.getNextSibling()!=null) {
+                                xpath = ((XPath_ExpressionNode)this.getNextSibling());
+                                xpath.evaluate(inputMonitor,  aliases, tempAliases);
+                        }
+                }
+        }
+
+        @Override
+        public Object getMonitoringValue() throws WSCoLException {
+                if (aliasNodeInfo!=null) {
+                //	aliasNodeInfo
+                        return aliasNodeInfo;
+                } else if (alias!=null) {
+                        //	alias
+                        return alias;
+                } else {
+                        //non alias
+                        if (xpath==null)
+                                return identifier.getMonitoringValue();
+                        else
+                                return (String)identifier.getMonitoringValue()+xpath.getMonitoringValue();
+                }
+        }
+
+        public String getAllXpath() throws WSCoLException {
+                if (extraPath != null)
+                        return getMonitoringValue()+extraPath;
+                else
+                        return (String)getMonitoringValue();
+
+        }
+        @Override
+        public String toString(){
+                return "Variable";
+        }
+
+        public String getIdentifier() throws WSCoLException{
+                return identifier.getMonitoringValue();
+        }
 
 }

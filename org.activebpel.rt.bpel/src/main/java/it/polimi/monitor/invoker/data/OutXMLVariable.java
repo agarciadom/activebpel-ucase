@@ -31,118 +31,118 @@ public class OutXMLVariable
     private String closeAngularBracket = ">"; //"&gt;";
 
     public OutXMLVariable()
-	{
-		
-	}
-	
-	public String GetXMLVariable(SOAPBody soapBody)
-	{
-		String result = null;
-		
-		if(soapBody.hasChildNodes())
-		{
-			Iterator iterator = soapBody.getChildElements();
-			
-			Node responseNode = (Node) iterator.next();
-			
-			if(responseNode.hasChildNodes())
-			{
-				result = openAngularBracket + "Response" + closeAngularBracket;
-				
-				NodeList list = responseNode.getChildNodes();
-				int l = 0;
-				
-				while((list.getLength() > 0) && (l < list.getLength()/* < 2*/))
-				{
-					Node returnVariable = (Node) list.item(l++);
-					
+        {
+
+        }
+
+        public String GetXMLVariable(SOAPBody soapBody)
+        {
+                String result = null;
+
+                if(soapBody.hasChildNodes())
+                {
+                        Iterator iterator = soapBody.getChildElements();
+
+                        Node responseNode = (Node) iterator.next();
+
+                        if(responseNode.hasChildNodes())
+                        {
+                                result = openAngularBracket + "Response" + closeAngularBracket;
+
+                                NodeList list = responseNode.getChildNodes();
+                                int l = 0;
+
+                                while((list.getLength() > 0) && (l < list.getLength()/* < 2*/))
+                                {
+                                        Node returnVariable = (Node) list.item(l++);
+
 //					result += openAngularBracket + returnVariable.getNodeName() + closeAngularBracket;
-					result += openAngularBracket + returnVariable.getLocalName() + closeAngularBracket;
-					
-					if(returnVariable.hasChildNodes())
-					{
-						NodeList variableParts = returnVariable.getChildNodes();
-						
-						Node temp;
-							
-						for(int i = 0; i < variableParts.getLength(); i++)
-						{
-							temp = (Node) variableParts.item(i);
+                                        result += openAngularBracket + returnVariable.getLocalName() + closeAngularBracket;
 
-							if(temp.getNodeType() == 1)
-							{
+                                        if(returnVariable.hasChildNodes())
+                                        {
+                                                NodeList variableParts = returnVariable.getChildNodes();
+
+                                                Node temp;
+
+                                                for(int i = 0; i < variableParts.getLength(); i++)
+                                                {
+                                                        temp = (Node) variableParts.item(i);
+
+                                                        if(temp.getNodeType() == 1)
+                                                        {
 //								result += openAngularBracket + temp.getNodeName() + closeAngularBracket;
-								result += openAngularBracket + temp.getLocalName() + closeAngularBracket;
-							}
-							
-							if(temp.hasChildNodes())
-							{
-//								System.out.println("Node type: " + temp.getNodeType());
-								result += this.GetXMLComplexTypes(temp);
-							}
-							else
-							{
-								result += temp.getTextContent();
-							}
+                                                                result += openAngularBracket + temp.getLocalName() + closeAngularBracket;
+                                                        }
 
-							if(temp.getNodeType() == 1)
-							{
+                                                        if(temp.hasChildNodes())
+                                                        {
+//								System.out.println("Node type: " + temp.getNodeType());
+                                                                result += this.GetXMLComplexTypes(temp);
+                                                        }
+                                                        else
+                                                        {
+                                                                result += temp.getTextContent();
+                                                        }
+
+                                                        if(temp.getNodeType() == 1)
+                                                        {
 //								result += openAngularBracket + "/" + temp.getNodeName() + closeAngularBracket;
-								result += openAngularBracket + "/" + temp.getLocalName() + closeAngularBracket;
-							}
-						}
-					}
+                                                                result += openAngularBracket + "/" + temp.getLocalName() + closeAngularBracket;
+                                                        }
+                                                }
+                                        }
 
 //					result += openAngularBracket + "/" + returnVariable.getNodeName() + closeAngularBracket;
-					result += openAngularBracket + "/" + returnVariable.getLocalName() + closeAngularBracket;
-				}
-				
-				result += openAngularBracket + "/Response" + closeAngularBracket;
-			}
-		}
-		
-		return result;
-	}
-	
-	private String GetXMLComplexTypes(Node node)
-	{
-		String result = "";
-		
-		if(node.hasChildNodes())
-		{
-			NodeList list = node.getChildNodes();
+                                        result += openAngularBracket + "/" + returnVariable.getLocalName() + closeAngularBracket;
+                                }
 
-			Node temp;
-			
-			for(int i = 0; i < list.getLength(); i++)
-			{
-				temp = (Node) list.item(i);
-				
-				if(temp.getNodeType() == 1)
-				{
+                                result += openAngularBracket + "/Response" + closeAngularBracket;
+                        }
+                }
+
+                return result;
+        }
+
+        private String GetXMLComplexTypes(Node node)
+        {
+                String result = "";
+
+                if(node.hasChildNodes())
+                {
+                        NodeList list = node.getChildNodes();
+
+                        Node temp;
+
+                        for(int i = 0; i < list.getLength(); i++)
+                        {
+                                temp = (Node) list.item(i);
+
+                                if(temp.getNodeType() == 1)
+                                {
 //					result += openAngularBracket + temp.getNodeName() + closeAngularBracket;
-					result += openAngularBracket + temp.getLocalName() + closeAngularBracket;
-				}
-				
-				if(temp.hasChildNodes())
-				{
-					result += this.GetXMLComplexTypes(temp);
-				}
-				else
-				{
-//					System.out.println("Node type: " + temp.getNodeType());
-					result += temp.getTextContent();
-				}
+                                        result += openAngularBracket + temp.getLocalName() + closeAngularBracket;
+                                }
 
-				if(temp.getNodeType() == 1)
-				{
+                                if(temp.hasChildNodes())
+                                {
+                                        result += this.GetXMLComplexTypes(temp);
+                                }
+                                else
+                                {
+//					System.out.println("Node type: " + temp.getNodeType());
+                                        result += temp.getTextContent();
+                                }
+
+                                if(temp.getNodeType() == 1)
+                                {
 //					result += openAngularBracket + "/" + temp.getNodeName() + closeAngularBracket;
-					result += openAngularBracket + "/" + temp.getLocalName() + closeAngularBracket;
-				}
-			}
-		}
+                                        result += openAngularBracket + "/" + temp.getLocalName() + closeAngularBracket;
+                                }
+                        }
+                }
 
 //		System.out.println("Result ricorsivo: " + result);
-		return result;
-	}
+                return result;
+        }
 }

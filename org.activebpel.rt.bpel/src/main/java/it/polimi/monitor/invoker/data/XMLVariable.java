@@ -36,64 +36,64 @@ import com.sun.xml.bind.StringInputStream;
 
 public class XMLVariable
 {
-	private String variableValue;
-	
-	private XPath xpath;
-	
-	private Document document;
-	
-	public XMLVariable(String value)
-	{
-		try
-		{
-			this.variableValue = value;
+        private String variableValue;
 
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			this.document = builder.parse(new StringInputStream(value));
-			
-			this.xpath = XPathFactory.newInstance().newXPath();
-		} 
-		catch (ParserConfigurationException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		catch (SAXException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} 
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public String GetValue(String XPath)
-	{
-		if(XPath.equals("") || (XPath == null))
-			return null;
-		System.err.println(XPath);
-		try
-		{
-			Node node = (Node) xpath.evaluate(XPath, this.document, XPathConstants.NODE);
-			
-			if(node == null)
-			{
-				System.err.println("'param' is null!!");
-			}
-			else
-			{
-				return node.getTextContent();
-			}
-		} 
-		catch (XPathExpressionException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return null;
-	}
+        private XPath xpath;
+
+        private Document document;
+
+        public XMLVariable(String value)
+        {
+                try
+                {
+                        this.variableValue = value;
+
+                        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+                        this.document = builder.parse(new StringInputStream(value));
+
+                        this.xpath = XPathFactory.newInstance().newXPath();
+                }
+                catch (ParserConfigurationException e)
+                {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
+                catch (SAXException e)
+                {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
+                catch (IOException e)
+                {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
+        }
+
+        public String GetValue(String XPath)
+        {
+                if(XPath.equals("") || (XPath == null))
+                        return null;
+                System.err.println(XPath);
+                try
+                {
+                        Node node = (Node) xpath.evaluate(XPath, this.document, XPathConstants.NODE);
+
+                        if(node == null)
+                        {
+                                System.err.println("'param' is null!!");
+                        }
+                        else
+                        {
+                                return node.getTextContent();
+                        }
+                }
+                catch (XPathExpressionException e)
+                {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                }
+
+                return null;
+        }
 }

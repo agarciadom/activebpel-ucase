@@ -20,26 +20,26 @@ package it.polimi.monitor.invoker.exceptions;
 
 public class ServiceWSDLExcpetion extends Exception
 {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private String message;
-	
-	public ServiceWSDLExcpetion(String message)
-	{
-		this.message = message;
-	}
+        /**
+         *
+         */
+        private static final long serialVersionUID = 1L;
+        private String message;
 
-	public String getMessage()
-	{
-		// TODO Auto-generated method stub
-		return this.message;
-	}
+        public ServiceWSDLExcpetion(String message)
+        {
+                this.message = message;
+        }
 
-	public void printStackTrace()
-	{
-		// TODO Auto-generated method stub
-		System.err.println("ServiceWSDLException --> " + this.message);
-	}
+        public String getMessage()
+        {
+                // TODO Auto-generated method stub
+                return this.message;
+        }
+
+        public void printStackTrace()
+        {
+                // TODO Auto-generated method stub
+                System.err.println("ServiceWSDLException --> " + this.message);
+        }
 }
