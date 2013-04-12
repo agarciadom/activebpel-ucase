@@ -27,6 +27,13 @@
 
 package it.polimi.monitor.monitorlogger;
 
+import it.polimi.monitor.monitorlogger.data.MonitoringResultInfoWrapper;
+import it.polimi.monitor.monitorlogger.data.RecoveryResultInfoWrapper;
+import it.polimi.monitor.monitorlogger.persistencedata.MonitoringResult;
+import it.polimi.monitor.monitorlogger.persistencedata.MonitoringResultPK;
+import it.polimi.monitor.monitorlogger.persistencedata.RecoveryResult;
+import it.polimi.monitor.monitorlogger.persistencedata.RecoveryResultPK;
+
 import java.util.Date;
 import java.util.List;
 
@@ -38,18 +45,10 @@ import javax.jws.soap.SOAPBinding;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import it.polimi.monitor.monitorlogger.MonitorLogger;
-import it.polimi.monitor.monitorlogger.data.MonitoringResultInfoWrapper;
-import it.polimi.monitor.monitorlogger.data.RecoveryResultInfoWrapper;
-import it.polimi.monitor.monitorlogger.persistencedata.MonitoringResult;
-import it.polimi.monitor.monitorlogger.persistencedata.MonitoringResultPK;
-import it.polimi.monitor.monitorlogger.persistencedata.RecoveryResult;
-import it.polimi.monitor.monitorlogger.persistencedata.RecoveryResultPK;
-
 @WebService(serviceName="MonitorLoggerWS", targetNamespace="http://it.polimi.monitor/monitorlogger", name="MonitorLogger")
 @SOAPBinding(style=SOAPBinding.Style.RPC)
-
-public @Stateless class MonitorLoggerBean implements MonitorLogger
+@Stateless
+public class MonitorLoggerBean implements MonitorLogger
 {
 	@PersistenceContext(unitName="monitor_logger")
 	private EntityManager entityManager;

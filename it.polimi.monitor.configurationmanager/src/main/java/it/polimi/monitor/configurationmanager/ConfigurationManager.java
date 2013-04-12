@@ -39,7 +39,7 @@ public interface ConfigurationManager
 	 * @return true if operation finishes successfully, false otherwise
 	 * @throws ConfigurationManagerException
 	 */
-	public abstract boolean insertNewProcess(ProcessInfoWrapper initProcessInfo);
+	boolean insertNewProcess(ProcessInfoWrapper initProcessInfo);
 
 	/**
 	 * Inserts a service invocation data into DynamoDatabase
@@ -47,7 +47,7 @@ public interface ConfigurationManager
 	 * @return true if operation finishes successfully, false otherwise
 	 * @throws ConfigurationManagerException
 	 */
-	public abstract boolean insertNewSupervisionRule(SupervisionRuleInfoWrapper initInvokeInfo);
+	boolean insertNewSupervisionRule(SupervisionRuleInfoWrapper initInvokeInfo);
 
 	/**
 	 * Removes a process from the DB
@@ -56,7 +56,7 @@ public interface ConfigurationManager
 	 * @return
 	 * @throws ConfigurationManagerException
 	 */
-	public abstract boolean releaseProcess(ProcessInfoWrapper processInfo);
+	boolean releaseProcess(ProcessInfoWrapper processInfo);
 
 	/**
 	 * Returns process priority by process-user ID
@@ -65,7 +65,7 @@ public interface ConfigurationManager
 	 * @return
 	 * @throws ConfigurationManagerException
 	 */
-	public abstract Integer getProcessPriority(ProcessInfoWrapper processInfo);
+	Integer getProcessPriority(ProcessInfoWrapper processInfo);
 
 	/**
 	 * Returns condition (pre or post) priority by process-user-invoke ID
@@ -75,7 +75,7 @@ public interface ConfigurationManager
 	 * @return
 	 * @throws ConfigurationManagerException
 	 */	
-	public abstract SupervisionRuleInfoWrapper getSupervisionRule(String processID, String userID, String location, boolean isPrecondition);
+	SupervisionRuleInfoWrapper getSupervisionRule(String processID, String userID, String location, boolean isPrecondition);
 
 	/**
 	 * Retrieve a list of monitored processes
@@ -83,7 +83,7 @@ public interface ConfigurationManager
 	 * @throws ConfigurationManagerException 
 	 * 
 	 */
-	public abstract ProcessInfoWrapper[] getMonitoredProcesses();
+	ProcessInfoWrapper[] getMonitoredProcesses();
 	
 	/**
 	 * Retrieve the list of invoke assertions of the given process-user couple ID
@@ -91,7 +91,7 @@ public interface ConfigurationManager
 	 * @param userID
 	 * @return
 	 */
-	public abstract SupervisionRuleInfoWrapper[] getProcessSupervisionRules(String processID, String userID);
+	SupervisionRuleInfoWrapper[] getProcessSupervisionRules(String processID, String userID);
 
 	/**
 	 * Modify process priority
@@ -99,7 +99,7 @@ public interface ConfigurationManager
 	 * @return 
 	 * @throws ConfigurationManagerException 
 	 */
-	public abstract boolean setNewProcessPriority(ProcessInfoWrapper newProcessInfo);
+	boolean setNewProcessPriority(ProcessInfoWrapper newProcessInfo);
 
 	/**
 	 * Modify invoke priority
@@ -107,17 +107,17 @@ public interface ConfigurationManager
 	 * @return
 	 * @throws ConfigurationManagerException 
 	 */
-	public abstract boolean changeSupervisionRuleParams(SupervisionRuleInfoWrapper newInvokeInfo);
+	boolean changeSupervisionRuleParams(SupervisionRuleInfoWrapper newInvokeInfo);
 	
-	public abstract boolean setTemporaryProcessDataChanging(ProcessInfoWrapper processInfoWrapper);
+	boolean setTemporaryProcessDataChanging(ProcessInfoWrapper processInfoWrapper);
 	
-	public abstract boolean setTemporaryChangingRule(TemporaryRuleChangingInfoWrapper temporaryRuleChangingInfoWrapper);
+	boolean setTemporaryChangingRule(TemporaryRuleChangingInfoWrapper temporaryRuleChangingInfoWrapper);
 	
-	public abstract ProcessInfoWrapper getTemporaryProcessDataChanging(ProcessInfoWrapper processInfoWrapper);
+	ProcessInfoWrapper getTemporaryProcessDataChanging(ProcessInfoWrapper processInfoWrapper);
 	
-	public abstract TemporaryRuleChangingInfoWrapper getTemporaryChangingRule(TemporaryRuleChangingInfoWrapper temporaryRuleChangingInfoWrapper);
+	TemporaryRuleChangingInfoWrapper getTemporaryChangingRule(TemporaryRuleChangingInfoWrapper temporaryRuleChangingInfoWrapper);
 	
-	public abstract void realeseTemporaryProcessChanges(ProcessInfoWrapper processInfoWrapper);
+	void realeseTemporaryProcessChanges(ProcessInfoWrapper processInfoWrapper);
 
 //	public boolean eraseDatabase();
 }

@@ -1,13 +1,9 @@
-
 /* Copyright 2007, 2008 , DEEP SE group, Dipartimento di Elettronica e Informazione (DEI), Politecnico di Milano */
 
-
-/*  
- *  Licence: 
- *
+/*
+ *  Licence:
  *
  *  This file is part of  DYNAMO .
- *
  *
  *	DYNAMO is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,34 +17,28 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with DYNAMO.  If not, see <http://www.gnu.org/licenses/>.
- *   
  */
- 
+
 
 /**
- * 
+ *
  */
 package it.polimi.persistence;
+
+
 
 /**
  * @author Luca Galluppi
  *
  */
 public class SearchHistoricalVariableException extends Exception {
+    private static final long serialVersionUID = 11111111;
 
-	private static final long serialVersionUID = 11111111;
-	
+   /**
+     * @param message
+     */
+    public SearchHistoricalVariableException(String message) {
+        super(message);
+    }
 
-	/**
-	 * @param message
-	 */
-	public SearchHistoricalVariableException(String message) {
-		super(message);
-	}
-
-
-	
-	
-	
-	
 }

@@ -1,9 +1,7 @@
-
 /* Copyright 2007, 2008 , DEEP SE group, Dipartimento di Elettronica e Informazione (DEI), Politecnico di Milano */
 
-
-/*  
- *  Licence: 
+/*
+ *  Licence:
  *
  *
  *  This file is part of  DYNAMO .
@@ -21,25 +19,24 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with DYNAMO.  If not, see <http://www.gnu.org/licenses/>.
- *   
+ *
  */
- 
+
 
 /**
- * 
+ *
  */
 package it.polimi.persistence;
 
+
+
 /**
  * @author Luca Galluppi
- *
  */
 public class CreateHistoricalVariableException extends Exception {
+    private static final long serialVersionUID = 11111111111L;
 
-	private static final long serialVersionUID = 11111111111L;
-	
-	public CreateHistoricalVariableException(String mes){
-		super(mes);
-	}	
-	
+    public CreateHistoricalVariableException(String mes){
+        super(mes);
+    }
 }

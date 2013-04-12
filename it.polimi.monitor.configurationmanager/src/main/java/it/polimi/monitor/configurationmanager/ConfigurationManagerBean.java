@@ -53,7 +53,6 @@ import javax.persistence.PersistenceContext;
 
 @WebService(serviceName="ConfigurationManagerWS", targetNamespace="http://it.polimi.monitor/configurationmanager", name="ConfigurationManager")
 @SOAPBinding(style=SOAPBinding.Style.RPC)
-
 @Stateless
 public class ConfigurationManagerBean implements ConfigurationManager
 {
