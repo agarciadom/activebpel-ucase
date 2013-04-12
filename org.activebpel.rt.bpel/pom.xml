@@ -13,7 +13,7 @@
   <name>ActiveBPEL::BPEL Runtime</name>
 
   <properties>
-      <jaxb.version>2.1.4</jaxb.version>
+      <jaxb.version>1.0.5</jaxb.version>
   </properties>
 
   <dependencies>
@@ -61,17 +61,17 @@
       <artifactId>geronimo-jaxrpc_1.1_spec</artifactId>
     </dependency>
     <dependency>
-        <groupId>sun-jaxb</groupId>
+        <groupId>xfire</groupId>
         <artifactId>jaxb-api</artifactId>
-        <version>${jaxb.version}</version>
+        <version>1.0</version>
     </dependency>
     <dependency>
-        <groupId>sun-jaxb</groupId>
+        <groupId>xfire</groupId>
         <artifactId>jaxb-impl</artifactId>
         <version>${jaxb.version}</version>
     </dependency>
     <dependency>
-        <groupId>sun-jaxb</groupId>
+        <groupId>xfire</groupId>
         <artifactId>jaxb-xjc</artifactId>
         <version>${jaxb.version}</version>
     </dependency>
