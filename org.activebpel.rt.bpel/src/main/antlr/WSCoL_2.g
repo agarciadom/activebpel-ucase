@@ -1,3 +1,6 @@
+header {
+package it.polimi.WSCoL;
+}
 class WSCoLLexer extends Lexer;
 
 options
@@ -188,8 +191,6 @@ NEWLINE: ("\r\n"
       $setType(Token.SKIP);
     }
     ;
-
-
 
 
 

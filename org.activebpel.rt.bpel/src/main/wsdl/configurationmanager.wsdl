@@ -1,0 +1,348 @@
+<definitions name='ConfigurationManagerWS' targetNamespace='http://it.polimi.monitor/configurationmanager' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://it.polimi.monitor/configurationmanager' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://it.polimi.monitor/configurationmanager' version='1.0' xmlns:tns='http://it.polimi.monitor/configurationmanager' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:complexType name='processInfoWrapper'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='priority' type='xs:int'/>
+     <xs:element minOccurs='0' name='processId' type='xs:string'/>
+     <xs:element minOccurs='0' name='processInstanceId' type='xs:long'/>
+     <xs:element minOccurs='0' name='userId' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='supervisionRuleInfoWrapper'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='droolsRule' type='xs:string'/>
+     <xs:element minOccurs='0' name='location' type='xs:string'/>
+     <xs:element name='precondition' type='xs:boolean'/>
+     <xs:element name='priority' type='xs:int'/>
+     <xs:element minOccurs='0' name='processID' type='xs:string'/>
+     <xs:element minOccurs='0' name='providers' type='xs:string'/>
+     <xs:element minOccurs='0' name='recoveryStrategy' type='xs:string'/>
+     <xs:element minOccurs='0' name='timeFrame' type='xs:string'/>
+     <xs:element minOccurs='0' name='userID' type='xs:string'/>
+     <xs:element minOccurs='0' name='wscolRule' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='temporaryRuleChangingInfoWrapper'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='location' type='xs:string'/>
+     <xs:element minOccurs='0' name='newCondition' type='xs:string'/>
+     <xs:element minOccurs='0' name='newConditionPriority' type='xs:int'/>
+     <xs:element minOccurs='0' name='newConditionRecovery' type='xs:string'/>
+     <xs:element minOccurs='0' name='newProviderList' type='xs:string'/>
+     <xs:element minOccurs='0' name='newTimeFrame' type='xs:string'/>
+     <xs:element name='precondition' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='processID' type='xs:string'/>
+     <xs:element name='processInstanceID' type='xs:long'/>
+     <xs:element minOccurs='0' name='userID' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType final='#all' name='processInfoWrapperArray'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='item' nillable='true' type='tns:processInfoWrapper'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType final='#all' name='supervisionRuleInfoWrapperArray'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='item' nillable='true' type='tns:supervisionRuleInfoWrapper'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+ <message name='ConfigurationManager_getTemporaryProcessDataChangingResponse'>
+  <part name='return' type='tns:processInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_realeseTemporaryProcessChanges'>
+  <part name='processInfoWrapper' type='tns:processInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_insertNewSupervisionRule'>
+  <part name='initInvokeInfo' type='tns:supervisionRuleInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_getProcessSupervisionRules'>
+  <part name='processID' type='xsd:string'></part>
+  <part name='userID' type='xsd:string'></part>
+ </message>
+ <message name='ConfigurationManager_getTemporaryProcessDataChanging'>
+  <part name='processInfoWrapper' type='tns:processInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_getSupervisionRuleResponse'>
+  <part name='return' type='tns:supervisionRuleInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_getProcessInfoResponse'>
+  <part name='return' type='tns:processInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_insertNewSupervisionRuleResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='ConfigurationManager_changeSupervisionRuleParamsResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='ConfigurationManager_getTemporaryChangingRuleResponse'>
+  <part name='return' type='tns:temporaryRuleChangingInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_getSupervisionRule'>
+  <part name='processID' type='xsd:string'></part>
+  <part name='userID' type='xsd:string'></part>
+  <part name='location' type='xsd:string'></part>
+  <part name='isPrecondition' type='xsd:boolean'></part>
+ </message>
+ <message name='ConfigurationManager_changeSupervisionRuleParams'>
+  <part name='newInvokeInfo' type='tns:supervisionRuleInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_insertNewProcess'>
+  <part name='initProcessInfo' type='tns:processInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_getMonitoredProcesses'></message>
+ <message name='ConfigurationManager_releaseProcess'>
+  <part name='processInfo' type='tns:processInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_insertNewProcessResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='ConfigurationManager_getProcessPriorityResponse'>
+  <part name='return' type='xsd:int'></part>
+ </message>
+ <message name='ConfigurationManager_releaseProcessResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='ConfigurationManager_getProcessPriority'>
+  <part name='processInfo' type='tns:processInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_setTemporaryChangingRule'>
+  <part name='temporaryRuleChangingInfoWrapper' type='tns:temporaryRuleChangingInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_setNewProcessPriorityResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='ConfigurationManager_setTemporaryProcessDataChangingResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='ConfigurationManager_getTemporaryChangingRule'>
+  <part name='temporaryRuleChangingInfoWrapper' type='tns:temporaryRuleChangingInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_setTemporaryChangingRuleResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='ConfigurationManager_getProcessInfo'>
+  <part name='processID' type='xsd:string'></part>
+  <part name='userID' type='xsd:string'></part>
+ </message>
+ <message name='ConfigurationManager_getMonitoredProcessesResponse'>
+  <part name='return' type='tns:processInfoWrapperArray'></part>
+ </message>
+ <message name='ConfigurationManager_setTemporaryProcessDataChanging'>
+  <part name='processInfoWrapper' type='tns:processInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_realeseTemporaryProcessChangesResponse'></message>
+ <message name='ConfigurationManager_setNewProcessPriority'>
+  <part name='newProcessInfo' type='tns:processInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_getProcessSupervisionRulesResponse'>
+  <part name='return' type='tns:supervisionRuleInfoWrapperArray'></part>
+ </message>
+ <portType name='ConfigurationManager'>
+  <operation name='changeSupervisionRuleParams' parameterOrder='newInvokeInfo'>
+   <input message='tns:ConfigurationManager_changeSupervisionRuleParams'></input>
+   <output message='tns:ConfigurationManager_changeSupervisionRuleParamsResponse'></output>
+  </operation>
+  <operation name='getMonitoredProcesses'>
+   <input message='tns:ConfigurationManager_getMonitoredProcesses'></input>
+   <output message='tns:ConfigurationManager_getMonitoredProcessesResponse'></output>
+  </operation>
+  <operation name='getProcessInfo' parameterOrder='processID userID'>
+   <input message='tns:ConfigurationManager_getProcessInfo'></input>
+   <output message='tns:ConfigurationManager_getProcessInfoResponse'></output>
+  </operation>
+  <operation name='getProcessPriority' parameterOrder='processInfo'>
+   <input message='tns:ConfigurationManager_getProcessPriority'></input>
+   <output message='tns:ConfigurationManager_getProcessPriorityResponse'></output>
+  </operation>
+  <operation name='getProcessSupervisionRules' parameterOrder='processID userID'>
+   <input message='tns:ConfigurationManager_getProcessSupervisionRules'></input>
+   <output message='tns:ConfigurationManager_getProcessSupervisionRulesResponse'></output>
+  </operation>
+  <operation name='getSupervisionRule' parameterOrder='processID userID location isPrecondition'>
+   <input message='tns:ConfigurationManager_getSupervisionRule'></input>
+   <output message='tns:ConfigurationManager_getSupervisionRuleResponse'></output>
+  </operation>
+  <operation name='getTemporaryChangingRule' parameterOrder='temporaryRuleChangingInfoWrapper'>
+   <input message='tns:ConfigurationManager_getTemporaryChangingRule'></input>
+   <output message='tns:ConfigurationManager_getTemporaryChangingRuleResponse'></output>
+  </operation>
+  <operation name='getTemporaryProcessDataChanging' parameterOrder='processInfoWrapper'>
+   <input message='tns:ConfigurationManager_getTemporaryProcessDataChanging'></input>
+   <output message='tns:ConfigurationManager_getTemporaryProcessDataChangingResponse'></output>
+  </operation>
+  <operation name='insertNewProcess' parameterOrder='initProcessInfo'>
+   <input message='tns:ConfigurationManager_insertNewProcess'></input>
+   <output message='tns:ConfigurationManager_insertNewProcessResponse'></output>
+  </operation>
+  <operation name='insertNewSupervisionRule' parameterOrder='initInvokeInfo'>
+   <input message='tns:ConfigurationManager_insertNewSupervisionRule'></input>
+   <output message='tns:ConfigurationManager_insertNewSupervisionRuleResponse'></output>
+  </operation>
+  <operation name='realeseTemporaryProcessChanges' parameterOrder='processInfoWrapper'>
+   <input message='tns:ConfigurationManager_realeseTemporaryProcessChanges'></input>
+   <output message='tns:ConfigurationManager_realeseTemporaryProcessChangesResponse'></output>
+  </operation>
+  <operation name='releaseProcess' parameterOrder='processInfo'>
+   <input message='tns:ConfigurationManager_releaseProcess'></input>
+   <output message='tns:ConfigurationManager_releaseProcessResponse'></output>
+  </operation>
+  <operation name='setNewProcessPriority' parameterOrder='newProcessInfo'>
+   <input message='tns:ConfigurationManager_setNewProcessPriority'></input>
+   <output message='tns:ConfigurationManager_setNewProcessPriorityResponse'></output>
+  </operation>
+  <operation name='setTemporaryChangingRule' parameterOrder='temporaryRuleChangingInfoWrapper'>
+   <input message='tns:ConfigurationManager_setTemporaryChangingRule'></input>
+   <output message='tns:ConfigurationManager_setTemporaryChangingRuleResponse'></output>
+  </operation>
+  <operation name='setTemporaryProcessDataChanging' parameterOrder='processInfoWrapper'>
+   <input message='tns:ConfigurationManager_setTemporaryProcessDataChanging'></input>
+   <output message='tns:ConfigurationManager_setTemporaryProcessDataChangingResponse'></output>
+  </operation>
+ </portType>
+ <binding name='ConfigurationManagerBinding' type='tns:ConfigurationManager'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='changeSupervisionRuleParams'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='getMonitoredProcesses'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='getProcessInfo'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='getProcessPriority'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='getProcessSupervisionRules'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='getSupervisionRule'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='getTemporaryChangingRule'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='getTemporaryProcessDataChanging'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='insertNewProcess'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='insertNewSupervisionRule'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='realeseTemporaryProcessChanges'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='releaseProcess'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='setNewProcessPriority'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='setTemporaryChangingRule'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='setTemporaryProcessDataChanging'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='ConfigurationManagerWS'>
+  <port binding='tns:ConfigurationManagerBinding' name='ConfigurationManagerPort'>
+   <soap:address location='http://127.0.0.1:8080/ConfigurationManagerBeanService/ConfigurationManagerBean'/>
+  </port>
+ </service>
+</definitions>
