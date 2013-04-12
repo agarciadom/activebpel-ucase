@@ -35,7 +35,7 @@
     <!-- Dynamo submodules -->
     <module>it.polimi.monitor.configurationmanager</module>
     <module>it.polimi.monitor.monitorlogger</module>
-    <module>it.polimi.persistence</module>
+    <module>it.polimi.historicalvars</module>
   </modules>
 
   <properties>

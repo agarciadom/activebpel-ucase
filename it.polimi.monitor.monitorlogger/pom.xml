@@ -7,11 +7,11 @@
         <version>4.1-uca11-SNAPSHOT</version>
     </parent>
 
-    <groupId>it.polimi</groupId>
-    <artifactId>monitor-monitorlogger</artifactId>
+    <groupId>it.polimi.monitor</groupId>
+    <artifactId>monitorlogger</artifactId>
     <version>4.1-uca11-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Dynamo::Monitor Logger</name>
+    <name>Dynamo::JBoss WS::Monitor Logger</name>
 
     <dependencies>
         <dependency>
@@ -20,4 +20,9 @@
             <version>1.0.0</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>MonitorLogger-${project.version}.jar</finalName>
+    </build>
+
 </project>

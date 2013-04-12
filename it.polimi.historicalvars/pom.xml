@@ -8,10 +8,10 @@
     </parent>
 
     <groupId>it.polimi</groupId>
-    <artifactId>persistence</artifactId>
+    <artifactId>historicalvars</artifactId>
     <version>4.1-uca11-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>Dynamo::Persistence</name>
+    <name>Dynamo::JBoss WS::Historical Variables</name>
 
     <dependencies>
         <dependency>
@@ -20,4 +20,9 @@
             <version>1.0.0</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>HistoricalVariable-${project.version}.jar</finalName>
+    </build>
+
 </project>
