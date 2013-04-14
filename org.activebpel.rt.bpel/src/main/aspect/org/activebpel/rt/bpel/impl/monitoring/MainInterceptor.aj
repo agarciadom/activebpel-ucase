@@ -1436,11 +1436,13 @@ public privileged aspect MainInterceptor {
 	pointcut pickCallObj(AeActivityPickImpl obj):
 		execution(void AeActivityPickImpl.execute()) && target(obj);
 
-	pointcut pickOnMessage(AeOnMessage obj):
-		execution(void AeOnMessage.onMessage(IAeMessageData)) && target(obj);
+	pointcut pickOnMessage(AeOnMessage.AeMessageDispatcher dispatcher):
+		execution(void onMessage(IAeMessageData)) && target(dispatcher);
 
-	after(AeOnMessage obj): pickOnMessage(obj){
+	after(AeOnMessage.AeMessageDispatcher dispatcher): pickOnMessage(dispatcher) {
 		synchronized (this) {
+			final AeOnMessage obj = (AeOnMessage)dispatcher.getTarget();
+			
 			timer=System.currentTimeMillis();
 			// da vedere se le regole post sulla pick vanno messe col xpath
 			// della
