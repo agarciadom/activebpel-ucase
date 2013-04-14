@@ -3,7 +3,7 @@
 
   <groupId>org.activebpel</groupId>
   <artifactId>engine</artifactId>
-  <version>4.1-uca11-SNAPSHOT</version>
+  <version>4.1-uca12</version>
   <packaging>pom</packaging>
   <name>ActiveBPEL::Engine</name>
 
@@ -22,6 +22,7 @@
     <module>org.activebpel.rt.bpel.ext.expr</module>
     <module>org.activebpel.rt.bpel.server</module>
     <module>org.activebpel.rt.bpel</module>
+    <module>org.activebpel.rt.bpeladmin</module>
     <module>org.activebpel.rt.bpeladmin.war</module>
     <module>org.activebpel.rt.dist</module>
     <module>org.activebpel.rt.exist</module>
