@@ -72,9 +72,13 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.activebpel.rt.bpel.AeBusinessProcessException;
+import org.activebpel.rt.bpel.AeWSDLDefHelper;
 import org.activebpel.rt.bpel.IAeBusinessProcess;
 import org.activebpel.rt.bpel.IAeFault;
 import org.activebpel.rt.bpel.IAeVariable;
+import org.activebpel.rt.bpel.def.activity.AeActivityInvokeDef;
+import org.activebpel.rt.bpel.def.activity.support.AeConditionDef;
+import org.activebpel.rt.bpel.def.activity.support.AeExpressionBaseDef;
 import org.activebpel.rt.bpel.impl.AeAbstractBpelObject;
 import org.activebpel.rt.bpel.impl.AeBusinessProcess;
 import org.activebpel.rt.bpel.impl.AeBusinessProcessEngine;
@@ -829,16 +833,12 @@ public privileged aspect MainInterceptor {
 					if (((recovery == null) || (recovery.equals(""))))
 						recovery="{ignore()}";
 
-					AeVariable variable = (AeVariable) obj.getVariable(obj.getDef().getInputVariable());
+					final String inputVariable = ((AeActivityInvokeDef)obj.getDefinition()).getInputVariable();
+					AeVariable variable = (AeVariable)obj.getProcess().getVariable(obj.getLocationPath(), inputVariable);
 					AeBusinessProcess process = (AeBusinessProcess) obj.getProcess();
 
 					// Need WSDL of invoke and operation ...
-					AeBPELExtendedWSDLDef aeBPELExtendedWSDLDef = null;
-					try {
-						aeBPELExtendedWSDLDef = process.getWSDLDefinition(variable.getMessageType());
-					} catch (AeBusinessProcessException e1) {
-						e1.printStackTrace();
-					}
+					final AeBPELExtendedWSDLDef aeBPELExtendedWSDLDef = AeWSDLDefHelper.getWSDLDefinitionForMsg(process.getProcessPlan(), variable.getMessageType());
 					String serviceWSDL = aeBPELExtendedWSDLDef.getWSDLDef().getDocumentBaseURI();
 
 					// System.out.println("WSDL url?? " +
@@ -1360,16 +1360,12 @@ public privileged aspect MainInterceptor {
 						if ((recovery == null) || (recovery.equals("")))
 							recovery="{ignore()}";
 
-						AeVariable variable = (AeVariable) obj.getVariable(obj.getDef().getInputVariable());
+						final String inputVariable = ((AeActivityInvokeDef)obj.getDefinition()).getInputVariable();
+						AeVariable variable = (AeVariable)obj.getProcess().getVariable(obj.getLocationPath(), inputVariable);
 						AeBusinessProcess process = (AeBusinessProcess) obj.getProcess();
 
 						// Need WSDL of invoke and operation ...
-						AeBPELExtendedWSDLDef aeBPELExtendedWSDLDef = null;
-						try {
-							aeBPELExtendedWSDLDef = process.getWSDLDefinition(variable.getMessageType());
-						} catch (AeBusinessProcessException e1) {
-							e1.printStackTrace();
-						}
+						final AeBPELExtendedWSDLDef aeBPELExtendedWSDLDef = AeWSDLDefHelper.getWSDLDefinitionForMsg(process.getProcessPlan(), variable.getMessageType());
 						String serviceWSDL = aeBPELExtendedWSDLDef.getWSDLDef().getDocumentBaseURI();
 						// System.out.println("WSDL url?? " + aeBPELExtendedWSDLDef.getWSDLDef().getDocumentBaseURI());
 
@@ -2201,8 +2197,7 @@ public privileged aspect MainInterceptor {
 
 		recoveryParams.setXmlMailConfig(xmlMailConfig);
 
-		Recovery recovery = new Recovery();
-		recovery.setRecoveryParams(recoveryParams, aliases, tempAliases);
+		Recovery recovery = new Recovery(recoveryParams, aliases, tempAliases);
 		timerRecoveryTime = System.currentTimeMillis();
 		boolean recoveryResult = recovery.DoRecovery();
 		recoveryTime = System.currentTimeMillis() - timerRecoveryTime;
@@ -2261,9 +2256,12 @@ public privileged aspect MainInterceptor {
 					data = ((Document) data).getDocumentElement();
 				// Execute query against context data, this MUST return exactly
 				// one node
-				data = obj.executeQuery(query, data);
-				data = AeXPathHelper.unwrapXPathValue(data, obj
-						.isEmptyQuerySelectionAllowed());
+				AeExpressionBaseDef expr = new AeConditionDef();
+				expr.setExpression(query);			
+				data = obj.executeExpression(expr, data);
+
+				final AeXPathHelper helper = AeXPathHelper.getInstance(obj.getProcess().getBPELNamespace());
+				data = helper.unwrapXPathValue(data, obj.getProcess().isDisableSelectionFailure());
 			}
 		} catch (AeBusinessProcessException e) {
 			data = null;
@@ -2291,12 +2289,11 @@ public privileged aspect MainInterceptor {
 	 * Modifies the partnerLinkName's address to 'newServiceEndpoint'
 	 */
 	private void rebindService(String partnerLinkName,
-			IAeBusinessProcess process, String newServiceEndpoint) {
-		if (process instanceof AeBusinessProcess) {
+			IAeBusinessProcess iProcess, String newServiceEndpoint) {
+		if (iProcess instanceof AeBusinessProcess) {
+			final AeBusinessProcess process = (AeBusinessProcess)iProcess;
 			AePartnerLink object = process.getPartnerLink(partnerLinkName);
-
-			AeEndpointReference endpoint = (AeEndpointReference) object
-					.getPartnerReference();
+			AeEndpointReference endpoint = (AeEndpointReference) object.getPartnerReference();
 			endpoint.setAddress(newServiceEndpoint);
 		}
 	}
