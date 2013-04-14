@@ -4,10 +4,10 @@
   <parent>
     <groupId>org.activebpel</groupId>
     <artifactId>engine</artifactId>
-    <version>4.1-uca12</version>
+    <version>4.1-uca12-dynamo1-SNAPSHOT</version>
   </parent>
 
   <artifactId>subdir-webapp-assembly</artifactId>
-  <version>4.1-uca12</version>
+  <version>4.1-uca12-dynamo1-SNAPSHOT</version>
   <name>ActiveBPEL::webapp Subdirectory Assembly</name>
 </project>

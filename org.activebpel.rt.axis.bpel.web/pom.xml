@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.activebpel</groupId>
     <artifactId>engine</artifactId>
-    <version>4.1-uca12</version>
+    <version>4.1-uca12-dynamo1-SNAPSHOT</version>
   </parent>
 
   <artifactId>rt.axis.bpel.web</artifactId>
-  <version>4.1-uca12</version>
+  <version>4.1-uca12-dynamo1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ActiveBPEL::Administration Site</name>
 

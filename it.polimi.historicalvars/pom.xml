@@ -4,12 +4,12 @@
     <parent>
         <groupId>org.activebpel</groupId>
         <artifactId>engine</artifactId>
-        <version>4.1-uca11-SNAPSHOT</version>
+        <version>4.1-uca12-dynamo1-SNAPSHOT</version>
     </parent>
 
     <groupId>it.polimi</groupId>
     <artifactId>historicalvars</artifactId>
-    <version>4.1-uca11-SNAPSHOT</version>
+    <version>4.1-uca12-dynamo1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Dynamo::JBoss WS::Historical Variables</name>
 
