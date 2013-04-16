@@ -22,7 +22,7 @@
     </dependencies>
 
     <build>
-        <finalName>HistoricalVariable-${project.version}.jar</finalName>
+        <finalName>HistoricalVariable-${project.version}</finalName>
     </build>
 
 </project>

@@ -22,7 +22,7 @@
     </dependencies>
 
     <build>
-        <finalName>ConfigurationManager-${project.version}.jar</finalName>
+        <finalName>ConfigurationManager-${project.version}</finalName>
     </build>
 
 </project>

@@ -22,7 +22,7 @@
     </dependencies>
 
     <build>
-        <finalName>MonitorLogger-${project.version}.jar</finalName>
+        <finalName>MonitorLogger-${project.version}</finalName>
     </build>
 
 </project>
