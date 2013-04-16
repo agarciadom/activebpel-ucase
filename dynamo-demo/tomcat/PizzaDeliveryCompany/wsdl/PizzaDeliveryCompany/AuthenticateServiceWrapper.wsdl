@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="AuthenticateServiceWrapper" targetNamespace="http://it.polimi.demo.services/AuthenticateService" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:tns="http://it.polimi.demo.services/AuthenticateService" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://it.polimi.demo.services/AuthenticateService" location="http://127.0.0.1:8080/AuthenticateServiceBeanService/AuthenticateServiceBean?wsdl"/>
+  <wsdl:import namespace="http://it.polimi.demo.services/AuthenticateService" location="http://127.0.0.1:8080/AuthenticateService/AuthenticateServiceBean?wsdl"/>
 <plnk:partnerLinkType name="AuthenticateServicePLT">
    <plnk:role name="authenticateServiceRole">
       <plnk:portType name="tns:AuthenticateService"/>

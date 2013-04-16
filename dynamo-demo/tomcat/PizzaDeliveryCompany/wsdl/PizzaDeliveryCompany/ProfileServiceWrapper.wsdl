@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="ProfileServiceWrapper" targetNamespace="http://it.polimi.demo.services/ProfileService" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:tns="http://it.polimi.demo.services/ProfileService" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://it.polimi.demo.services/ProfileService" location="http://127.0.0.1:8080/ProfileServiceBeanService/ProfileServiceBean?wsdl"/>
+  <wsdl:import namespace="http://it.polimi.demo.services/ProfileService" location="http://127.0.0.1:8080/ProfileService/ProfileServiceBean?wsdl"/>
 <plnk:partnerLinkType name="ProfileServicePLT">
    <plnk:role name="profileServiceRole">
       <plnk:portType name="tns:ProfileService"/>
