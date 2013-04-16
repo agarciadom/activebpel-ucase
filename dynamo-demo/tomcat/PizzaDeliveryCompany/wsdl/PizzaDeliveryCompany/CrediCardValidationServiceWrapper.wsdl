@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="CrediCardValidationServiceWrapper" targetNamespace="http://it.polimi.demo.services/CreditCardValidationService" xmlns:tns="http://it.polimi.demo.services/CreditCardValidationService" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://it.polimi.demo.services/CreditCardValidationService" location="http://127.0.0.1:8080/CreditCardValidationServiceBeanService/CreditCardValidationServiceBean?wsdl"/>
+<plnk:partnerLinkType name="CreditCardValidationServicePLT">
+   <plnk:role name="creditCardValidationServiceRole">
+      <plnk:portType name="tns:CreditCardValidationService"/>
+   </plnk:role>
+</plnk:partnerLinkType>
+</wsdl:definitions>

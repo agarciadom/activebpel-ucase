@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="PizzaDeliveryCompany" targetNamespace="http://it.polimi.demo.services/PizzaDeliveryCompany" xmlns:tns="http://it.polimi.demo.services/PizzaDeliveryCompany" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <schema targetNamespace="http://it.polimi.demo.services/PizzaDeliveryCompany" tns="http://it.polimi.demo.services/PizzaDeliveryCompany" xmlns="http://www.w3.org/2001/XMLSchema">
+		<complexType name="stringArray">
+		<sequence>
+			<element maxOccurs="unbounded" minOccurs="0" name="item" nillable="true" type="xsd:string"/>
+		</sequence>
+		</complexType>
+	  </schema>
+  </wsdl:types>
+  <wsdl:message name="orderPizzaResponse">
+    <wsdl:part name="result" type="xsd:boolean"/>
+  </wsdl:message>
+  <wsdl:message name="selectPizzaRequest">
+    <wsdl:part name="username" type="xsd:string"/>
+    <wsdl:part name="password" type="xsd:string"/>
+    <wsdl:part name="priority" type="xsd:int"/>
+  </wsdl:message>
+  <wsdl:message name="orderPizzaRequest">
+    <wsdl:part name="username" type="xsd:string"/>
+    <wsdl:part name="priority" type="xsd:int"/>
+    <wsdl:part name="selectedPizza" type="xsd:string"/>
+    <wsdl:part name="cellphoneNumber" type="xsd:string"/>
+    <wsdl:part name="total" type="xsd:int"/>
+  </wsdl:message>
+  <wsdl:message name="selectPizzaResponse">
+    <wsdl:part name="listOfPizza" type="tns:stringArray"/>
+  </wsdl:message>
+  <wsdl:portType name="PizzaDeliveryCompanyPT">
+    <wsdl:operation name="SelectPizza">
+      <wsdl:input message="tns:selectPizzaRequest"/>
+      <wsdl:output message="tns:selectPizzaResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="OrderPizza">
+      <wsdl:input message="tns:orderPizzaRequest"/>
+      <wsdl:output message="tns:orderPizzaResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+<plnk:partnerLinkType name="PizzaDeliveryCompanyPLT">
+   <plnk:role name="pizzaDeliveryCompanyRole">
+      <plnk:portType name="tns:PizzaDeliveryCompanyPT"/>
+   </plnk:role>
+</plnk:partnerLinkType>
+<bpws:property name="username" type="xsd:string"/>
+<bpws:property name="priority" type="xsd:int"/>
+<bpws:propertyAlias messageType="tns:orderPizzaRequest" part="username" propertyName="tns:username"/>
+<bpws:propertyAlias messageType="tns:selectPizzaRequest" part="username" propertyName="tns:username"/>
+<bpws:propertyAlias messageType="tns:orderPizzaRequest" part="priority" propertyName="tns:priority"/>
+<bpws:propertyAlias messageType="tns:selectPizzaRequest" part="priority" propertyName="tns:priority"/>
+</wsdl:definitions>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdlCatalog xmlns='http://schemas.active-endpoints.com/wsdl-catalog/2005/09/wsdlCatalog.xml'>
+   <wsdlEntry location="project:/PizzaDeliveryCompany/AuthenticateServiceWrapper.wsdl" classpath="wsdl/PizzaDeliveryCompany/AuthenticateServiceWrapper.wsdl" />
+   <wsdlEntry location="project:/PizzaDeliveryCompany/CrediCardValidationServiceWrapper.wsdl" classpath="wsdl/PizzaDeliveryCompany/CrediCardValidationServiceWrapper.wsdl" />
+   <wsdlEntry location="project:/PizzaDeliveryCompany/GPSServiceWrapper.wsdl" classpath="wsdl/PizzaDeliveryCompany/GPSServiceWrapper.wsdl" />
+   <wsdlEntry location="project:/PizzaDeliveryCompany/MapServiceWrapper.wsdl" classpath="wsdl/PizzaDeliveryCompany/MapServiceWrapper.wsdl" />
+   <wsdlEntry location="project:/PizzaDeliveryCompany/PizzaCatalogServiceWrapper.wsdl" classpath="wsdl/PizzaDeliveryCompany/PizzaCatalogServiceWrapper.wsdl" />
+   <wsdlEntry location="project:/PizzaDeliveryCompany/PizzaDeliveryCompany.wsdl" classpath="wsdl/PizzaDeliveryCompany/PizzaDeliveryCompany.wsdl" />
+   <wsdlEntry location="project:/PizzaDeliveryCompany/PizzaManagerWrapper.wsdl" classpath="wsdl/PizzaDeliveryCompany/PizzaManagerWrapper.wsdl" />
+   <wsdlEntry location="project:/PizzaDeliveryCompany/ProfileServiceWrapper.wsdl" classpath="wsdl/PizzaDeliveryCompany/ProfileServiceWrapper.wsdl" />
+   <wsdlEntry location="project:/PizzaDeliveryCompany/SMSServiceWrapper.wsdl" classpath="wsdl/PizzaDeliveryCompany/SMSServiceWrapper.wsdl" />
+</wsdlCatalog>

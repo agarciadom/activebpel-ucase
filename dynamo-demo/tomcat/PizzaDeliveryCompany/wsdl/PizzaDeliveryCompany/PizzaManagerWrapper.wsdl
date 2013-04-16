@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="PizzaManagerWrapper" targetNamespace="http://pizzaManager.elet.polimi.it" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:tns="http://pizzaManager.elet.polimi.it" xmlns:ns1="http://pizzaManager.elet.polimi.it/" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://pizzaManager.elet.polimi.it/" location="http://127.0.0.1:8080/PizzaManagerService/PizzaManager?wsdl"/>
+<plnk:partnerLinkType name="PizzaManagerPLT">
+   <plnk:role name="pizzaManagerRole">
+      <plnk:portType name="ns1:PizzaManager"/>
+   </plnk:role>
+</plnk:partnerLinkType>
+</wsdl:definitions>

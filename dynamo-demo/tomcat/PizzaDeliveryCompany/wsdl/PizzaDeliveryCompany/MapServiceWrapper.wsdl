@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="MapServiceWrapper" targetNamespace="http://it.polimi.demo.services/MapService" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:tns="http://it.polimi.demo.services/MapService" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:import namespace="http://it.polimi.demo.services/MapService" location="http://127.0.0.1:8080/MapServiceBeanService/MapServiceBean?wsdl"/>
+<plnk:partnerLinkType name="MapServicePLT">
+   <plnk:role name="mapServiceRole">
+      <plnk:portType name="tns:MapService"/>
+   </plnk:role>
+</plnk:partnerLinkType>
+</wsdl:definitions>

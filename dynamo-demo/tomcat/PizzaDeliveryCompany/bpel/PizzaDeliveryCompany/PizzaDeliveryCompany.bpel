@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+BPEL Process Definition
+Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.com)
+-->
+<process name="PizzaDeliveryCompany" suppressJoinFailure="yes" targetNamespace="http://PizzaDeliveryCompany" xmlns="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:abx="http://www.activebpel.org/bpel/extension" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:ns1="http://it.polimi.demo.services/PizzaDeliveryCompany" xmlns:ns10="http://pizzaManager.elet.polimi.it/" xmlns:ns11="http://pizzaManager.elet.polimi.it" xmlns:ns12="http://it.polimi.demo.services/GeographicCoordinatesService" xmlns:ns2="http://it.polimi.demo.services/AuthenticateService" xmlns:ns3="http://it.polimi.demo.services/ProfileService" xmlns:ns4="http://it.polimi.demo.services/PizzaCatalogService" xmlns:ns5="http://it.polimi.demo.services/CreditCardValidationService" xmlns:ns6="http://it.polimi.demo.services/GPSService" xmlns:ns7="http://it.polimi.demo.services/MapService" xmlns:ns8="http://it.polimi.demo.services/SMSService" xmlns:ns9="http://it.polimi.demo.services/PizzaDeliveryCompany" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <partnerLinks>
+      <partnerLink myRole="pizzaDeliveryCompanyRole" name="PizzaDeliveryCompanyPLT" partnerLinkType="ns1:PizzaDeliveryCompanyPLT"/>
+      <partnerLink name="AuthenticateServicePLT" partnerLinkType="ns2:AuthenticateServicePLT" partnerRole="authenticateServiceRole"/>
+      <partnerLink name="ProfileServicePLT" partnerLinkType="ns3:ProfileServicePLT" partnerRole="profileServiceRole"/>
+      <partnerLink name="PizzaCatalogServicePLT" partnerLinkType="ns4:PizzaCatalogServicePLT" partnerRole="pizzaCatalogServiceRole"/>
+      <partnerLink name="CreditCardValidationServicePLT" partnerLinkType="ns5:CreditCardValidationServicePLT" partnerRole="creditCardValidationServiceRole"/>
+      <partnerLink name="GPSServicePLT" partnerLinkType="ns6:GPSServicePLT" partnerRole="GPSServiceRole"/>
+      <partnerLink name="MapServicePLT" partnerLinkType="ns7:MapServicePLT" partnerRole="mapServiceRole"/>
+      <partnerLink name="SMSServicePLT" partnerLinkType="ns8:SMSServicePLT" partnerRole="SMSServiceRole"/>
+      <partnerLink name="PizzaManagerPLT" partnerLinkType="ns11:PizzaManagerPLT" partnerRole="pizzaManagerRole"/>
+   </partnerLinks>
+   <variables>
+      <variable messageType="ns1:selectPizzaResponse" name="selectPizzaResponse"/>
+      <variable messageType="ns2:AuthenticateService_authenticate" name="AuthenticateService_authenticate"/>
+      <variable messageType="ns2:AuthenticateService_authenticateResponse" name="AuthenticateService_authenticateResponse"/>
+      <variable messageType="ns3:ProfileService_getUserProfile" name="ProfileService_getUserProfile"/>
+      <variable messageType="ns3:ProfileService_getUserProfileResponse" name="ProfileService_getUserProfileResponse"/>
+      <variable messageType="ns4:PizzaCatalogService_getPizzaList" name="PizzaCatalogService_getPizzaList"/>
+      <variable messageType="ns4:PizzaCatalogService_getPizzaListResponse" name="PizzaCatalogService_getPizzaListResponse"/>
+      <variable messageType="ns1:orderPizzaRequest" name="orderPizzaRequest"/>
+      <variable messageType="ns1:orderPizzaResponse" name="orderPizzaResponse"/>
+      <variable messageType="ns5:CreditCardValidationService_payment" name="CreditCardValidationService_payment"/>
+      <variable messageType="ns5:CreditCardValidationService_paymentResponse" name="CreditCardValidationService_paymentResponse"/>
+      <variable messageType="ns6:GPSService_getCoord" name="GPSService_getCoord"/>
+      <variable messageType="ns6:GPSService_getCoordResponse" name="GPSService_getCoordResponse"/>
+      <variable messageType="ns7:MapService_getMap" name="MapService_getMap"/>
+      <variable messageType="ns7:MapService_getMapResponse" name="MapService_getMapResponse"/>
+      <variable messageType="ns8:SMSService_sendSMS" name="SMSService_sendSMS"/>
+      <variable messageType="ns8:SMSService_sendSMSResponse" name="SMSService_sendSMSResponse"/>
+      <variable messageType="ns1:selectPizzaRequest" name="selectPizzaRequest"/>
+      <variable messageType="ns10:PizzaManager_addPizzaRecord" name="PizzaManager_addPizzaRecord"/>
+      <variable messageType="ns10:PizzaManager_addPizzaRecordResponse" name="PizzaManager_addPizzaRecordResponse"/>
+   </variables>
+   <correlationSets>
+      <correlationSet name="Correlation" properties="ns1:priority ns1:username"/>
+   </correlationSets>
+   <sequence>
+      <receive createInstance="yes" operation="SelectPizza" partnerLink="PizzaDeliveryCompanyPLT" portType="ns1:PizzaDeliveryCompanyPT" variable="selectPizzaRequest">
+         <correlations>
+            <correlation initiate="yes" set="Correlation"/>
+         </correlations>
+      </receive>
+      <assign>
+         <copy>
+            <from part="username" variable="selectPizzaRequest"/>
+            <to part="username" variable="AuthenticateService_authenticate"/>
+         </copy>
+         <copy>
+            <from part="password" variable="selectPizzaRequest"/>
+            <to part="password" variable="AuthenticateService_authenticate"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="AuthenticateService_authenticate" name="InvokeAuthenticate" operation="authenticate" outputVariable="AuthenticateService_authenticateResponse" partnerLink="AuthenticateServicePLT" portType="ns2:AuthenticateService"/>
+      <scope variableAccessSerializable="no">
+         <variables>
+            <variable name="authenticationResult" type="xsd:boolean"/>
+         </variables>
+         <sequence>
+            <assign>
+               <copy>
+                  <from part="result" variable="AuthenticateService_authenticateResponse"/>
+                  <to variable="authenticationResult"/>
+               </copy>
+            </assign>
+            <switch>
+               <case condition="not( bpws:getVariableData('authenticationResult') )">
+                  <terminate/>
+               </case>
+            </switch>
+         </sequence>
+      </scope>
+      <assign>
+         <copy>
+            <from part="username" variable="selectPizzaRequest"/>
+            <to part="username" variable="ProfileService_getUserProfile"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="ProfileService_getUserProfile" name="InvokeProfile" operation="getUserProfile" outputVariable="ProfileService_getUserProfileResponse" partnerLink="ProfileServicePLT" portType="ns3:ProfileService"/>
+      <assign>
+         <copy>
+            <from part="result" query="/result/preferredTypeOfPizza" variable="ProfileService_getUserProfileResponse"/>
+            <to part="pizzaType" variable="PizzaCatalogService_getPizzaList"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="PizzaCatalogService_getPizzaList" name="InvokePizzaCatalog" operation="getPizzaList" outputVariable="PizzaCatalogService_getPizzaListResponse" partnerLink="PizzaCatalogServicePLT" portType="ns4:PizzaCatalogService"/>
+      <assign>
+         <copy>
+            <from part="result" variable="PizzaCatalogService_getPizzaListResponse"/>
+            <to part="listOfPizza" variable="selectPizzaResponse"/>
+         </copy>
+      </assign>
+      <reply operation="SelectPizza" partnerLink="PizzaDeliveryCompanyPLT" portType="ns1:PizzaDeliveryCompanyPT" variable="selectPizzaResponse"/>
+      <receive operation="OrderPizza" partnerLink="PizzaDeliveryCompanyPLT" portType="ns1:PizzaDeliveryCompanyPT" variable="orderPizzaRequest">
+         <correlations>
+            <correlation set="Correlation"/>
+         </correlations>
+      </receive>
+      <assign>
+         <copy>
+            <from part="result" query="/result/userCreditCardNumber" variable="ProfileService_getUserProfileResponse"/>
+            <to part="creditCardNumber" variable="CreditCardValidationService_payment"/>
+         </copy>
+         <copy>
+            <from part="total" variable="orderPizzaRequest"/>
+            <to part="fee" variable="CreditCardValidationService_payment"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="CreditCardValidationService_payment" name="InvokeCCValidation" operation="payment" outputVariable="CreditCardValidationService_paymentResponse" partnerLink="CreditCardValidationServicePLT" portType="ns5:CreditCardValidationService"/>
+      <scope variableAccessSerializable="no">
+         <variables>
+            <variable name="ccValidationResult" type="xsd:boolean"/>
+         </variables>
+         <sequence>
+            <assign>
+               <copy>
+                  <from part="result" variable="CreditCardValidationService_paymentResponse"/>
+                  <to variable="ccValidationResult"/>
+               </copy>
+            </assign>
+            <switch>
+               <case condition="not( bpws:getVariableData('ccValidationResult') )">
+                  <terminate/>
+               </case>
+            </switch>
+         </sequence>
+      </scope>
+      <assign>
+         <copy>
+            <from part="result" query="/result/userAddress" variable="ProfileService_getUserProfileResponse"/>
+            <to part="address" variable="GPSService_getCoord"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="GPSService_getCoord" name="InvokeGPS" operation="getCoord" outputVariable="GPSService_getCoordResponse" partnerLink="GPSServicePLT" portType="ns6:GPSService"/>
+      <assign>
+         <copy>
+            <from part="result" query="/result/easting" variable="GPSService_getCoordResponse"/>
+            <to part="utmCoordinates" query="/utmCoordinates/easting" variable="MapService_getMap"/>
+         </copy>
+         <copy>
+            <from part="result" query="/result/northing" variable="GPSService_getCoordResponse"/>
+            <to part="utmCoordinates" query="/utmCoordinates/northing" variable="MapService_getMap"/>
+         </copy>
+         <copy>
+            <from part="result" query="/result/zone" variable="GPSService_getCoordResponse"/>
+            <to part="utmCoordinates" query="/utmCoordinates/zone" variable="MapService_getMap"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="MapService_getMap" name="InvokeMap" operation="getMap" outputVariable="MapService_getMapResponse" partnerLink="MapServicePLT" portType="ns7:MapService"/>
+      <assign>
+         <copy>
+            <from part="result" variable="MapService_getMapResponse"/>
+            <to part="addPizzaRecord" query="/ns10:addPizzaRecord/arg0/imageLocation" variable="PizzaManager_addPizzaRecord"/>
+         </copy>
+         <copy>
+            <from part="username" variable="orderPizzaRequest"/>
+            <to part="addPizzaRecord" query="/ns10:addPizzaRecord/arg0/clientName" variable="PizzaManager_addPizzaRecord"/>
+         </copy>
+         <copy>
+            <from part="selectedPizza" variable="orderPizzaRequest"/>
+            <to part="addPizzaRecord" query="/ns10:addPizzaRecord/arg0/pizzaName" variable="PizzaManager_addPizzaRecord"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="PizzaManager_addPizzaRecord" name="InvokePizzaManager" operation="addPizzaRecord" outputVariable="PizzaManager_addPizzaRecordResponse" partnerLink="PizzaManagerPLT" portType="ns10:PizzaManager"/>
+      <assign>
+         <copy>
+            <from part="cellphoneNumber" variable="orderPizzaRequest"/>
+            <to part="phoneNumber" variable="SMSService_sendSMS"/>
+         </copy>
+         <copy>
+            <from>Pizza will be delivered in 20 minutes.</from>
+            <to part="message" variable="SMSService_sendSMS"/>
+         </copy>
+      </assign>
+      <invoke inputVariable="SMSService_sendSMS" name="InvokeSMS" operation="sendSMS" outputVariable="SMSService_sendSMSResponse" partnerLink="SMSServicePLT" portType="ns8:SMSService"/>
+      <assign>
+         <copy>
+            <from part="result" variable="SMSService_sendSMSResponse"/>
+            <to part="result" variable="orderPizzaResponse"/>
+         </copy>
+      </assign>
+      <reply operation="OrderPizza" partnerLink="PizzaDeliveryCompanyPLT" portType="ns1:PizzaDeliveryCompanyPT" variable="orderPizzaResponse"/>
+   </sequence>
+</process>
