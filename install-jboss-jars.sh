@@ -15,6 +15,7 @@ fi
 HV_P=it.polimi.historicalvars
 CM_P=it.polimi.monitor.configurationmanager
 ML_P=it.polimi.monitor.monitorlogger
+DEMO_JARS=dynamo-demo/jboss
 
 SERVER_DEPLOY="$JBOSS_DIR/server/default/deploy/"
 
@@ -25,3 +26,4 @@ mvn -am -pl "$HV_P,$CM_P,$ML_P" clean install
 cp -v "$(main_jar "$HV_P")" "$SERVER_DEPLOY"/historicalVariable.jar
 cp -v "$(main_jar "$CM_P")" "$SERVER_DEPLOY"/configurationManager.jar
 cp -v "$(main_jar "$ML_P")" "$SERVER_DEPLOY"/monitorLogger.jar
+cp -v "$DEMO_JARS"/*.jar "$SERVER_DEPLOY"
