@@ -164,14 +164,11 @@ DEMO=dynamo-demo/tomcat
 BPEL=PizzaDeliveryCompany
 BPR="$BPEL.bpr"
 
-mvn -am -pl "$DIST_P" clean install
+mvn -am -pl "$DIST_P" install
 tar -xzf "$DIST_P"/target/*-tomcat.tar.gz -C "$CATALINA_HOME"
 
 # Replace "8xxx" by "7xxx" in server.xml, to change the port Tomcat listens to
 sed -i -r -e 's/8([0-9]+)/7\1/g' "$CATALINA_HOME"/{conf/server.xml,bin/ActiveBPEL.sh}
-
-# Copy over the Tomcat .war files
-cp -v "$DEMO"/*.war "$CATALINA_HOME/webapps"
 
 # Zip the composition and install it
 
