@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set +x
+set -e
 
 main_jar() {
     PROJECT=$1

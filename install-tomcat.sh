@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set +x
+set -e
 
 if [ -z "$CATALINA_HOME" ]; then
     echo "Please set CATALINA_HOME to the Tomcat 5 installation directory." >&2
@@ -15,8 +15,8 @@ BPR="$BPEL.bpr"
 mvn -am -pl "$DIST_P" clean install
 tar -xzf "$DIST_P"/target/*-tomcat.tar.gz -C "$CATALINA_HOME"
 
-# Replace "80" by "70" in server.xml, to change the port Tomcat listens to
-sed -ie 's/70/80/g' "$CATALINA_HOME/conf/server.xml"
+# Replace "8xxx" by "7xxx" in server.xml, to change the port Tomcat listens to
+sed -i -r -e 's/8([0-9]+)/7\1/g' "$CATALINA_HOME"/{conf/server.xml,bin/ActiveBPEL.sh}
 
 # Copy over the Tomcat .war files
 cp -v "$DEMO"/*.war "$CATALINA_HOME/webapps"
