@@ -166,6 +166,7 @@ BPR="$BPEL.bpr"
 
 mvn -am -pl "$DIST_P" install
 tar -xzf "$DIST_P"/target/*-tomcat.tar.gz -C "$CATALINA_HOME"
+chmod +x "$CATALINA_HOME"/bin/*.sh
 
 # Replace "8xxx" by "7xxx" in server.xml, to change the port Tomcat listens to
 sed -i -r -e 's/8([0-9]+)/7\1/g' "$CATALINA_HOME"/{conf/server.xml,bin/ActiveBPEL.sh}
