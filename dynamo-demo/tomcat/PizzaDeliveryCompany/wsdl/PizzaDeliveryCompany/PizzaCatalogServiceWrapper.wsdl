@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <wsdl:definitions name="PizzaCatalogServiceWrapper" targetNamespace="http://it.polimi.demo.services/PizzaCatalogService" xmlns:bpws="http://schemas.xmlsoap.org/ws/2003/03/business-process/" xmlns:tns="http://it.polimi.demo.services/PizzaCatalogService" xmlns:plnk="http://schemas.xmlsoap.org/ws/2003/05/partner-link/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:import namespace="http://it.polimi.demo.services/PizzaCatalogService" location="http://127.0.0.1:8080/PizzaCatalogService/PizzaCatalogServiceBean?wsdl"/>
+  <wsdl:import namespace="http://it.polimi.demo.services/PizzaCatalogService" location="http://127.0.0.1:8080/PizzaCatalogServiceBeanService/PizzaCatalogServiceBean?wsdl"/>
 <plnk:partnerLinkType name="PizzaCatalogServicePLT">
    <plnk:role name="pizzaCatalogServiceRole">
       <plnk:portType name="tns:PizzaCatalogService"/>
