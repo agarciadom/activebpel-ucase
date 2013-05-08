@@ -3,27 +3,27 @@
    <partnerLinks>
       <partnerLink name="AuthenticateServicePLT">
          <partnerRole endpointReference="static">
-            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/AuthenticateService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/AuthenticateService/AuthenticateServiceBean</wsa:Address> <wsa:ServiceName PortName="AuthenticateServicePort">s:AuthenticateService</wsa:ServiceName> </wsa:EndpointReference>
+            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/AuthenticateService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/AuthenticateServiceBeanService/AuthenticateServiceBean</wsa:Address> <wsa:ServiceName PortName="AuthenticateServicePort">s:AuthenticateService</wsa:ServiceName> </wsa:EndpointReference>
          </partnerRole>
       </partnerLink>
       <partnerLink name="CreditCardValidationServicePLT">
          <partnerRole endpointReference="static">
-            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/CreditCardValidationService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/CreditCardValidationService/CreditCardValidationServiceBean</wsa:Address> <wsa:ServiceName PortName="CreditCardValidationServicePort">s:CreditCardValidationService</wsa:ServiceName> </wsa:EndpointReference>
+            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/CreditCardValidationService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/CreditCardValidationServiceBeanService/CreditCardValidationServiceBean</wsa:Address> <wsa:ServiceName PortName="CreditCardValidationServicePort">s:CreditCardValidationService</wsa:ServiceName> </wsa:EndpointReference>
          </partnerRole>
       </partnerLink>
       <partnerLink name="GPSServicePLT">
          <partnerRole endpointReference="static">
-            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/GPSService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/GPSService/GPSServiceBean</wsa:Address> <wsa:ServiceName PortName="GPSServicePort">s:GPSService</wsa:ServiceName> </wsa:EndpointReference>
+            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/GPSService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/GPSServiceBeanService/GPSServiceBean</wsa:Address> <wsa:ServiceName PortName="GPSServicePort">s:GPSService</wsa:ServiceName> </wsa:EndpointReference>
          </partnerRole>
       </partnerLink>
       <partnerLink name="MapServicePLT">
          <partnerRole endpointReference="static">
-            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/MapService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/MapService/MapServiceBean</wsa:Address> <wsa:ServiceName PortName="MapServicePort">s:MapService</wsa:ServiceName> </wsa:EndpointReference>
+            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/MapService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/MapServiceBeanService/MapServiceBean</wsa:Address> <wsa:ServiceName PortName="MapServicePort">s:MapService</wsa:ServiceName> </wsa:EndpointReference>
          </partnerRole>
       </partnerLink>
       <partnerLink name="PizzaCatalogServicePLT">
          <partnerRole endpointReference="static">
-            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/PizzaCatalogService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/PizzaCatalogService/PizzaCatalogServiceBean</wsa:Address> <wsa:ServiceName PortName="PizzaCatalogServicePort">s:PizzaCatalogService</wsa:ServiceName> </wsa:EndpointReference>
+            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/PizzaCatalogService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/PizzaCatalogServiceBeanService/PizzaCatalogServiceBean</wsa:Address> <wsa:ServiceName PortName="PizzaCatalogServicePort">s:PizzaCatalogService</wsa:ServiceName> </wsa:EndpointReference>
          </partnerRole>
       </partnerLink>
       <partnerLink name="PizzaDeliveryCompanyPLT">
@@ -36,33 +36,33 @@
       </partnerLink>
       <partnerLink name="ProfileServicePLT">
          <partnerRole endpointReference="static">
-            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/ProfileService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/ProfileService/ProfileServiceBean</wsa:Address> <wsa:ServiceName PortName="ProfileServicePort">s:ProfileService</wsa:ServiceName> </wsa:EndpointReference>
+            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/ProfileService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/ProfileServiceBeanService/ProfileServiceBean</wsa:Address> <wsa:ServiceName PortName="ProfileServicePort">s:ProfileService</wsa:ServiceName> </wsa:EndpointReference>
          </partnerRole>
       </partnerLink>
       <partnerLink name="SMSServicePLT">
          <partnerRole endpointReference="static">
-            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/SMSService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/SMSService/SMSServiceBean</wsa:Address> <wsa:ServiceName PortName="SMSServicePort">s:SMSService</wsa:ServiceName> </wsa:EndpointReference>
+            <wsa:EndpointReference xmlns:s="http://it.polimi.demo.services/SMSService" xmlns:wsa="http://schemas.xmlsoap.org/ws/2003/03/addressing"> <wsa:Address>http://127.0.0.1:8080/SMSServiceBeanService/SMSServiceBean</wsa:Address> <wsa:ServiceName PortName="SMSServicePort">s:SMSService</wsa:ServiceName> </wsa:EndpointReference>
          </partnerRole>
       </partnerLink>
    </partnerLinks>
    <wsdlReferences>
       <wsdl location="project:/PizzaDeliveryCompany/CrediCardValidationServiceWrapper.wsdl" namespace="http://it.polimi.demo.services/CreditCardValidationService"/>
-      <wsdl location="http://127.0.0.1:8080/ProfileService/ProfileServiceBean?wsdl" namespace="http://it.polimi.demo.services/ProfileService"/>
+      <wsdl location="http://127.0.0.1:8080/ProfileServiceBeanService/ProfileServiceBean?wsdl" namespace="http://it.polimi.demo.services/ProfileService"/>
       <wsdl location="project:/PizzaDeliveryCompany/AuthenticateServiceWrapper.wsdl" namespace="http://it.polimi.demo.services/AuthenticateService"/>
-      <wsdl location="http://127.0.0.1:8080/SMSService/SMSServiceBean?wsdl" namespace="http://it.polimi.demo.services/SMSService"/>
-      <wsdl location="http://127.0.0.1:8080/GPSService/GPSServiceBean?wsdl" namespace="http://it.polimi.demo.services/GPSService"/>
+      <wsdl location="http://127.0.0.1:8080/SMSServiceBeanService/SMSServiceBean?wsdl" namespace="http://it.polimi.demo.services/SMSService"/>
+      <wsdl location="http://127.0.0.1:8080/GPSServiceBeanService/GPSServiceBean?wsdl" namespace="http://it.polimi.demo.services/GPSService"/>
       <wsdl location="project:/PizzaDeliveryCompany/ProfileServiceWrapper.wsdl" namespace="http://it.polimi.demo.services/ProfileService"/>
       <wsdl location="project:/PizzaDeliveryCompany/PizzaCatalogServiceWrapper.wsdl" namespace="http://it.polimi.demo.services/PizzaCatalogService"/>
-      <wsdl location="http://127.0.0.1:8080/CreditCardValidationService/CreditCardValidationServiceBean?wsdl" namespace="http://it.polimi.demo.services/CreditCardValidationService"/>
-      <wsdl location="http://127.0.0.1:8080/AuthenticateService/AuthenticateServiceBean?wsdl" namespace="http://it.polimi.demo.services/AuthenticateService"/>
+      <wsdl location="http://127.0.0.1:8080/CreditCardValidationServiceBeanService/CreditCardValidationServiceBean?wsdl" namespace="http://it.polimi.demo.services/CreditCardValidationService"/>
+      <wsdl location="http://127.0.0.1:8080/AuthenticateServiceBeanService/AuthenticateServiceBean?wsdl" namespace="http://it.polimi.demo.services/AuthenticateService"/>
       <wsdl location="project:/PizzaDeliveryCompany/PizzaDeliveryCompany.wsdl" namespace="http://it.polimi.demo.services/PizzaDeliveryCompany"/>
       <wsdl location="project:/PizzaDeliveryCompany/SMSServiceWrapper.wsdl" namespace="http://it.polimi.demo.services/SMSService"/>
       <wsdl location="project:/PizzaDeliveryCompany/MapServiceWrapper.wsdl" namespace="http://it.polimi.demo.services/MapService"/>
       <wsdl location="project:/PizzaDeliveryCompany/GPSServiceWrapper.wsdl" namespace="http://it.polimi.demo.services/GPSService"/>
       <wsdl location="project:/PizzaDeliveryCompany/PizzaManagerWrapper.wsdl" namespace="http://pizzaManager.elet.polimi.it"/>
-      <wsdl location="http://127.0.0.1:8080/PizzaCatalogService/PizzaCatalogServiceBean?wsdl" namespace="http://it.polimi.demo.services/PizzaCatalogService"/>
-      <wsdl location="http://127.0.0.1:8080/MapService/MapServiceBean?wsdl" namespace="http://it.polimi.demo.services/MapService"/>
+      <wsdl location="http://127.0.0.1:8080/PizzaCatalogServiceBeanService/PizzaCatalogServiceBean?wsdl" namespace="http://it.polimi.demo.services/PizzaCatalogService"/>
+      <wsdl location="http://127.0.0.1:8080/MapServiceBeanService/MapServiceBean?wsdl" namespace="http://it.polimi.demo.services/MapService"/>
       <wsdl location="http://127.0.0.1:8080/PizzaManagerService/PizzaManager?wsdl" namespace="http://pizzaManager.elet.polimi.it/"/>
-      <wsdl location="http://127.0.0.1:8080/GeographicCoordinatesService/GeographicCoordinatesServiceBean?wsdl" namespace="http://it.polimi.demo.services/GeographicCoordinatesService"/>
+      <wsdl location="http://127.0.0.1:8080/GeographicCoordinatesServiceBeanService/GeographicCoordinatesServiceBean?wsdl" namespace="http://it.polimi.demo.services/GeographicCoordinatesService"/>
    </wsdlReferences>
 </process>
