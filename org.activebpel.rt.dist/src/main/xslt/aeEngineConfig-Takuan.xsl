@@ -16,22 +16,4 @@
        <xsl:attribute name="value">urn:ae:full</xsl:attribute>
      </xsl:copy>
    </xsl:template>
-
-   <!--
-       Add XPath extension functions
-
-       Available from: https://neptuno.uca.es/redmine/projects/sources-fm
-   -->
-   <xsl:template match="/config/entry[@name = 'FunctionContexts']">
-     <xsl:copy>
-       <xsl:copy-of select="@*"/>
-       <entry name="Funciones de monitorizacion">
-         <entry name="Prefix"    value="uca"/>
-         <entry name="Namespace" value="http://www.uca.es/xpath/2007/11"/>
-         <entry name="Class"
-                value="es.uca.webservices.xpath.ContextoFunciones"/>
-       </entry>
-     </xsl:copy>
-   </xsl:template>
-
 </xsl:stylesheet>
