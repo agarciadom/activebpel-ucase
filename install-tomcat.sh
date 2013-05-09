@@ -141,10 +141,7 @@ function confirm_rm() {
 
 ### Main body
 
-if [ -z "$CATALINA_HOME" ]; then
-    echo "Please set CATALINA_HOME to the Tomcat 5 installation directory." >&2
-    exit 1
-fi
+CATALINA_HOME=$HOME/bin/dynamo-tomcat
 
 ### Download and install Tomcat
 

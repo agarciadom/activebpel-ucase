@@ -137,7 +137,7 @@ Edited using ActiveBPEL(tm) Designer Version 2.0.0 (http://www.active-endpoints.
          </copy>
       </assign>
       <invoke inputVariable="GPSService_getCoord" name="InvokeGPS" operation="getCoord" outputVariable="GPSService_getCoordResponse" partnerLink="GPSServicePLT" portType="ns6:GPSService"/>
-      <assign>
+      <assign name="CopyGPS">
          <copy>
             <from part="result" query="/result/easting" variable="GPSService_getCoordResponse"/>
             <to part="utmCoordinates" query="/utmCoordinates/easting" variable="MapService_getMap"/>
