@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config xmlns:xalan="http://xml.apache.org/xslt">
    <entry value="ActiveBPEL In-Memory Configuration" name="Description"/>
-   <entry name="ValidateServiceMessages" value="true"/>
+   <entry name="ValidateServiceMessages" value="false"/>
    <entry name="AllowEmptyQuerySelection" value="false"/>
    <entry name="AllowCreateXPath" value="true"/>
    <entry name="Logging" value="urn:ae:none"/>

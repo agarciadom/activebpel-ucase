@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
    <entry name="Description" value="ActiveBPEL Configuration"/>
-   <entry name="ValidateServiceMessages" value="true"/>
+   <entry name="ValidateServiceMessages" value="false"/>
    <entry name="AllowEmptyQuerySelection" value="false"/>
    <entry name="AllowCreateXPath" value="true"/>
    <entry name="Logging" value="urn:ae:none"/>
