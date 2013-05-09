@@ -3,7 +3,7 @@
    <entry value="ActiveBPEL In-Memory Configuration" name="Description"/>
    <entry name="ValidateServiceMessages" value="true"/>
    <entry name="AllowEmptyQuerySelection" value="false"/>
-   <entry name="AllowCreateXPath" value="false"/>
+   <entry name="AllowCreateXPath" value="true"/>
    <entry name="Logging" value="urn:ae:none"/>
    <entry name="UnmatchedReceiveTimeout" value="300"/>
    <entry name="FunctionContexts"/>
