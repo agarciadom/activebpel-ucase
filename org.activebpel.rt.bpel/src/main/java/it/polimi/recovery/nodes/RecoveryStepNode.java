@@ -199,9 +199,9 @@ public class RecoveryStepNode extends WSReLNode
 		XMLParser parserBPELVariables = new XMLParser();
 		
 		parserBPELVariables.SetXML(oldMonitoringData);
-		variables = parserBPELVariables.GetXPath("monitor_data");
+		variables = parserBPELVariables.GetXPath("monitor_data/data");
 		
-		int lengthBeginXPath = "/monitor_data/".length();
+		int lengthBeginXPath = "/monitor_data/data/".length();
 		
 		
 		//Invoker was modified to remove all namespaces and relative prefixes, before returning the result

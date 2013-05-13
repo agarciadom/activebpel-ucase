@@ -35,7 +35,7 @@ public class InternalVarNode extends Variable {
 	private VariableNode varNode=null;
 	private Object value=null;
 	private Object currentValue=null;
-	private final String MONITOR = "monitor_data/";
+	private final String MONITOR = "monitor_data/data/";
 	private String xpath=null;
 	private Alias alias=null;
 	private AliasNodeInfo aliasNode=null;
