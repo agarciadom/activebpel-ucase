@@ -198,18 +198,37 @@ class WSCoLParser extends Parser;
 
 options {
     buildAST=true;
-    k=4;
+    k=8;
 }
-{	//simboli
+
+{
     class Symbol {
         String name;
         public Symbol(String name) {
             this.name = name;
         }
     }
-    //creo la tabella dei symboli
     java.util.Hashtable<String,Symbol> symbols = new java.util.Hashtable<String,Symbol>();
+
+    private java.util.List<String> errors = new java.util.LinkedList<String>();
+
+    @Override
+    public void reportError(RecognitionException e) {
+        errors.add(e.toString());
+        super.reportError(e);
+    }
+
+    @Override
+    public void reportError(String e) {
+        errors.add(e);
+        super.reportError(e);
+    }
+
+    public java.util.List<String> getErrors() {
+        return errors;
+    }
 }
+
 imaginaryTokenDefinitions :
     RECOVERY
     CONDITION
