@@ -104,17 +104,21 @@ function download_from_http() {
     fi
 
     URL=$1
-    push_d "$DL_CACHE"
+    DEST_PATH=$DL_CACHE/$(basename "$URL")
 
-    status "Downloading $URL..."
-    if ! wget --no-check-certificate --no-http-keep-alive --timestamping "$URL"; then
-        error "Failed to download $URL"
-        return 2
+    if test -f "$DEST_PATH"; then
+        status "File already available at $DEST_PATH: reusing"
+    else
+        push_d "$DL_CACHE"
+        status "Downloading $URL..."
+        if ! wget --no-check-certificate --no-http-keep-alive --timestamping "$URL"; then
+            error "Failed to download $URL"
+            return 2
+        fi
+        status "File downloaded to $DEST_PATH"
+        pop_d
     fi
 
-    DEST_PATH=$DL_CACHE/$(basename "$URL")
-    status "File downloaded to $DEST_PATH"
-    pop_d
     echo $DEST_PATH
 }
 
