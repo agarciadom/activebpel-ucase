@@ -208,6 +208,11 @@ if ! confirm_rm "$JBOSS_DIR"; then
 fi
 mv "$(unpack -p "$JBOSS42_ZIP")" "$JBOSS_DIR"
 
+# Pack the dynamo-war directory
+pushd "$DEMO_JARS"/dynamo-war
+zip -r ../dynamo.war *
+popd
+
 # Copy the Dynamo .jar files over to the JBoss directory
 cp -v "$(main_jar "$HV_P")" "$SERVER_DEPLOY"/historicalVariable.jar
 cp -v "$(main_jar "$CM_P")" "$SERVER_DEPLOY"/ConfigurationManagerBeanService.jar
