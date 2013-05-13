@@ -75,7 +75,7 @@ try {
 	recoveryStrategy2 = recoveryStrategy2.replaceAll("&gt;", ">");
 	timeFrame = "every 1 hour";
 	userID="luciano";
-	wscolRule2 = "let $hRes = returnInt('http://127.0.0.1:8080/ImageVerifierServiceBeanService/ImageVerifierServiceBean?wsdl','getHRes','&lt;InvokeServiceParameters&gt;&lt;imageURL&gt;' + $MapService_getMapResponse/result + '&lt;/imageURL&gt;&lt;/InvokeServiceParameters&gt;',/Response/result);$hRes &lt;= 150;";
+	wscolRule2 = "let $hRes = returnNum('http://127.0.0.1:8080/ImageVerifierServiceBeanService/ImageVerifierServiceBean?wsdl','getHRes','&lt;InvokeServiceParameters&gt;&lt;imageURL&gt;' + $MapService_getMapResponse/result + '&lt;/imageURL&gt;&lt;/InvokeServiceParameters&gt;',/Response/result);$hRes &lt;= 150;";
 	wscolRule2 = wscolRule2.replaceAll("&lt;", "<");
 	wscolRule2 = wscolRule2.replaceAll("&gt;", ">");
 

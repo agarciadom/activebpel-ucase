@@ -39,7 +39,7 @@ recoveryStrategy = recoveryStrategy.replaceAll("&lt;", "<");
 recoveryStrategy = recoveryStrategy.replaceAll("&gt;", ">");
 String timeFrame = "every 1 hour";
 String userID="luciano";
-String wscolRule = "let $hRes = returnInt('http://127.0.0.1:8080/ImageVerifierServiceBeanService/ImageVerifierServiceBean?wsdl','getHRes','&lt;InvokeServiceParameters&gt;&lt;imageURL&gt;' + $MapService_getMapResponse/result + '&lt;/imageURL&gt;&lt;/InvokeServiceParameters&gt;',/Response/result);$hRes &lt;= 150;";
+String wscolRule = "let $hRes = returnNum('http://127.0.0.1:8080/ImageVerifierServiceBeanService/ImageVerifierServiceBean?wsdl','getHRes','&lt;InvokeServiceParameters&gt;&lt;imageURL&gt;' + $MapService_getMapResponse/result + '&lt;/imageURL&gt;&lt;/InvokeServiceParameters&gt;',/Response/result);$hRes &lt;= 150;";
 wscolRule = wscolRule.replaceAll("&lt;", "<");
 wscolRule = wscolRule.replaceAll("&gt;", ">");
 
