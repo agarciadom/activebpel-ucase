@@ -52,6 +52,7 @@ import it.polimi.recovery.data.RecoveryParams;
 import it.polimi.recovery.data.ServiceInvocationParams;
 import it.polimi.recovery.data.SupervisionParams;
 
+import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.rmi.RemoteException;
@@ -108,8 +109,6 @@ import org.w3c.dom.NodeList;
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
 import antlr.collections.AST;
-
-import com.sun.xml.bind.StringInputStream;
 
 public privileged aspect MainInterceptor {
 	private long respTime = 0;
@@ -2334,8 +2333,7 @@ public privileged aspect MainInterceptor {
 			Source source = new DOMSource(document);
 			StringWriter stringWriter = new StringWriter();
 			Result result = new StreamResult(stringWriter);
-			StreamSource xsltSource = new StreamSource(new StringInputStream(
-					xslt));
+			StreamSource xsltSource = new StreamSource(new ByteArrayInputStream(xslt.getBytes()));
 			TransformerFactory factory = TransformerFactory.newInstance();
 			transformer = factory.newTransformer(xsltSource);
 			transformer.transform(source, result);

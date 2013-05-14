@@ -26,6 +26,7 @@ import it.polimi.recovery.data.RecoveryResult;
 import it.polimi.recovery.data.RuleParams;
 import it.polimi.recovery.data.ServiceInvocationParams;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -57,7 +58,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 
-import com.sun.xml.bind.StringInputStream;
 import com.sun.xml.ws.server.DocInfo;
 import com.sun.xml.ws.transport.http.server.EndpointEntityResolver;
 import com.sun.xml.ws.wsdl.WSDLContext;
@@ -70,7 +70,7 @@ public class AtomicRecoveryAction
 		{
 			Properties fMailServerConfig = new Properties();
 			
-			fMailServerConfig.loadFromXML(new StringInputStream(xmlProperties));
+			fMailServerConfig.loadFromXML(new ByteArrayInputStream(xmlProperties.getBytes()));
 			
 			Session session;
 
@@ -227,9 +227,9 @@ public class AtomicRecoveryAction
 		{
 			ByteArrayOutputStream resultOutput = new ByteArrayOutputStream();
 			StreamResult result = new StreamResult(resultOutput);
-			StreamSource xsltSource = new StreamSource(new StringInputStream(xslt));
+			StreamSource xsltSource = new StreamSource(new ByteArrayInputStream(xslt.getBytes()));
 			
-			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new StringInputStream(serviceInvokeResponse));
+			Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new ByteArrayInputStream(serviceInvokeResponse.getBytes()));
 			DOMSource responseSource = new DOMSource(document);
 			
 			Transformer transformer = TransformerFactory.newInstance().newTransformer(xsltSource);

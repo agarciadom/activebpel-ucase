@@ -18,6 +18,7 @@
 
 package it.polimi.recovery;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Vector;
@@ -47,8 +48,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.sun.xml.bind.StringInputStream;
-
 public class XMLParser
 {
 	DocumentBuilder doc;
@@ -76,7 +75,7 @@ public class XMLParser
 	{
 		try
 		{
-			this.document = this.doc.parse(new StringInputStream(xml));
+			this.document = this.doc.parse(new ByteArrayInputStream(xml.getBytes()));
 			
 			saxDoc = new DocumentWrapper(this.document, null, new Configuration());
 		}

@@ -18,6 +18,7 @@
 
 package it.polimi.monitor.invoker.data;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -31,8 +32,6 @@ import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-
-import com.sun.xml.bind.StringInputStream;
 
 public class XMLVariable
 {
@@ -49,7 +48,7 @@ public class XMLVariable
                         this.variableValue = value;
 
                         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-                        this.document = builder.parse(new StringInputStream(value));
+                        this.document = builder.parse(new ByteArrayInputStream(value.getBytes()));
 
                         this.xpath = XPathFactory.newInstance().newXPath();
                 }
