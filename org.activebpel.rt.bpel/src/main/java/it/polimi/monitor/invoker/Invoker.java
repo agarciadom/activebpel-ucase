@@ -24,7 +24,6 @@ import it.polimi.monitor.invoker.exceptions.ServiceWSDLExcpetion;
 import it.polimi.monitor.invoker.service.Element;
 import it.polimi.monitor.invoker.service.ServiceWSDL;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -89,20 +88,14 @@ public class Invoker
 
                         SOAPPart part = request.getSOAPPart();
                         SOAPEnvelope envelope = part.getEnvelope();
-                        envelope.setAttribute("xmlns:ser", this.serviceWsdl.GetTargetNamespace());
-                        envelope.setAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+                        //envelope.addNamespaceDeclaration("ser", this.serviceWsdl.GetTargetNamespace());
+                        envelope.addNamespaceDeclaration("xsi", "http://www.w3.org/2001/XMLSchema-instance");
 
                         SOAPBody body = envelope.getBody();
                         this.soapFactory = SOAPFactory.newInstance();
 
-                        String namespacePrefix = "ser";
-
-//			if(!this.serviceWsdl.isSchemaQualified())
-//			{
-//				namespacePrefix = "ser";
-//			}
-
-                        Name bodyName = this.soapFactory.createName(operationName, namespacePrefix, null);
+                        final String namespacePrefix = "ser";
+                        Name bodyName = this.soapFactory.createName(operationName, namespacePrefix, this.serviceWsdl.GetTargetNamespace());
                         SOAPBodyElement bodyElement = body.addBodyElement(bodyName);
 
                         String messageName = this.serviceWsdl.RetreiveInMessageName(operationName);

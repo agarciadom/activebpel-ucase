@@ -18,16 +18,15 @@
 
 package it.polimi.monitor;
 
+import it.polimi.WSCoL.WSCoLLexer;
+import it.polimi.WSCoL.WSCoLLexerTokenTypes;
+import it.polimi.WSCoL.WSCoLParser;
 import it.polimi.exception.DuplicateIdentifierException;
 import it.polimi.exception.InvalidInputMonitor;
 import it.polimi.exception.WSCoLException;
 import it.polimi.monitor.nodes.AliasNodes;
 import it.polimi.monitor.nodes.Aliases;
 import it.polimi.monitor.nodes.NodeWSCoL;
-import it.polimi.WSCoL.WSCoLLexer;
-import it.polimi.WSCoL.WSCoLLexerTokenTypes;
-import it.polimi.WSCoL.WSCoLParser;
-
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -38,7 +37,6 @@ import java.util.logging.Logger;
 import antlr.RecognitionException;
 import antlr.TokenStreamException;
 import antlr.collections.AST;
-import antlr.debug.misc.ASTFrame;
 /**
  * This class can use for monitoring a WSCoL rules. This receive a rules, a set of data
  * and information for interact with historical variable. It can evaluate the monitoring
