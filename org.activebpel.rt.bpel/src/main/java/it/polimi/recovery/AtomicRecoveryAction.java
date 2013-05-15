@@ -29,10 +29,6 @@ import it.polimi.recovery.data.ServiceInvocationParams;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -42,6 +38,13 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.wsdl.Definition;
+import javax.wsdl.Port;
+import javax.wsdl.Service;
+import javax.wsdl.WSDLException;
+import javax.wsdl.extensions.soap.SOAPAddress;
+import javax.wsdl.extensions.soap12.SOAP12Address;
+import javax.wsdl.factory.WSDLFactory;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
@@ -52,15 +55,9 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.ws.WebServiceException;
 
 import org.w3c.dom.Document;
-import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
-
-import com.sun.xml.ws.server.DocInfo;
-import com.sun.xml.ws.transport.http.server.EndpointEntityResolver;
-import com.sun.xml.ws.wsdl.WSDLContext;
 
 public class AtomicRecoveryAction
 {
@@ -134,12 +131,10 @@ public class AtomicRecoveryAction
 		return new RecoveryResult(false, "Retry: invoke activity return an empty or null result!!");
 	}
 	
-	public static RecoveryResult Rebind(String newServiceURI, ServiceInvocationParams serviceParams, boolean toInvoke)
+	public static RecoveryResult Rebind(String newServiceURI, ServiceInvocationParams serviceParams, boolean toInvoke) throws WSDLException
 	{
 		String serviceInvokeResponse = null;
 		RecoveryResult recoveryResult = new RecoveryResult();
-		
-//		System.out.println("Data input: " + serviceParams.getInput());
 		
 		if(toInvoke)
 		{
@@ -247,39 +242,8 @@ public class AtomicRecoveryAction
 			
 			return recoveryResult;
 		}
-		catch (TransformerConfigurationException e)
+		catch (Exception e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new RecoveryResult(false, e.getMessage());
-		}
-		catch (TransformerFactoryConfigurationError e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new RecoveryResult(false, e.getMessage());
-		}
-		catch (SAXException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new RecoveryResult(false, e.getMessage());
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new RecoveryResult(false, e.getMessage());
-		}
-		catch (ParserConfigurationException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return new RecoveryResult(false, e.getMessage());
-		}
-		catch (TransformerException e)
-		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return new RecoveryResult(false, e.getMessage());
 		}
@@ -299,29 +263,21 @@ public class AtomicRecoveryAction
 		return recoveryResult;
 	}
 	
-	private static String RetrieveServiceEndpoint(String wsdlUrl)
+	private static String RetrieveServiceEndpoint(String wsdlUrl) throws WSDLException
 	{
-		Map<String, DocInfo> map = new HashMap<String, DocInfo>();
+		final Definition def = WSDLFactory.newInstance().newWSDLReader().readWSDL(wsdlUrl);
 		
-		EntityResolver entityResolver = new EndpointEntityResolver(map);
-		
-		WSDLContext wsdlContext = null;
-		try
-		{
-			wsdlContext = new WSDLContext(new URL(wsdlUrl), entityResolver);
+		final Service srv = (Service) def.getServices().values().iterator().next();
+		final Port port = (Port)srv.getPorts().values().iterator().next();
+		for (Object o : port.getExtensibilityElements()) {
+			if (o instanceof SOAPAddress) {
+				return ((SOAPAddress)o).getLocationURI();
+			}
+			else if (o instanceof SOAP12Address) {
+				return ((SOAP12Address)o).getLocationURI();
+			}
 		}
-		catch (WebServiceException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (MalformedURLException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-//		System.out.println(wsdlContext.getEndpoint(wsdlContext.getServiceQName()));
-		
-		return wsdlContext.getEndpoint(wsdlContext.getServiceQName());
+
+		return null;
 	}
 }

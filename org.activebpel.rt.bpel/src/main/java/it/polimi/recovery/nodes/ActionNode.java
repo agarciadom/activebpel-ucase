@@ -32,6 +32,8 @@ import it.polimi.recovery.data.ServiceInvocationParams;
 
 import java.util.Vector;
 
+import javax.wsdl.WSDLException;
+
 import antlr.collections.AST;
 
 public class ActionNode extends WSReLNode 
@@ -89,6 +91,9 @@ public class ActionNode extends WSReLNode
 			}
 			catch (WSCoLException e)
 			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (WSDLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

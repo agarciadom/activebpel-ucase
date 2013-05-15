@@ -14,155 +14,104 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.invoker.service;
 
 import it.polimi.monitor.invoker.exceptions.ServiceWSDLExcpetion;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.util.Collection;
 import java.util.Vector;
-import java.util.Map.Entry;
 
+import javax.wsdl.Binding;
+import javax.wsdl.BindingOperation;
+import javax.wsdl.Definition;
+import javax.wsdl.Operation;
+import javax.wsdl.Part;
+import javax.wsdl.Port;
+import javax.wsdl.PortType;
+import javax.wsdl.Service;
+import javax.wsdl.WSDLException;
+import javax.wsdl.factory.WSDLFactory;
 import javax.xml.namespace.QName;
-import javax.xml.stream.XMLStreamException;
 
-import org.xml.sax.EntityResolver;
-import org.xml.sax.SAXException;
+public class ServiceWSDLJaxWS {
+	private String wsdlLocation;
 
-import com.sun.xml.ws.model.Mode;
+	private Definition wsdlDef;
 
-import com.sun.xml.ws.server.DocInfo;
-import com.sun.xml.ws.transport.http.server.EndpointEntityResolver;
-import com.sun.xml.ws.wsdl.WSDLContext;
-import com.sun.xml.ws.wsdl.parser.Binding;
-import com.sun.xml.ws.wsdl.parser.BindingOperation;
-import com.sun.xml.ws.wsdl.parser.Message;
-import com.sun.xml.ws.wsdl.parser.PortType;
-import com.sun.xml.ws.wsdl.parser.PortTypeOperation;
-import com.sun.xml.ws.wsdl.parser.WSDLDocument;
+	public ServiceWSDLJaxWS(String wsdlLoc) throws WSDLException {
+		this.wsdlLocation = wsdlLoc;
+		this.wsdlDef = WSDLFactory.newInstance().newWSDLReader()
+				.readWSDL(wsdlLoc);
+	}
 
-public class ServiceWSDLJaxWS
-{
-        private String wsdlLocation;
+	public String GetTargetNamespace() {
+		String targetNS = wsdlDef.getTargetNamespace();
 
-        private WSDLContext wsdlContext;
+		if (targetNS != null) {
+			return targetNS;
+		}
 
-        private WSDLDocument wsdlDocument;
+		return getFirstService().getQName().getNamespaceURI();
+	}
 
-        public ServiceWSDLJaxWS(String wsdlLoc) throws MalformedURLException, IOException, XMLStreamException, SAXException
-        {
-                this.wsdlLocation = wsdlLoc;
+	private Service getFirstService() {
+		final Service firstService = (Service) wsdlDef.getServices().values()
+				.iterator().next();
+		return firstService;
+	}
 
-                Map<String, DocInfo> map = new HashMap<String, DocInfo>();
+	public QName GetServiceQName() throws ServiceWSDLExcpetion {
+		if (!isThereOnlyOneServiceName()) {
+			throw new ServiceWSDLExcpetion(
+					"More than one Service present in the wsdl:"
+							+ this.wsdlLocation);
+		}
 
-                EntityResolver entityResolver = new EndpointEntityResolver(map);
+		return getFirstService().getQName();
+	}
 
-                this.wsdlContext = new WSDLContext(new URL(this.wsdlLocation), entityResolver);
+	public String GetPortName() {
+		final Port port = (Port) getFirstService().getPorts().values()
+				.iterator().next();
+		return port.getName();
+	}
 
-                this.wsdlDocument = this.wsdlContext.getWsdlDocument();
-        }
+	public boolean isThereOnlyOneServiceName() {
+		return wsdlDef.getServices().size() == 1;
+	}
 
-        public String GetTargetNamespace()
-        {
-                String targetNS = this.wsdlContext.getTargetNamespace();
+	public String RetreiveInMessageName(String operation, QName service,
+			QName port) {
+		Binding serviceBinding = wsdlDef.getService(service)
+				.getPort(port.getLocalPart()).getBinding();
+		QName portTypeQName = serviceBinding.getPortType().getQName();
+		PortType portType = wsdlDef.getPortType(portTypeQName);
 
-                if(targetNS != null)
-                {
-                        return targetNS;
-                }
+		final Operation op = portType.getOperation(operation, null, null);
+		if (op != null) {
+			return op.getInput().getName();
+		}
+		return null;
+	}
 
-                return this.wsdlContext.getServiceQName().getNamespaceURI();
-        }
+	public Collection<Part> GetMessageParts(QName messageName) {
+		return wsdlDef.getMessage(messageName).getParts().values();
+	}
 
-        public QName GetServiceQName() throws ServiceWSDLExcpetion
-        {
-                if(!this.isThereOnlyOneServiceName())
-                {
-                        throw new ServiceWSDLExcpetion("More than one Service present in the wsdl:" + this.wsdlLocation);
-                }
+	public Vector<Element> GetComplexTypeDefinition(String operation,
+			QName service, String port, Collection<Part> messageParts) {
+		final Binding serviceBinding = wsdlDef.getService(service)
+				.getPort(port).getBinding();
+		final BindingOperation bindingOperation = serviceBinding
+				.getBindingOperation(operation, null, null);
 
-                return this.wsdlContext.getServiceQName();
-        }
+		for (Part part : messageParts) {
+			System.out.println(String.format("Part %s: type %s, element %s",
+					part.getName(), part.getTypeName(), part.getElementName()));
+		}
 
-        public QName GetPortQName()
-        {
-                return this.wsdlContext.getPortName();
-        }
-
-        public boolean isThereOnlyOneServiceName()
-        {
-                Set<QName> serviceNameList = this.wsdlContext.getAllServiceNames();
-
-                if(serviceNameList.size() == 1)
-                {
-                        return true;
-                }
-                else
-                {
-                        return false;
-                }
-        }
-
-    public QName RetreiveInMessageName(String operation, QName service, QName port)
-    {
-        Binding serviceBinding = this.wsdlContext.getWsdlBinding(service, port);
-
-        QName portTypeQName = serviceBinding.getPortTypeName();
-        PortType portType = this.wsdlDocument.getPortType(portTypeQName);
-
-        Set<Entry<String, PortTypeOperation>> ptoSet = portType.entrySet();
-
-        Iterator iterator = ptoSet.iterator();
-
-        Entry entry;
-
-        while(iterator.hasNext())
-        {
-                entry = (Entry) iterator.next();
-
-                if(((String)entry.getKey()).equals(operation))
-                {
-                        PortTypeOperation result = (PortTypeOperation) entry.getValue();
-
-                        return result.getInputMessage();
-                }
-        }
-
-        return null;
-    }
-
-    public Iterator GetMessageParts(QName messageName)
-    {
-                //Retreive message definition from the WSDL
-                Message message = this.wsdlDocument.getMessage(messageName);
-
-                return message.iterator();
-    }
-
-    public Vector<Element> GetComplexTypeDefinition(String operation, QName service, QName port, Iterator messageParts)
-    {
-        Binding serviceBinding = this.wsdlContext.getWsdlBinding(service, port);
-
-        BindingOperation bindingOperation = serviceBinding.get(operation);
-
-        Element element;
-        String temp;
-
-        while(messageParts.hasNext())
-        {
-                element = new Element();
-                temp = (String)messageParts.next();
-
-                System.out.println("Part: " + temp + " - MimeType: " + bindingOperation.getPart(temp, Mode.IN));
-        }
-
-        return null;
-    }
+		return null;
+	}
 }

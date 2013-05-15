@@ -23,8 +23,6 @@
  *  along with DYNAMO.  If not, see <http://www.gnu.org/licenses/>.
  *   
  */
- 
- 
 
 package org.activebpel.rt.bpel.impl.monitoring;
 
