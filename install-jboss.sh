@@ -218,7 +218,7 @@ zip -r ../dynamo.war *
 popd
 
 # Copy the Dynamo .jar files over to the JBoss directory
-cp -v "$(main_jar "$HV_P")" "$SERVER_DEPLOY"/historicalVariable.jar
+cp -v "$(main_jar "$HV_P")" "$SERVER_DEPLOY"/HistoricalVariableBeanService.jar
 cp -v "$(main_jar "$CM_P")" "$SERVER_DEPLOY"/ConfigurationManagerBeanService.jar
 cp -v "$(main_jar "$ML_P")" "$SERVER_DEPLOY"/MonitorLogger.jar
 cp -v "$DEMO_JARS"/*.{jar,war} "$SERVER_DEPLOY"
