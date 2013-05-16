@@ -34,7 +34,7 @@ boolean precondition = false;
 int priority = 4;
 String processID = "PizzaDeliveryCompany";
 String providers = "MagicMap";
-String recoveryStrategy = "if($hRes &lt; 180;){ignore()}else{rebind('http://127.0.0.1:8080/MapServiceBackUpBeanService/MapServiceBackUpBean?wsdl') and notify('During recovery Dynamo had to rebind to a backup service.','mac@localhost') or notify('Could not find a map with a suitable size','mac@localhost') and halt()}";
+String recoveryStrategy = "if($hRes &lt; 180;){ignore()}else{rebind('http://127.0.0.1:8080/MapServiceBackUpBeanService/MapServiceBackUpBean?wsdl') and notify('During recovery Dynamo had to rebind to a backup service.','antonio@localhost') or notify('Could not find a map with a suitable size','antonio@localhost') and halt()}";
 recoveryStrategy = recoveryStrategy.replaceAll("&lt;", "<");
 recoveryStrategy = recoveryStrategy.replaceAll("&gt;", ">");
 String timeFrame = "every 1 hour";
@@ -87,7 +87,7 @@ out.println(e.getMessage());
 </tr>
 <tr>
 <td><b>Recovery rule</b></td>
-<td>if($hRes &lt; 180;){ignore()}else{notify('Could not load a map with a suitable size','mac@localhost') and halt()}
+<td>if($hRes &lt; 180;){ignore()}else{notify('Could not load a map with a suitable size','antonio@localhost') and halt()}
 </td>
 </tr>
 </table>

@@ -34,7 +34,7 @@ boolean precondition = false;
 int priority = 4;
 String processID = "PizzaDeliveryCompany";
 String providers = "MagicMap";
-String recoveryStrategy = "if($hRes &lt; 180;){ignore()}else{change_supervision_rules(\"let $hRes = returnNum('http://127.0.0.1:8080/ImageVerifierServiceBeanService/ImageVerifierServiceBean?wsdl','getHRes','&lt;InvokeServiceParameters&gt;&lt;imageURL&gt;' + $MapService_getMapResponse/result + '&lt;/imageURL&gt;&lt;/InvokeServiceParameters&gt;',/Response/result);$hRes &lt;= 750;\",\"{ignore() and notify('The map is still too big.','mac@localhost')}\",'permanent')}";
+String recoveryStrategy = "if($hRes &lt; 180;){ignore()}else{change_supervision_rules(\"let $hRes = returnNum('http://127.0.0.1:8080/ImageVerifierServiceBeanService/ImageVerifierServiceBean?wsdl','getHRes','&lt;InvokeServiceParameters&gt;&lt;imageURL&gt;' + $MapService_getMapResponse/result + '&lt;/imageURL&gt;&lt;/InvokeServiceParameters&gt;',/Response/result);$hRes &lt;= 750;\",\"{ignore() and notify('The map is still too big.','antonio@localhost')}\",'permanent')}";
 recoveryStrategy = recoveryStrategy.replaceAll("&lt;", "<");
 recoveryStrategy = recoveryStrategy.replaceAll("&gt;", ">");
 String timeFrame = "every 1 hour";
@@ -87,7 +87,7 @@ out.println(e.getMessage());
 </tr>
 <tr>
 <td><b>Recovery rule</b></td>
-<td>if($hRes &lt; 180;){ignore()}else{rebind('http://127.0.0.1:8080/MapServiceBackUpBeanService/MapServiceBackUpBean?wsdl') and notify('During recovery Dynamo had to rebind to a backup service.','mac@localhost') or notify('Could not find a map with a suitable size','mac@localhost') and halt()}
+<td>if($hRes &lt; 180;){ignore()}else{rebind('http://127.0.0.1:8080/MapServiceBackUpBeanService/MapServiceBackUpBean?wsdl') and notify('During recovery Dynamo had to rebind to a backup service.','antonio@localhost') or notify('Could not find a map with a suitable size','antonio@localhost') and halt()}
 </td>
 </tr>
 </table>

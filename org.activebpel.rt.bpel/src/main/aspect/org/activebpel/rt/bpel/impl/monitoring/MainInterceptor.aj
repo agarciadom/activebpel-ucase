@@ -2161,7 +2161,7 @@ public privileged aspect MainInterceptor {
 	}
 
 	/**
-	 * Calls the recvoery strategy executor
+	 * Calls the recovery strategy executor
 	 */
 	private RecoveryResultWrapper callRecovery(
 			SupervisionRuleInfoWrapper supervisionRuleInfoWrapper,
@@ -2171,10 +2171,8 @@ public privileged aspect MainInterceptor {
 			AliasNodes tempAliases) {
 		String xmlMailConfig = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
 				+ "<!DOCTYPE properties SYSTEM \"http://java.sun.com/dtd/properties.dtd\">"
-				+ "<properties>" + "<entry key=\"mail.smtp.auth\">true</entry>"
+				+ "<properties>" + "<entry key=\"mail.smtp.auth\">false</entry>"
 				+ "<entry key=\"mail.smtp.host\">localhost</entry>"
-				+ "<entry key=\"mail.smtp.user\">mac</entry>"
-				+ "<entry key=\"mail.smtp.password\">mac</entry>"
 				+ "<entry key=\"from\">dynamo</entry>" + "</properties>";
 
 		RecoveryResultWrapper recoveryResultWrapper = new RecoveryResultWrapper();

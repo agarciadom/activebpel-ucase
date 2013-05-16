@@ -64,8 +64,8 @@ public class ActionNode extends WSReLNode
 		if(this.actionName.equalsIgnoreCase("notify"))
 			try
 			{
-				result =  AtomicRecoveryAction.Notify((String) this.paramList.get(0).getMonitoringValue(), 
-						(String) this.paramList.get(1).getMonitoringValue(), 
+				result =  AtomicRecoveryAction.Notify((String) this.paramList.get(0).getMonitoringValue(),
+						(String) this.paramList.get(1).getMonitoringValue(),
 						recoveryParams.getXmlMailConfig());
 			}
 			catch (WSCoLException e1)

@@ -34,7 +34,7 @@ String location="/process/sequence/invoke[@name='InvokeGPS']";
 boolean precondition = false;
 int priority = 2;
 String processID = "PizzaDeliveryCompany";
-String recoveryStrategy1 = "{retry(1) or notify('Error in retreiving GPS coordinates!!','mac@localhost') and halt()}";
+String recoveryStrategy1 = "{retry(1) or notify('Error in retreiving GPS coordinates!!','antonio@localhost') and halt()}";
 recoveryStrategy1 = recoveryStrategy1.replaceAll("&lt;", "<");
 recoveryStrategy1 = recoveryStrategy1.replaceAll("&gt;", ">");
 String timeFrame = "always";
@@ -70,7 +70,7 @@ try {
 	priority = 4;
 	processID = "PizzaDeliveryCompany";
 	String providers = "MagicMap";
-	recoveryStrategy2 = "if($hRes &lt; 180;){ignore()}else{notify('Could not load a map with a suitable size','mac@localhost') and halt()}";
+	recoveryStrategy2 = "if($hRes &lt; 180;){ignore()}else{notify('Could not load a map with a suitable size','antonio@localhost') and halt()}";
 	recoveryStrategy2 = recoveryStrategy2.replaceAll("&lt;", "<");
 	recoveryStrategy2 = recoveryStrategy2.replaceAll("&gt;", ">");
 	timeFrame = "every 1 hour";
