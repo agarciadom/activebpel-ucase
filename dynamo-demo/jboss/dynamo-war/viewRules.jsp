@@ -54,7 +54,8 @@ Rules for process <b><%=pID %></b> and user <b><%=uID %></b>
 	for (int i=0; i < rules.length; i++) {
 		
 		SupervisionRuleInfoWrapper rule = rules[i];
-		
+                if (rule == null) continue;
+
 		String location = rule.getLocation();
 		int priority = rule.getPriority();
 		String providers = rule.getProviders();

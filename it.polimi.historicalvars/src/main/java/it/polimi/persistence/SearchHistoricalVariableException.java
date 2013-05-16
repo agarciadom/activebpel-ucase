@@ -25,20 +25,39 @@
  */
 package it.polimi.persistence;
 
+import javax.xml.ws.WebFault;
+
 
 
 /**
  * @author Luca Galluppi
  *
  */
+@WebFault(faultBean = "it.polimi.persistence.FaultBean")
 public class SearchHistoricalVariableException extends Exception {
     private static final long serialVersionUID = 11111111;
 
-   /**
-     * @param message
-     */
-    public SearchHistoricalVariableException(String message) {
-        super(message);
+    private FaultBean faultBean;
+
+    public SearchHistoricalVariableException() {
+        super();
     }
 
+    public SearchHistoricalVariableException(String mes){
+        super(mes);
+    }
+
+    public SearchHistoricalVariableException(String message, FaultBean faultBean, Throwable cause) {
+        super(message, cause);
+        this.faultBean = faultBean;
+    }
+
+    public SearchHistoricalVariableException(String message, FaultBean faultBean) {
+        super(message);
+        this.faultBean = faultBean;
+    }
+
+    public FaultBean getFaultInfo() {
+        return faultBean;
+    }
 }

@@ -28,9 +28,7 @@
 package it.polimi.persistence;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class HistoricalVariableInfo implements Serializable{
 	private String aliasName; //not null

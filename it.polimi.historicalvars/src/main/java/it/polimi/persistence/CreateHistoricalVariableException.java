@@ -28,15 +28,38 @@
  */
 package it.polimi.persistence;
 
+import javax.xml.ws.WebFault;
+
 
 
 /**
  * @author Luca Galluppi
  */
+@WebFault(faultBean = "it.polimi.persistence.FaultBean")
 public class CreateHistoricalVariableException extends Exception {
     private static final long serialVersionUID = 11111111111L;
 
+    private FaultBean faultBean;
+
+    public CreateHistoricalVariableException() {
+        super();
+    }
+
     public CreateHistoricalVariableException(String mes){
         super(mes);
+    }
+
+    public CreateHistoricalVariableException(String message, FaultBean faultBean, Throwable cause) {
+        super(message, cause);
+        this.faultBean = faultBean;
+    }
+
+    public CreateHistoricalVariableException(String message, FaultBean faultBean) {
+        super(message);
+        this.faultBean = faultBean;
+    }
+
+    public FaultBean getFaultInfo() {
+        return faultBean;
     }
 }
