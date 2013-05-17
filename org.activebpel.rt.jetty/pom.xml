@@ -25,6 +25,10 @@
           <groupId>tomcat</groupId>
           <artifactId>servlet</artifactId>
         </exclusion>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+        </exclusion>
 
         <!-- Remove optional cruft of ActiveBPEL -->
         <exclusion>
@@ -63,6 +67,13 @@
       <version>${project.version}</version>
       <type>jar</type>
       <classifier>subdir-webapp</classifier>
+
+      <exclusions>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <!-- From org.mortbay.jetty:jetty-maven-plugin:7.1.5.v200100705 -->
