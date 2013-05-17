@@ -8,7 +8,6 @@
   </parent>
 
   <artifactId>rt.tamino</artifactId>
-  <version>4.1-uca14-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ActiveBPEL::Tamino</name>
 

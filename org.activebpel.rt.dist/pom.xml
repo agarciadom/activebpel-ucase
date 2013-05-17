@@ -8,7 +8,6 @@
   </parent>
 
   <artifactId>rt.dist</artifactId>
-  <version>4.1-uca14-SNAPSHOT</version>
   <packaging>ear</packaging>
   <name>ActiveBPEL::Distributions</name>
 

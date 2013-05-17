@@ -8,7 +8,6 @@
   </parent>
 
   <artifactId>rt.bpel.ext.expr.bsf</artifactId>
-  <version>4.1-uca14-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ActiveBPEL::Extra Expression Engines (Jython)</name>
 
