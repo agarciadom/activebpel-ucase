@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.activebpel</groupId>
     <artifactId>engine</artifactId>
-    <version>4.1-uca14</version>
+    <version>4.1-uca15-SNAPSHOT</version>
   </parent>
 
   <artifactId>rt.axis.bpel.web.war</artifactId>
