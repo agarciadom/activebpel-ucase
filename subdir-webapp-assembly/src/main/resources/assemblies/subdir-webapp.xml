@@ -11,8 +11,13 @@
       <directory>${project.build.directory}/${project.build.finalName}</directory>
       <excludes>
         <exclude>**/*.jar</exclude>
+        <exclude>WEB-INF/classes/**</exclude>
       </excludes>
       <outputDirectory>webapps/${subdir.name}</outputDirectory>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</directory>
+      <outputDirectory>/</outputDirectory>
     </fileSet>
   </fileSets>
 </assembly>

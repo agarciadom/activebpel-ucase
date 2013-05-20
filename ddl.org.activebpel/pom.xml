@@ -8,7 +8,6 @@
   </parent>
 
   <artifactId>ddl</artifactId>
-  <version>4.1-uca12-dynamo1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ActiveBPEL::DDL</name>
 

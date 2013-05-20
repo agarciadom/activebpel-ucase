@@ -8,7 +8,6 @@
   </parent>
 
   <artifactId>rt.bpeladmin.help.war</artifactId>
-  <version>4.1-uca1</version>
   <packaging>war</packaging>
   <name>ActiveBPEL::BpelAdmin Help WAR</name>
 

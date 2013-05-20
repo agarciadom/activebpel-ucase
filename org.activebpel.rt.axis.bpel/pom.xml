@@ -8,7 +8,6 @@
   </parent>
 
   <artifactId>rt.axis.bpel</artifactId>
-  <version>4.1-uca12-dynamo1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>ActiveBPEL::RT-AXIS-BPEL</name>
 

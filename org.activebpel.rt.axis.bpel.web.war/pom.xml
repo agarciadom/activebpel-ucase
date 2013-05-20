@@ -8,7 +8,6 @@
   </parent>
 
   <artifactId>rt.axis.bpel.web.war</artifactId>
-  <version>4.1-uca12-dynamo1-SNAPSHOT</version>
   <packaging>war</packaging>
   <name>ActiveBPEL::Server Web Service WAR</name>
 
