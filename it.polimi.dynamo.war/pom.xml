@@ -12,26 +12,6 @@
     <packaging>war</packaging>
     <name>Dynamo::Web UI</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.axis</groupId>
-            <artifactId>axis</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-discovery</groupId>
-            <artifactId>commons-discovery</artifactId>
-            <version>0.2</version>
-        </dependency>
-
-        <!-- Do we really need this one? -->
-        <dependency>
-            <groupId>org.apache.axis</groupId>
-            <artifactId>axis-ant</artifactId>
-            <version>1.4</version>
-        </dependency>
-    </dependencies>
-
     <build>
         <pluginManagement>
             <plugins>
@@ -56,10 +36,43 @@
                         </goals>
                         <configuration>
                             <wsdlDirectory>src/main/wsdl</wsdlDirectory>
+                            <target>2.0</target>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>jspc</id>
+            <build>
+                <plugins>
+                    <!-- Precompile .jsp to detect problems earlier -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>jspc-maven-plugin</artifactId>
+                        <version>1.4.6</version>
+                        <executions>
+                            <execution>
+                                <id>jspc</id>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.3</version>
+                        <configuration>
+                            <webXml>${basedir}/target/jspweb.xml</webXml>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
