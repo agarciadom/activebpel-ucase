@@ -365,6 +365,8 @@ public class ConfigurationManagerBean implements ConfigurationManager
 				subResult.setRecoveryStrategy(supervisionRule.getRecoveryStrategy());
 				subResult.setTimeFrame(supervisionRule.getTimeFrame());
 				subResult.setProviders(supervisionRule.getProviders());
+				
+				result[i] = subResult;
 			}
 			
 			return result;
