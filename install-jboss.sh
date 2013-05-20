@@ -200,6 +200,7 @@ fi
 HV_P=it.polimi.historicalvars
 CM_P=it.polimi.monitor.configurationmanager
 ML_P=it.polimi.monitor.monitorlogger
+WAR_P=it.polimi.dynamo.war
 DEMO_JARS=dynamo-demo/jboss
 
 # Build all JBoss jars and their dependencies
@@ -212,15 +213,11 @@ if ! confirm_rm "$JBOSS_DIR"; then
 fi
 mv "$(unpack -p "$JBOSS42_ZIP")" "$JBOSS_DIR"
 
-# Pack the dynamo-war directory
-pushd "$DEMO_JARS"/dynamo-war
-zip -r ../dynamo.war *
-popd
-
 # Copy the Dynamo .jar files over to the JBoss directory
 cp -v "$(main_jar "$HV_P")" "$SERVER_DEPLOY"/HistoricalVariableBeanService.jar
 cp -v "$(main_jar "$CM_P")" "$SERVER_DEPLOY"/ConfigurationManagerBeanService.jar
 cp -v "$(main_jar "$ML_P")" "$SERVER_DEPLOY"/MonitorLoggerBeanService.jar
+cp -v "$(main_jar "$WAR_P")" "$SERVER_DEPLOY"/dynamo.war
 cp -v "$DEMO_JARS"/*.{jar,war} "$SERVER_DEPLOY"
 
 # Add the utility script to start JBoss with remote debugging support using JDWP

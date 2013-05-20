@@ -1,0 +1,132 @@
+<definitions name='MonitorLoggerWS' targetNamespace='http://it.polimi.monitor/monitorlogger' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://it.polimi.monitor/monitorlogger' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://it.polimi.monitor/monitorlogger' version='1.0' xmlns:tns='http://it.polimi.monitor/monitorlogger' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:complexType name='monitoringResultInfoWrapper'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='date' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='location' type='xs:string'/>
+     <xs:element minOccurs='0' name='monitoringData' type='xs:string'/>
+     <xs:element minOccurs='0' name='monitoringResult' type='xs:boolean'/>
+     <xs:element name='monitoringTime' type='xs:long'/>
+     <xs:element name='precondition' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='processID' type='xs:string'/>
+     <xs:element minOccurs='0' name='processPriority' type='xs:int'/>
+     <xs:element minOccurs='0' name='providers' type='xs:string'/>
+     <xs:element minOccurs='0' name='timeFrame' type='xs:string'/>
+     <xs:element minOccurs='0' name='userID' type='xs:string'/>
+     <xs:element minOccurs='0' name='wscolPriority' type='xs:int'/>
+     <xs:element minOccurs='0' name='wscolRule' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='recoveryResultInfoWrapper'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='completeRecoveryStrategy' type='xs:string'/>
+     <xs:element minOccurs='0' name='date' type='xs:dateTime'/>
+     <xs:element minOccurs='0' name='executedRecoveryStrategy' type='xs:string'/>
+     <xs:element minOccurs='0' name='location' type='xs:string'/>
+     <xs:element name='precondition' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='processID' type='xs:string'/>
+     <xs:element name='recoveryTime' type='xs:long'/>
+     <xs:element minOccurs='0' name='successful' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='userID' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType final='#all' name='monitoringResultInfoWrapperArray'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='item' nillable='true' type='tns:monitoringResultInfoWrapper'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType final='#all' name='recoveryResultInfoWrapperArray'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='item' nillable='true' type='tns:recoveryResultInfoWrapper'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+ <message name='MonitorLogger_InsertNewMonitoringResultResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='MonitorLogger_GetRecoveryResults'>
+  <part name='monitoringResultInfoWrapper' type='tns:recoveryResultInfoWrapper'></part>
+ </message>
+ <message name='MonitorLogger_InsertNewRecoveryResultResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='MonitorLogger_InsertNewRecoveryResult'>
+  <part name='recoveryResultInfoWrapper' type='tns:recoveryResultInfoWrapper'></part>
+ </message>
+ <message name='MonitorLogger_InsertNewMonitoringResult'>
+  <part name='monitoringResultInfoWrapper' type='tns:monitoringResultInfoWrapper'></part>
+ </message>
+ <message name='MonitorLogger_GetRecoveryResultsResponse'>
+  <part name='return' type='tns:recoveryResultInfoWrapperArray'></part>
+ </message>
+ <message name='MonitorLogger_GetMonitoringResultsResponse'>
+  <part name='return' type='tns:monitoringResultInfoWrapperArray'></part>
+ </message>
+ <message name='MonitorLogger_GetMonitoringResults'>
+  <part name='monitoringResultInfoWrapper' type='tns:monitoringResultInfoWrapper'></part>
+ </message>
+ <portType name='MonitorLogger'>
+  <operation name='GetMonitoringResults' parameterOrder='monitoringResultInfoWrapper'>
+   <input message='tns:MonitorLogger_GetMonitoringResults'></input>
+   <output message='tns:MonitorLogger_GetMonitoringResultsResponse'></output>
+  </operation>
+  <operation name='GetRecoveryResults' parameterOrder='monitoringResultInfoWrapper'>
+   <input message='tns:MonitorLogger_GetRecoveryResults'></input>
+   <output message='tns:MonitorLogger_GetRecoveryResultsResponse'></output>
+  </operation>
+  <operation name='InsertNewMonitoringResult' parameterOrder='monitoringResultInfoWrapper'>
+   <input message='tns:MonitorLogger_InsertNewMonitoringResult'></input>
+   <output message='tns:MonitorLogger_InsertNewMonitoringResultResponse'></output>
+  </operation>
+  <operation name='InsertNewRecoveryResult' parameterOrder='recoveryResultInfoWrapper'>
+   <input message='tns:MonitorLogger_InsertNewRecoveryResult'></input>
+   <output message='tns:MonitorLogger_InsertNewRecoveryResultResponse'></output>
+  </operation>
+ </portType>
+ <binding name='MonitorLoggerBinding' type='tns:MonitorLogger'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='GetMonitoringResults'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </output>
+  </operation>
+  <operation name='GetRecoveryResults'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </output>
+  </operation>
+  <operation name='InsertNewMonitoringResult'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </output>
+  </operation>
+  <operation name='InsertNewRecoveryResult'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='MonitorLoggerWS'>
+  <port binding='tns:MonitorLoggerBinding' name='MonitorLoggerPort'>
+   <soap:address location='http://127.0.0.1:8080/MonitorLoggerBeanService/MonitorLoggerBean'/>
+  </port>
+ </service>
+</definitions>
