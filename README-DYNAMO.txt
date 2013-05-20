@@ -28,10 +28,10 @@ Debian-based GNU/Linux system can install it by following these steps:
 
     cd ~/bin/jboss-4.2.3.GA && bin/run.sh
 
-  In the second terminal, run:
+  Wait until JBoss has finished starting. Now, run this in the second terminal:
 
     cd ~/bin/dynamo-tomcat && CATALINA_RUN=$(pwd) bin/catalina.sh run
 
-- Wait 10-20 seconds for both servers to fully start up.
+  Wait until ActiveBPEL has started ("Initialized" is not enough).
 
 - Go to http://localhost:8080/dynamo and try out the Pizza Delivery demo.

@@ -126,7 +126,7 @@
  </binding>
  <service name='MonitorLoggerWS'>
   <port binding='tns:MonitorLoggerBinding' name='MonitorLoggerPort'>
-   <soap:address location='http://127.0.0.1:8080/MonitorLogger/MonitorLoggerBean'/>
+   <soap:address location='http://127.0.0.1:8080/MonitorLoggerBeanService/MonitorLoggerBean'/>
   </port>
  </service>
 </definitions>
