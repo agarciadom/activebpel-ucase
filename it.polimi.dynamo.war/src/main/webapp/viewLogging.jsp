@@ -2,13 +2,16 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-<%@ page import="monitor.polimi.it.monitorlogger.MonitorLoggerWSLocator" %>
+<%@ page import="monitor.polimi.it.monitorlogger.MonitorLoggerWS" %>
 <%@ page import="monitor.polimi.it.monitorlogger.MonitorLogger" %>
 <%@ page import="monitor.polimi.it.monitorlogger.MonitoringResultInfoWrapper" %>
+<%@ page import="monitor.polimi.it.monitorlogger.MonitoringResultInfoWrapperArray" %>
 <%@ page import="monitor.polimi.it.monitorlogger.RecoveryResultInfoWrapper" %>
+<%@ page import="monitor.polimi.it.monitorlogger.RecoveryResultInfoWrapperArray" %>
 
 <%@ page import="java.rmi.RemoteException" %>
-<%@ page import="javax.xml.rpc.ServiceException" %>
+<%@ page import="java.util.List" %>
+<%@ page import="javax.xml.ws.WebServiceException" %>
 
 
 <html>
@@ -27,7 +30,7 @@ String uID = request.getParameter("uID");
 String loc = request.getParameter("loc");
 boolean precondition = (Boolean.valueOf(request.getParameter("precondition"))).booleanValue();
 
-MonitorLoggerWSLocator locator = null;
+MonitorLoggerWS locator = null;
 MonitorLogger logger = null;
 
 MonitoringResultInfoWrapper mQuery = new MonitoringResultInfoWrapper();
@@ -43,20 +46,17 @@ rQuery.setUserID(uID);
 rQuery.setLocation(loc);
 rQuery.setPrecondition(precondition);
 
-MonitoringResultInfoWrapper[] monitoring =null;
-RecoveryResultInfoWrapper[] recovery = null;
+List<MonitoringResultInfoWrapper> monitoring = null;
+List<RecoveryResultInfoWrapper> recovery = null;
 
 try {
-	locator = new MonitorLoggerWSLocator();
+	locator = new MonitorLoggerWS();
 	logger = locator.getMonitorLoggerPort();
 
-	monitoring = logger.getMonitoringResults(mQuery);
-	recovery = logger.getRecoveryResults(rQuery);
-		
-} catch (ServiceException e) {
-out.println(e.getMessage());
-} catch (RemoteException e) {
-out.println(e.getMessage());
+	monitoring = logger.getMonitoringResults(mQuery).getItem();
+	recovery = logger.getRecoveryResults(rQuery).getItem();
+} catch (WebServiceException e) {
+	out.println(e.getMessage());
 }
 
 %>
@@ -67,19 +67,18 @@ if (monitoring == null) {
 	out.println("<b>Nothing has been logged for this rule.</b");
 }
 else {
-try { 
-
+	try {
 %>
 <b>Monitoring Expression:</b>
 <br>
 <br>
-<% 
-String wscol = monitoring[monitoring.length - 1].getWscolRule();
-wscol = wscol.replaceAll("<", "&lt;");
-wscol = wscol.replaceAll(">", "&gt;");
-out.println(wscol);
-}
-catch (Exception e) {}
+<%
+		String wscol = monitoring.get(monitoring.size() - 1).getWscolRule();
+		wscol = wscol.replaceAll("<", "&lt;");
+		wscol = wscol.replaceAll(">", "&gt;");
+		out.println(wscol);
+	}
+	catch (Exception e) {}
 %>
 <br>
 <br>
@@ -91,31 +90,25 @@ catch (Exception e) {}
 	<td><b>Monitoring Data</b></td>
 	</tr>
 
-
-
 <%
-
 try {
-	int cycles=10;
-	if (monitoring.length<10) {cycles=monitoring.length;}
-for (int i=0; i< cycles; i++) {
-	
-	String mData = monitoring[i].getMonitoringData();
-	mData = mData.replaceAll("<","&lt;");
-	mData = mData.replaceAll(">","&gt;");
-	
-	%>
+	final int cycles = Math.min(10, monitoring.size());
+	for (int i = 0; i < cycles; i++) {
+		final MonitoringResultInfoWrapper item = monitoring.get(i);
+		String mData = item.getMonitoringData();
+		mData = mData.replaceAll("<","&lt;");
+		mData = mData.replaceAll(">","&gt;");
+%>
 	
 	<tr>
-	<td><%=monitoring[i].getDate().getTime().toString() %></td>
-	<td><%=monitoring[i].getMonitoringResult().booleanValue() %></td>
+	<td><%=item.getDate().toGregorianCalendar().getTime().toString() %></td>
+	<td><%=item.isMonitoringResult() %></td>
 	<td><%=mData %></td>
 	</tr>
 	<%
-	
-}
-}
-catch (Exception e) {}
+	}
+ }
+ catch (Exception e) {}
 }
 %>
 
@@ -135,61 +128,41 @@ try { %>
 <br>
 <br>
 <%
-String r = recovery[recovery.length - 1].getCompleteRecoveryStrategy();
-r= r.replaceAll("<","&lt;");
-r=r.replaceAll(">", "&gt;");
-out.println(r);
+	String r = recovery.get(recovery.size() - 1).getCompleteRecoveryStrategy();
+	r = r.replaceAll("<", "&lt;");
+	r = r.replaceAll(">", "&gt;");
+	out.println(r);
 }
 catch (Exception e) {}
 %>
 <br>
 <br>
 <table border=2>
-
 	<tr>
 	<td><b>Date</b></td>
 	<td><b>Recovery Result</b></td>
 	<td><b>Recovery Strategy</b></td>
 	</tr>
-
-
-
 <%
 try {
-	int cycles=10;
-	if (recovery.length<10) {cycles=recovery.length;}
-for (int i=0; i< cycles; i++) {
-	
-	String e = recovery[i].getExecutedRecoveryStrategy();
-	e=e.replaceAll("<","&lt;");
-	e=e.replaceAll(">","&gt;");
-	
-	%>
-	
+	final int cycles = Math.min(10, recovery.size());
+	for (int i = 0; i < cycles; i++) {
+		final RecoveryResultInfoWrapper item = recovery.get(i);
+		String e = item.getExecutedRecoveryStrategy();
+		e=e.replaceAll("<","&lt;");
+		e=e.replaceAll(">","&gt;");
+%>
 	<tr>
-	<td><%=recovery[i].getDate().getTime().toString() %></td>
-	<td><%=recovery[i].getSuccessful().booleanValue() %></td>
+	<td><%=item.getDate().toGregorianCalendar().getTime().toString() %></td>
+	<td><%=item.isSuccessful() %></td>
 	<td><%=e %></td>
 	</tr>
-	
-	<%
-	
+<%
 }
 }
 catch (Exception e) {}
 }
 %>
-
 </table>
-
-
-
-
-
-
-
-
-
-
 </body>
 </html>

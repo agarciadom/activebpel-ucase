@@ -3,10 +3,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManager" %>
-<%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWSLocator" %>
+<%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWS" %>
 <%@ page import="monitor.polimi.it.configurationmanager.ProcessInfoWrapper" %>
 <%@ page import="java.rmi.RemoteException" %>
-<%@ page import="javax.xml.rpc.ServiceException" %>
+<%@ page import="javax.xml.ws.WebServiceException" %>
 
 <html>
 <head>
@@ -30,24 +30,18 @@
 	pInfo.setUserId(username);
 	pInfo.setProcessId(pID);
 	pInfo.setPriority(priority);
-	
-	ConfigurationManagerWSLocator locator = new ConfigurationManagerWSLocator();
+
+	ConfigurationManagerWS locator = new ConfigurationManagerWS();
 	ConfigurationManager cm = null;
-	
+
 	boolean result = false;
-	
 	try {
-		
 		cm = locator.getConfigurationManagerPort();
-		
 		result = cm.insertNewProcess(pInfo);	
-		
-	} catch (ServiceException e) {
-	out.println(e.getMessage());
-	} catch (RemoteException e) {
-	out.println(e.getMessage());
+	} catch (WebServiceException e) {
+		out.println(e.getMessage());
 	}
-	
+
 	if (result == true) {
 		out.println("Your process has been inserted correctly!");
 	}

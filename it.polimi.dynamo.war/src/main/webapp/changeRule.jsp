@@ -2,10 +2,10 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManager" %>
-<%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWSLocator" %>
+<%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWS" %>
 <%@ page import="monitor.polimi.it.configurationmanager.SupervisionRuleInfoWrapper" %>
 <%@ page import="java.rmi.RemoteException" %>
-<%@ page import="javax.xml.rpc.ServiceException" %>
+<%@ page import="javax.xml.ws.WebServiceException" %>
 
 
 <html>
@@ -25,22 +25,16 @@
 	boolean precondition = (Boolean.valueOf(request.getParameter("precondition"))).booleanValue();
 	
 	
-	ConfigurationManagerWSLocator locator = new ConfigurationManagerWSLocator();
+	ConfigurationManagerWS locator = new ConfigurationManagerWS();
 	ConfigurationManager cm = null;
 	SupervisionRuleInfoWrapper rule = null;
 	
 	try {
-		
 		cm = locator.getConfigurationManagerPort();
 		rule = cm.getSupervisionRule(pID,uID,loc, precondition);
-
-	} catch (ServiceException e) {
-	out.println(e.getMessage());
-	} catch (RemoteException e) {
-	out.println(e.getMessage());
+	} catch (WebServiceException e) {
+		out.println(e.getMessage());
 	}
-
-	
 %>
 
 

@@ -4,10 +4,11 @@
 
 
 <%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManager" %>
-<%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWSLocator" %>
+<%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWS" %>
 <%@ page import="monitor.polimi.it.configurationmanager.ProcessInfoWrapper" %>
 <%@ page import="java.rmi.RemoteException" %>
-<%@ page import="javax.xml.rpc.ServiceException" %>
+<%@ page import="java.util.List" %>
+<%@ page import="javax.xml.ws.WebServiceException" %>
 
 
 
@@ -23,20 +24,15 @@
 
 <%
 
-ConfigurationManagerWSLocator locator = new ConfigurationManagerWSLocator();
+ConfigurationManagerWS locator = new ConfigurationManagerWS();
 ConfigurationManager cm = null;
-ProcessInfoWrapper[] processes = null;
+List<ProcessInfoWrapper> processes = null;
 
 try {
-	
 	cm = locator.getConfigurationManagerPort();
-	processes = cm.getMonitoredProcesses();
-	
-		
-} catch (ServiceException e) {
-out.println(e.getMessage());
-} catch (RemoteException e) {
-out.println(e.getMessage());
+	processes = cm.getMonitoredProcesses().getItem();
+} catch (WebServiceException e) {
+	out.println(e.getMessage());
 }
 
 %>
@@ -55,30 +51,24 @@ out.println(e.getMessage());
 	</tr>
 
 <%
-for (int i=0; i<processes.length; i++) {
-	
-	ProcessInfoWrapper pInfo = processes[i];
-	
-	String pID = pInfo.getProcessId();
-	Long iID = pInfo.getProcessInstanceId();
-	String uID = pInfo.getUserId();
-	Integer priority = pInfo.getPriority();
-	
-	%>
+for (ProcessInfoWrapper pInfo : processes) {
+	final String pID = pInfo.getProcessId();
+	final Long iID = pInfo.getProcessInstanceId();
+	final String uID = pInfo.getUserId();
+	final Integer priority = pInfo.getPriority();
+%>
 	<tr>
-	<form method=post action="changeProcess.jsp" target="_blank"/>
+	<form method=post action="changeProcess.jsp" target="_blank">
 	<td><input type=text name=pID size=20 value = "<%=pID %>"></td>
 	<td><input type=text name = uID size=20 value = "<%=uID %>"></td>
 	<td><select name = priority>
-<option value="1" <%if (priority.intValue()==1) {out.print("selected");} %>>1</option>
-<option value="2" <%if (priority.intValue()==2) {out.print("selected");} %>>2</option>
-<option value="3" <%if (priority.intValue()==3) {out.print("selected");} %>>3</option>
-<option value="4" <%if (priority.intValue()==4) {out.print("selected");} %>>4</option>
-<option value="5" <%if (priority.intValue()==5) {out.print("selected");} %>>5</option>
-</select></td>
+<% for (int i = 1; i <= 5; i++) { %>
+		<option value="<%=i%>" <%if (priority.intValue()==i) {out.print("selected");} %>><%=i%></option>
+<% } %>
+	</select></td>
 	<td><a href="viewRules.jsp?pID=<%=pID %>&uID=<%=uID %>">View</a></td>
 	<td><input type=submit value="Save changes"></td>
-	<form>
+	</form>
 	</tr>
 	<%
 	

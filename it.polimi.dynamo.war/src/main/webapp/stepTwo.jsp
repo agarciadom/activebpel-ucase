@@ -3,10 +3,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManager" %>
-<%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWSLocator" %>
+<%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWS" %>
 <%@ page import="monitor.polimi.it.configurationmanager.SupervisionRuleInfoWrapper" %>
 <%@ page import="java.rmi.RemoteException" %>
-<%@ page import="javax.xml.rpc.ServiceException" %>
+<%@ page import="javax.xml.ws.WebServiceException" %>
 
 <html>
 <head>
@@ -24,7 +24,7 @@
 
 <%
 
-ConfigurationManagerWSLocator locator = new ConfigurationManagerWSLocator();
+ConfigurationManagerWS locator = new ConfigurationManagerWS();
 ConfigurationManager cm = null;
 
 SupervisionRuleInfoWrapper ruleInfo = new SupervisionRuleInfoWrapper();
@@ -53,18 +53,12 @@ ruleInfo.setTimeFrame(timeFrame);
 ruleInfo.setUserID(userID);	
 ruleInfo.setWscolRule(wscolRule);	
 
-boolean result = false;
 try {
-	
 	cm = locator.getConfigurationManagerPort();
-	result = cm.changeSupervisionRuleParams(ruleInfo);
-
-} catch (ServiceException e) {
-out.println(e.getMessage());
-} catch (RemoteException e) {
-out.println(e.getMessage());
+	cm.changeSupervisionRuleParams(ruleInfo);
+} catch (WebServiceException e) {
+	out.println(e.getMessage());
 }
-
 %>
 <br>
 <b>Original rule number 1:</b>

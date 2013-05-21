@@ -2,14 +2,12 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-
 <%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManager" %>
-<%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWSLocator" %>
+<%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWS" %>
 <%@ page import="monitor.polimi.it.configurationmanager.SupervisionRuleInfoWrapper" %>
 <%@ page import="java.rmi.RemoteException" %>
-<%@ page import="javax.xml.rpc.ServiceException" %>
-
-
+<%@ page import="java.util.List" %>
+<%@ page import="javax.xml.ws.WebServiceException" %>
 
 <html>
 <head>
@@ -22,26 +20,17 @@
 <br>
 
 <%
+final String pID = request.getParameter("pID");
+final String uID = request.getParameter("uID");
 
-String pID = request.getParameter("pID");
-String uID = request.getParameter("uID");
-
-
-ConfigurationManagerWSLocator locator = new ConfigurationManagerWSLocator();
+ConfigurationManagerWS locator = new ConfigurationManagerWS();
 ConfigurationManager cm = null;
-SupervisionRuleInfoWrapper[] rules = null;
-
-
+List<SupervisionRuleInfoWrapper> rules = null;
 try {
-	
 	cm = locator.getConfigurationManagerPort();
-	rules = cm.getProcessSupervisionRules(pID,uID); 
-	
-		
-} catch (ServiceException e) {
-out.println(e.getMessage());
-} catch (RemoteException e) {
-out.println(e.getMessage());
+	rules = cm.getProcessSupervisionRules(pID,uID).getItem(); 
+} catch (WebServiceException e) {
+	out.println(e.getMessage());
 }
 
 %>
@@ -50,22 +39,21 @@ Rules for process <b><%=pID %></b> and user <b><%=uID %></b>
 <br>
 
 <%
+	int iRuleCounter = 0;
+	for (SupervisionRuleInfoWrapper rule : rules) {
+		final String location = rule.getLocation();
+		final int priority = rule.getPriority();
+		final String providers = rule.getProviders();
+		final String timeframe =rule.getTimeFrame();
 
-	for (int i=0; i < rules.length; i++) {
-		
-		SupervisionRuleInfoWrapper rule = rules[i];
-                if (rule == null) continue;
-
-		String location = rule.getLocation();
-		int priority = rule.getPriority();
-		String providers = rule.getProviders();
-		String timeframe =rule.getTimeFrame();
 		String monitoring = rule.getWscolRule();
 		monitoring = monitoring.replaceAll("<","&lt;");
 		monitoring = monitoring.replaceAll(">","&gt;");
+
 		String recovery = rule.getRecoveryStrategy();
 		recovery = recovery.replaceAll("<","&lt;");
-		recovery=recovery.replaceAll(">","&gt;");
+		recovery = recovery.replaceAll(">","&gt;");
+
 		boolean precondition = rule.isPrecondition();
 		String type=null;
 		if (precondition == false) {
@@ -76,7 +64,7 @@ Rules for process <b><%=pID %></b> and user <b><%=uID %></b>
 		}
 		
 		%>
-		<b>Rule numer <%=i+1 %></b>
+		<b>Rule number <%=iRuleCounter + 1 %></b>
 		<br>
 		<br>
 		<table border=2>
@@ -84,7 +72,7 @@ Rules for process <b><%=pID %></b> and user <b><%=uID %></b>
 		<tr><td><b>Type</b></td><td><%=type %></td></tr>
 		<tr><td><b>Priority</b></td><td><%=priority %></td></tr>
 		<tr><td><b>Providers</b></td><td><%=providers %></td></tr>
-		<tr><td><b>Timeframe</b></td><td><%=timeframe %></td></tr>
+		<tr><td><b>Time frame</b></td><td><%=timeframe %></td></tr>
 		<tr><td><b>Monitoring Expression</b></td><td><%=monitoring %></td></tr>
 		<tr><td><b>Recovery Strategy</b></td><td><%=recovery %></td></tr>
 		</table>
@@ -94,11 +82,9 @@ Rules for process <b><%=pID %></b> and user <b><%=uID %></b>
 		<br>
 		<br>
 		<br>
-		<%
-		
-		
+<%
+		iRuleCounter = iRuleCounter + 1;
 	}
-
 %>
 
 <a href="insertNewRule.jsp?pID=<%=pID %>&uID=<%=uID %>"><b>Insert a new rule</b></a>
