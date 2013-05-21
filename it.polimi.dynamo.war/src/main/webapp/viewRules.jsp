@@ -77,8 +77,8 @@ Rules for process <b><%=pID %></b> and user <b><%=uID %></b>
 		<tr><td><b>Recovery Strategy</b></td><td><%=recovery %></td></tr>
 		</table>
 		<br>
-		<a href="changeRule.jsp?pID=<%=pID %>&uID=<%=uID %>&loc=<%=location %>&pre=<%=precondition %>">Modify Rule</a><br>
-		<a href="viewLogging.jsp?pID=<%=pID %>&uID=<%=uID %>&loc=<%=location %>&pre=<%=precondition %>">View Log</a>
+		<a href="changeRule.jsp?pID=<%=pID %>&uID=<%=uID %>&loc=<%=location %>&precondition=<%=precondition %>">Modify Rule</a><br>
+		<a href="viewLogging.jsp?pID=<%=pID %>&uID=<%=uID %>&loc=<%=location %>&precondition=<%=precondition %>">View Log</a>
 		<br>
 		<br>
 		<br>
