@@ -204,7 +204,7 @@ WAR_P=it.polimi.dynamo.war
 DEMO_JARS=dynamo-demo/jboss
 
 # Build all JBoss jars and their dependencies
-mvn -am -pl "$HV_P,$CM_P,$ML_P" install
+mvn -am -pl "$HV_P,$CM_P,$ML_P,$WAR_P" install
 
 # Reinstall JBoss
 JBOSS42_ZIP=$(download_from_http "$JBOSS42_URL")

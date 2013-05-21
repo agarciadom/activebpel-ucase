@@ -53,8 +53,11 @@ try {
 	locator = new MonitorLoggerWS();
 	logger = locator.getMonitorLoggerPort();
 
-	monitoring = logger.getMonitoringResults(mQuery).getItem();
-	recovery = logger.getRecoveryResults(rQuery).getItem();
+	MonitoringResultInfoWrapperArray monitoringArray = logger.getMonitoringResults(mQuery);
+	if (monitoringArray != null) monitoring = monitoringArray.getItem();
+
+	RecoveryResultInfoWrapperArray recoveryArray = logger.getRecoveryResults(rQuery);
+	if (recoveryArray != null) recovery = recoveryArray.getItem();
 } catch (WebServiceException e) {
 	out.println(e.getMessage());
 }
