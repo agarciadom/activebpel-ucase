@@ -68,7 +68,7 @@ public interface ConfigurationManager
 	Integer getProcessPriority(ProcessInfoWrapper processInfo);
 
 	/**
-	 * Returns condition (pre or post) priority by process-user-invoke ID
+	 * Returns condition (pre or post) priority by process-user-invoke-pre/post ID
 	 * @param processID
 	 * @param userID
 	 * @param invokeID
@@ -76,6 +76,11 @@ public interface ConfigurationManager
 	 * @throws ConfigurationManagerException
 	 */	
 	SupervisionRuleInfoWrapper getSupervisionRule(String processID, String userID, String location, boolean isPrecondition);
+
+	/**
+	 * Removes condition by process-user-invoke-pre/post ID
+	 */
+	boolean releaseSupervisionRule(String processID, String userID, String location, boolean isPrecondition);
 
 	/**
 	 * Retrieve a list of monitored processes

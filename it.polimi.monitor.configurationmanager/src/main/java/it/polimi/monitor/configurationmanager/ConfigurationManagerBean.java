@@ -1,6 +1,9 @@
 
-/* Copyright 2007, 2008 , DEEP SE group, Dipartimento di Elettronica e Informazione (DEI), Politecnico di Milano */
-
+/* 
+ * Copyright 2007, 2008, DEEP SE group, Dipartimento di Elettronica e Informazione (DEI), Politecnico di Milano
+ * 
+ * Copyright 2013, Antonio García-Domínguez, University of Cádiz
+ */
 
 /*  
  *  Licence: 
@@ -27,13 +30,13 @@
 
 package it.polimi.monitor.configurationmanager;
 
-import it.polimi.monitor.configurationmanager.data.SupervisionRuleInfoWrapper;
 import it.polimi.monitor.configurationmanager.data.ProcessInfoWrapper;
+import it.polimi.monitor.configurationmanager.data.SupervisionRuleInfoWrapper;
 import it.polimi.monitor.configurationmanager.data.TemporaryRuleChangingInfoWrapper;
-import it.polimi.monitor.configurationmanager.persistencedata.SupervisionRule;
-import it.polimi.monitor.configurationmanager.persistencedata.SupervisionRulePK;
 import it.polimi.monitor.configurationmanager.persistencedata.ProcessData;
 import it.polimi.monitor.configurationmanager.persistencedata.ProcessDataPK;
+import it.polimi.monitor.configurationmanager.persistencedata.SupervisionRule;
+import it.polimi.monitor.configurationmanager.persistencedata.SupervisionRulePK;
 import it.polimi.monitor.configurationmanager.persistencedata.TemporaryProcessDataChanging;
 import it.polimi.monitor.configurationmanager.persistencedata.TemporaryProcessDataChangingPK;
 import it.polimi.monitor.configurationmanager.persistencedata.TemporarySupervisionRuleChange;
@@ -42,6 +45,7 @@ import it.polimi.monitor.configurationmanager.persistencedata.TemporarySupervisi
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
@@ -56,6 +60,8 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class ConfigurationManagerBean implements ConfigurationManager
 {
+	private static final Logger LOGGER = Logger.getLogger(ConfigurationManagerBean.class.getCanonicalName());
+	
 	@PersistenceContext(unitName="configuration_manager")
 	private EntityManager entityManager;
 	
@@ -66,14 +72,14 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		
 		try
 		{
-			if(entityManager!=null)
+			if(entityManager != null)
 			{
 				ProcessDataPK pk = new ProcessDataPK(initProcessInfo.getProcessId(), initProcessInfo.getUserId());
 				pd = (ProcessData) this.entityManager.find(ProcessData.class, pk);
 				
 				if(pd != null)
 				{
-					System.out.println("Process already registered!");
+					LOGGER.severe("Process already registered!");
 					return false;
 				}
 				
@@ -82,17 +88,17 @@ public class ConfigurationManagerBean implements ConfigurationManager
 												initProcessInfo.getPriority());
 				
 				this.entityManager.persist(pd);
-				System.out.println("Add new Process -> "+pd);
+				LOGGER.info("Add new Process -> "+pd);
 				return true;
 			}
 			else
 			{
-				System.out.println("EntityManager -> " + entityManager);
+				LOGGER.warning("EntityManager -> " + entityManager);
 			}
 		}
 		catch(Throwable e)
 		{
-			e.printStackTrace();
+			LOGGER.severe(e.getLocalizedMessage());
 		}
 		return false;
 	}
@@ -113,7 +119,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 				
 				if(pd == null)
 				{
-					System.out.println("Process unkown!"); 
+					LOGGER.severe("Process unkown!"); 
 					return false;
 				}
 
@@ -122,7 +128,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 
 				if(ad != null)
 				{
-					System.out.println("Assertion for process ["+ initInvokeInfo.getProcessID() +"] and user [" + initInvokeInfo.getUserID() + "] already registered!");
+					LOGGER.severe("Assertion for process ["+ initInvokeInfo.getProcessID() +"] and user [" + initInvokeInfo.getUserID() + "] already registered!");
 					return false;
 				}
 
@@ -134,12 +140,12 @@ public class ConfigurationManagerBean implements ConfigurationManager
 										 initInvokeInfo.getProviders());
 				
 				this.entityManager.persist(ad);
-				System.out.println("Add new supervisionRule -> "+ad);
+				LOGGER.info("Add new supervisionRule -> "+ad);
 				return true;
 			}
 			else
 			{
-				System.out.println("EntityManager -> " + entityManager);
+				LOGGER.warning("EntityManager -> " + entityManager);
 			}
 		}
 		catch(Throwable e)
@@ -152,8 +158,29 @@ public class ConfigurationManagerBean implements ConfigurationManager
 	@WebMethod
 	public boolean releaseProcess(@WebParam(name="processInfo") ProcessInfoWrapper processInfo)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (entityManager == null) {
+			LOGGER.warning("Entity manager is unavailable");
+			return false;
+		}
+
+		final ProcessDataPK pk = new ProcessDataPK(processInfo.getProcessId(), processInfo.getUserId());
+		final ProcessData pd = entityManager.find(ProcessData.class, pk);
+		if (pd == null) {
+			LOGGER.severe(String.format("No data recorded for process '%s' and user '%s'",
+					processInfo.getProcessId(), processInfo.getUserId()));
+			return false;
+		}
+
+		final List<SupervisionRule> processRules = getProcessSupervisionRulesList(
+				processInfo.getProcessId(), processInfo.getUserId());
+		if (processRules != null) {
+			for (SupervisionRule rule : processRules) {
+				entityManager.remove(rule);
+			}
+		}
+		entityManager.remove(pd);
+
+		return true;
 	}
 
 	@WebMethod
@@ -332,21 +359,17 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		return result;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@WebMethod
 	public SupervisionRuleInfoWrapper[] getProcessSupervisionRules(@WebParam(name="processID") String processID, 
 																	@WebParam(name="userID") String userID)
 	{
-		List<SupervisionRule> set = this.entityManager.createQuery("from SupervisionRule a where a.pk.processID=:pid and a.pk.userID=:uid")
-															.setParameter("pid", processID)
-															.setParameter("uid", userID)
-															.getResultList();
-		
+		List<SupervisionRule> set = getProcessSupervisionRulesList(processID, userID);
 		if(set != null)
 		{
 			SupervisionRuleInfoWrapper[] result = new SupervisionRuleInfoWrapper[set.size()];
 			
 			SupervisionRuleInfoWrapper subResult;
-			
 			SupervisionRule supervisionRule;
 			
 			for(int i = 0; i < set.size(); i++)
@@ -373,6 +396,15 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		}
 		
 		return null;
+	}
+
+	private List<SupervisionRule> getProcessSupervisionRulesList(
+			String processID, String userID) {
+		List<SupervisionRule> set = this.entityManager.createQuery("from SupervisionRule a where a.pk.processID=:pid and a.pk.userID=:uid")
+															.setParameter("pid", processID)
+															.setParameter("uid", userID)
+															.getResultList();
+		return set;
 	}
 
 	@WebMethod
@@ -648,6 +680,12 @@ public class ConfigurationManagerBean implements ConfigurationManager
 																		" | isPrecondition: " + queryResult2.get(i).getPk().isPrecondition());
 			}
 		}
+	}
+
+	public boolean releaseSupervisionRule(String processID, String userID,
+			String location, boolean isPrecondition) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 //	public boolean eraseDatabase()

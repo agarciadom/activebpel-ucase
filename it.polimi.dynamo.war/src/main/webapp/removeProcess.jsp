@@ -10,29 +10,27 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Process priority change</title>
+		<title>Remove process</title>
 	</head>
 	<body>
 		<img src="figures/testa_dynamo_small.jpg"/>
 <%
 	final String pID = request.getParameter("pID");
 	final String uID = request.getParameter("uID");
-	final Integer priority = new Integer(request.getParameter("priority"));
 	
-	boolean result = false;
+	boolean success = false;
 	try {
 		final ConfigurationManager cm = new ConfigurationManagerWS().getConfigurationManagerPort();
 		final ProcessInfoWrapper pInfo = new ProcessInfoWrapper();
-		pInfo.setPriority(priority);
 		pInfo.setProcessId(pID);
 		pInfo.setUserId(uID);
-		result = cm.setNewProcessPriority(pInfo);
+		success = cm.releaseProcess(pInfo);
 	} catch (WebServiceException e) {
 		out.println(e.getMessage());
 	}
 
-	if (result == true) { %>
-		<p>The process priority has been changed.</p>
+	if (success == true) { %>
+		<p>The process is no longer monitored.</p>
 		<script type="text/javascript">
 			setTimeout(function() { document.location = 'viewProcesses.jsp'; }, 3000);
 		</script>

@@ -2,7 +2,6 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
-
 <%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManager" %>
 <%@ page import="monitor.polimi.it.configurationmanager.ConfigurationManagerWS" %>
 <%@ page import="monitor.polimi.it.configurationmanager.ProcessInfoWrapper" %>
@@ -10,18 +9,13 @@
 <%@ page import="java.util.List" %>
 <%@ page import="javax.xml.ws.WebServiceException" %>
 
-
-
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Supervised processes</title>
-</head>
-<body>
-<img src="figures/testa_dynamo_small.jpg"/>
-<br>
-<br>
-
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<title>Supervised processes</title>
+	</head>
+	<body>
+		<img src="figures/testa_dynamo_small.jpg"/>
 <%
 
 ConfigurationManagerWS locator = new ConfigurationManagerWS();
@@ -34,22 +28,19 @@ try {
 } catch (WebServiceException e) {
 	out.println(e.getMessage());
 }
-
 %>
+		<h2>Currently supervised processes</h2>
 
-<b>Currently supervised processes</b>
-<br>
-<br>
-
-<table border=2>
-<tr>
-	<td><b>Process ID</b></td>
-	<td><b>User ID</b></td>
-	<td><b>Priority</b></td>
-	<td><b>View rules</b></td>
-	<td><b>Save changes</b></td>
-	</tr>
-
+		<table style="border: 0; padding: .5em">
+			<thead>
+				<tr>
+					<th>Process ID</th>
+					<th>User ID</th>
+					<th>Priority</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
 <%
 for (ProcessInfoWrapper pInfo : processes) {
 	final String pID = pInfo.getProcessId();
@@ -58,27 +49,31 @@ for (ProcessInfoWrapper pInfo : processes) {
 	final Integer priority = pInfo.getPriority();
 %>
 	<tr>
-	<form method=post action="changeProcess.jsp" target="_blank">
-	<td><input type=text name=pID size=20 value = "<%=pID %>"></td>
-	<td><input type=text name = uID size=20 value = "<%=uID %>"></td>
-	<td><select name = priority>
+			<td><%=pID%></td>
+			<td><%=uID%></td>
+			<td>
+				<form method="POST" action="changeProcess.jsp">
+					<input type="hidden" name="pID" value="<%=pID%>"/>
+					<input type="hidden" name="uID" value="<%=uID%>"/>
+					<select name="priority">
 <% for (int i = 1; i <= 5; i++) { %>
-		<option value="<%=i%>" <%if (priority.intValue()==i) {out.print("selected");} %>><%=i%></option>
+						<option value="<%=i%>" <%if (priority.intValue() == i) {out.print("selected");} %>><%=i%></option>
 <% } %>
-	</select></td>
-	<td><a href="viewRules.jsp?pID=<%=pID %>&uID=<%=uID %>">View</a></td>
-	<td><input type=submit value="Save changes"></td>
-	</form>
+					</select>
+					<input type="submit" value="Change priority"/>
+				</form>
+			</td>
+			<td>
+				<a href="viewRules.jsp?pID=<%=pID %>&uID=<%=uID %>">View rules</a>
+				<a href="removeProcess.jsp?pID=<%=pID%>&uID=<%=uID%>">Remove</a>
+			</td>
 	</tr>
 	<%
-	
 }
-
 %>
-</table>
-<br>
-<br>
-<a href="insertNewProcess.jsp"><b>Insert a new process</b></a>
+			</tbody>
+		</table>
 
-</body>
+		<p><a href="insertNewProcess.jsp">Insert a new process</a></p>
+	</body>
 </html>
