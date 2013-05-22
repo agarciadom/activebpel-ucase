@@ -15,14 +15,6 @@
      <xs:element minOccurs='0' name='userID' type='xs:string'/>
     </xs:sequence>
    </xs:complexType>
-   <xs:complexType name='processInfoWrapper'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='priority' type='xs:int'/>
-     <xs:element minOccurs='0' name='processId' type='xs:string'/>
-     <xs:element minOccurs='0' name='processInstanceId' type='xs:long'/>
-     <xs:element minOccurs='0' name='userId' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
    <xs:complexType name='supervisionRuleInfoWrapper'>
     <xs:sequence>
      <xs:element minOccurs='0' name='location' type='xs:string'/>
@@ -34,6 +26,14 @@
      <xs:element minOccurs='0' name='timeFrame' type='xs:string'/>
      <xs:element minOccurs='0' name='userID' type='xs:string'/>
      <xs:element minOccurs='0' name='wscolRule' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='processInfoWrapper'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='priority' type='xs:int'/>
+     <xs:element minOccurs='0' name='processId' type='xs:string'/>
+     <xs:element minOccurs='0' name='processInstanceId' type='xs:long'/>
+     <xs:element minOccurs='0' name='userId' type='xs:string'/>
     </xs:sequence>
    </xs:complexType>
    <xs:complexType final='#all' name='processInfoWrapperArray'>

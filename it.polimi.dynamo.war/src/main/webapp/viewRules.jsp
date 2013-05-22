@@ -17,22 +17,18 @@
 	<body>
 		<img src="figures/testa_dynamo_small.jpg"/>
 <%
-final String pID = request.getParameter("pID");
-final String uID = request.getParameter("uID");
+	final String pID = request.getParameter("pID");
+	final String uID = request.getParameter("uID");
 
-ConfigurationManagerWS locator = new ConfigurationManagerWS();
-ConfigurationManager cm = null;
-List<SupervisionRuleInfoWrapper> rules = null;
-try {
-	cm = locator.getConfigurationManagerPort();
-	rules = cm.getProcessSupervisionRules(pID,uID).getItem(); 
-} catch (WebServiceException e) {
-	out.println(e.getMessage());
-}
-
+	List<SupervisionRuleInfoWrapper> rules = null;
+	try {
+		final ConfigurationManager cm = new ConfigurationManagerWS().getConfigurationManagerPort();
+		rules = cm.getProcessSupervisionRules(pID,uID).getItem(); 
+	} catch (WebServiceException e) {
+		out.println(e.getMessage());
+	}
 %>
-<h2>Rules for process <b><%=pID %></b> and user <b><%=uID %></b></h2>
-
+		<h2>Rules for process <b><%=pID %></b> and user <b><%=uID %></b></h2>
 <%
 	int iRuleCounter = 0;
 	for (SupervisionRuleInfoWrapper rule : rules) {
@@ -57,34 +53,48 @@ try {
 		else {
 			type = "pre-condition";
 		}
-		
-		%>
-		<h3>Rule number <%=iRuleCounter + 1 %></b></h3>
-		<br>
-		<br>
-		<table border=2>
-		<tr><td><b>Location</b></td><td><%=location %></td></tr>
-		<tr><td><b>Type</b></td><td><%=type %></td></tr>
-		<tr><td><b>Priority</b></td><td><%=priority %></td></tr>
-		<tr><td><b>Providers</b></td><td><%=providers %></td></tr>
-		<tr><td><b>Time frame</b></td><td><%=timeframe %></td></tr>
-		<tr><td><b>Monitoring Expression</b></td><td><%=monitoring %></td></tr>
-		<tr><td><b>Recovery Strategy</b></td><td><%=recovery %></td></tr>
-		</table>
-		<ul style="list-style: none">
-			<li><a href="changeRule.jsp?pID=<%=pID%>&uID=<%=uID%>&loc=<%=location%>&precondition=<%=precondition%>">Modify</a></li>
-			<li><a href="removeRule.jsp?pID=<%=pID%>&uID=<%=uID%>&loc=<%=location%>&precondition=<%=precondition%>">Remove</a></li>
-			<li><a href="viewLogging.jsp?pID=<%=pID%>&uID=<%=uID%>&loc=<%=location%>&precondition=<%=precondition%>">Log</a></li>
-		</ul>
-		<br>
-		<br>
-		<br>
+%>
+	<h3>Rule number <%=iRuleCounter + 1 %></h3>
+
+	<table border="2">
+		<tr>
+			<th>Location</th>
+			<td><%=location%></td>
+		</tr>
+		<tr>
+			<th>Type</th>
+			<td><%=type%></td>
+		</tr>
+		<tr>
+			<th>Priority</th>
+			<td><%=priority%></td>
+		</tr>
+		<tr>
+			<th>Providers</th>
+			<td><%=providers%></td>
+		</tr>
+		<tr>
+			<th>Time frame</th>
+			<td><%=timeframe%></td>
+		</tr>
+		<tr>
+			<th>Monitoring Expression</th>
+			<td><%=monitoring%></td>
+		</tr>
+		<tr>
+			<th>Recovery Strategy</th>
+			<td><%=recovery %></td>
+		</tr>
+	</table>
+	<ul style="list-style: none">
+		<li><a href="changeRule.jsp?pID=<%=pID%>&uID=<%=uID%>&loc=<%=location%>&precondition=<%=precondition%>">Modify</a></li>
+		<li><a href="removeRule.jsp?pID=<%=pID%>&uID=<%=uID%>&loc=<%=location%>&precondition=<%=precondition%>">Remove</a></li>
+		<li><a href="viewLogging.jsp?pID=<%=pID%>&uID=<%=uID%>&loc=<%=location%>&precondition=<%=precondition%>">Log</a></li>
+	</ul>
 <%
 		iRuleCounter = iRuleCounter + 1;
 	}
 %>
-
-<a href="insertNewRule.jsp?pID=<%=pID %>&uID=<%=uID %>"><b>Insert a new rule</b></a>
-
-</body>
+		<p><a href="insertNewRule.jsp?pID=<%=pID %>&uID=<%=uID %>"><b>Insert a new rule</b></a></p>
+	</body>
 </html>

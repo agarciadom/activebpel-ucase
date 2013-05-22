@@ -43,51 +43,71 @@
    </xs:complexType>
   </xs:schema>
  </types>
- <message name='MonitorLogger_InsertNewMonitoringResultResponse'>
-  <part name='return' type='xsd:boolean'></part>
- </message>
- <message name='MonitorLogger_GetRecoveryResults'>
-  <part name='monitoringResultInfoWrapper' type='tns:recoveryResultInfoWrapper'></part>
- </message>
- <message name='MonitorLogger_InsertNewRecoveryResultResponse'>
-  <part name='return' type='xsd:boolean'></part>
- </message>
- <message name='MonitorLogger_InsertNewRecoveryResult'>
+ <message name='MonitorLogger_removeRecoveryResults'>
   <part name='recoveryResultInfoWrapper' type='tns:recoveryResultInfoWrapper'></part>
  </message>
- <message name='MonitorLogger_InsertNewMonitoringResult'>
-  <part name='monitoringResultInfoWrapper' type='tns:monitoringResultInfoWrapper'></part>
+ <message name='MonitorLogger_getRecoveryResults'>
+  <part name='recoveryResultInfoWrapper' type='tns:recoveryResultInfoWrapper'></part>
  </message>
- <message name='MonitorLogger_GetRecoveryResultsResponse'>
+ <message name='MonitorLogger_removeRecoveryResultsResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='MonitorLogger_insertNewRecoveryResult'>
+  <part name='recoveryResultInfoWrapper' type='tns:recoveryResultInfoWrapper'></part>
+ </message>
+ <message name='MonitorLogger_getRecoveryResultsResponse'>
   <part name='return' type='tns:recoveryResultInfoWrapperArray'></part>
  </message>
- <message name='MonitorLogger_GetMonitoringResultsResponse'>
+ <message name='MonitorLogger_getMonitoringResultsResponse'>
   <part name='return' type='tns:monitoringResultInfoWrapperArray'></part>
  </message>
- <message name='MonitorLogger_GetMonitoringResults'>
+ <message name='MonitorLogger_insertNewMonitoringResultResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='MonitorLogger_removeMonitoringResultsResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='MonitorLogger_insertNewRecoveryResultResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
+ <message name='MonitorLogger_removeMonitoringResults'>
+  <part name='monitoringResultInfoWrapper' type='tns:monitoringResultInfoWrapper'></part>
+ </message>
+ <message name='MonitorLogger_insertNewMonitoringResult'>
+  <part name='monitoringResultInfoWrapper' type='tns:monitoringResultInfoWrapper'></part>
+ </message>
+ <message name='MonitorLogger_getMonitoringResults'>
   <part name='monitoringResultInfoWrapper' type='tns:monitoringResultInfoWrapper'></part>
  </message>
  <portType name='MonitorLogger'>
-  <operation name='GetMonitoringResults' parameterOrder='monitoringResultInfoWrapper'>
-   <input message='tns:MonitorLogger_GetMonitoringResults'></input>
-   <output message='tns:MonitorLogger_GetMonitoringResultsResponse'></output>
+  <operation name='getMonitoringResults' parameterOrder='monitoringResultInfoWrapper'>
+   <input message='tns:MonitorLogger_getMonitoringResults'></input>
+   <output message='tns:MonitorLogger_getMonitoringResultsResponse'></output>
   </operation>
-  <operation name='GetRecoveryResults' parameterOrder='monitoringResultInfoWrapper'>
-   <input message='tns:MonitorLogger_GetRecoveryResults'></input>
-   <output message='tns:MonitorLogger_GetRecoveryResultsResponse'></output>
+  <operation name='getRecoveryResults' parameterOrder='recoveryResultInfoWrapper'>
+   <input message='tns:MonitorLogger_getRecoveryResults'></input>
+   <output message='tns:MonitorLogger_getRecoveryResultsResponse'></output>
   </operation>
-  <operation name='InsertNewMonitoringResult' parameterOrder='monitoringResultInfoWrapper'>
-   <input message='tns:MonitorLogger_InsertNewMonitoringResult'></input>
-   <output message='tns:MonitorLogger_InsertNewMonitoringResultResponse'></output>
+  <operation name='insertNewMonitoringResult' parameterOrder='monitoringResultInfoWrapper'>
+   <input message='tns:MonitorLogger_insertNewMonitoringResult'></input>
+   <output message='tns:MonitorLogger_insertNewMonitoringResultResponse'></output>
   </operation>
-  <operation name='InsertNewRecoveryResult' parameterOrder='recoveryResultInfoWrapper'>
-   <input message='tns:MonitorLogger_InsertNewRecoveryResult'></input>
-   <output message='tns:MonitorLogger_InsertNewRecoveryResultResponse'></output>
+  <operation name='insertNewRecoveryResult' parameterOrder='recoveryResultInfoWrapper'>
+   <input message='tns:MonitorLogger_insertNewRecoveryResult'></input>
+   <output message='tns:MonitorLogger_insertNewRecoveryResultResponse'></output>
+  </operation>
+  <operation name='removeMonitoringResults' parameterOrder='monitoringResultInfoWrapper'>
+   <input message='tns:MonitorLogger_removeMonitoringResults'></input>
+   <output message='tns:MonitorLogger_removeMonitoringResultsResponse'></output>
+  </operation>
+  <operation name='removeRecoveryResults' parameterOrder='recoveryResultInfoWrapper'>
+   <input message='tns:MonitorLogger_removeRecoveryResults'></input>
+   <output message='tns:MonitorLogger_removeRecoveryResultsResponse'></output>
   </operation>
  </portType>
  <binding name='MonitorLoggerBinding' type='tns:MonitorLogger'>
   <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
-  <operation name='GetMonitoringResults'>
+  <operation name='getMonitoringResults'>
    <soap:operation soapAction=''/>
    <input>
     <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
@@ -96,7 +116,7 @@
     <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
    </output>
   </operation>
-  <operation name='GetRecoveryResults'>
+  <operation name='getRecoveryResults'>
    <soap:operation soapAction=''/>
    <input>
     <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
@@ -105,7 +125,7 @@
     <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
    </output>
   </operation>
-  <operation name='InsertNewMonitoringResult'>
+  <operation name='insertNewMonitoringResult'>
    <soap:operation soapAction=''/>
    <input>
     <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
@@ -114,7 +134,25 @@
     <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
    </output>
   </operation>
-  <operation name='InsertNewRecoveryResult'>
+  <operation name='insertNewRecoveryResult'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </output>
+  </operation>
+  <operation name='removeMonitoringResults'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>
+   </output>
+  </operation>
+  <operation name='removeRecoveryResults'>
    <soap:operation soapAction=''/>
    <input>
     <soap:body namespace='http://it.polimi.monitor/monitorlogger' use='literal'/>

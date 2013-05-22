@@ -36,6 +36,7 @@ import it.polimi.monitor.monitorlogger.persistencedata.RecoveryResultPK;
 
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.jws.WebMethod;
@@ -50,11 +51,13 @@ import javax.persistence.PersistenceContext;
 @Stateless
 public class MonitorLoggerBean implements MonitorLogger
 {
+	private static final Logger LOGGER = Logger.getLogger(MonitorLoggerBean.class.getCanonicalName());
+
 	@PersistenceContext(unitName="monitor_logger")
 	private EntityManager entityManager;
 
 	@WebMethod
-	public boolean InsertNewMonitoringResult(@WebParam(name="monitoringResultInfoWrapper") MonitoringResultInfoWrapper monitoringResultInfoWrapper)
+	public boolean insertNewMonitoringResult(@WebParam(name="monitoringResultInfoWrapper") MonitoringResultInfoWrapper monitoringResultInfoWrapper)
 	{
 		if(this.entityManager != null)
 		{
@@ -92,18 +95,13 @@ public class MonitorLoggerBean implements MonitorLogger
 	}
 
 	@WebMethod
-	public MonitoringResultInfoWrapper[] GetMonitoringResults(@WebParam(name="monitoringResultInfoWrapper") MonitoringResultInfoWrapper monitoringResultInfoWrapper)
+	public MonitoringResultInfoWrapper[] getMonitoringResults(@WebParam(name="monitoringResultInfoWrapper") MonitoringResultInfoWrapper monitoringResultInfoWrapper)
 	{
 		MonitoringResultInfoWrapper[] results = null;
 		                            
 		if(this.entityManager != null)
 		{
-			List<MonitoringResult> resultSet = this.entityManager.createQuery("from MonitoringResult a where a.pk.processID=:pid and a.pk.userID=:uid and a.pk.location=:location and a.pk.isPrecondition=:precondition")
-															.setParameter("pid", monitoringResultInfoWrapper.getProcessID())
-															.setParameter("uid", monitoringResultInfoWrapper.getUserID())
-															.setParameter("location", monitoringResultInfoWrapper.getLocation())
-															.setParameter("precondition", monitoringResultInfoWrapper.isPrecondition())
-															.getResultList();
+			List<MonitoringResult> resultSet = getMonitoringResultsList(monitoringResultInfoWrapper);
 			
 			if(resultSet.size() > 0)
 			{
@@ -143,7 +141,20 @@ public class MonitorLoggerBean implements MonitorLogger
 	}
 
 	@WebMethod
-	public boolean InsertNewRecoveryResult(@WebParam(name="recoveryResultInfoWrapper") RecoveryResultInfoWrapper recoveryResultInfoWrapper)
+	public boolean removeMonitoringResults(@WebParam(name="monitoringResultInfoWrapper") MonitoringResultInfoWrapper monitoringResultInfoWrapper) {
+		if (entityManager == null) {
+			LOGGER.severe("The entity manager is unavailable");
+			return false;
+		}
+	
+		for (MonitoringResult r : getMonitoringResultsList(monitoringResultInfoWrapper)) {
+			entityManager.remove(r);
+		}
+		return true;
+	}
+
+	@WebMethod
+	public boolean insertNewRecoveryResult(@WebParam(name="recoveryResultInfoWrapper") RecoveryResultInfoWrapper recoveryResultInfoWrapper)
 	{
 		if(this.entityManager != null)
 		{
@@ -177,18 +188,13 @@ public class MonitorLoggerBean implements MonitorLogger
 	}
 
 	@WebMethod
-	public RecoveryResultInfoWrapper[] GetRecoveryResults(@WebParam(name="monitoringResultInfoWrapper") RecoveryResultInfoWrapper recoveryResultInfoWrapper)
+	public RecoveryResultInfoWrapper[] getRecoveryResults(@WebParam(name="recoveryResultInfoWrapper") RecoveryResultInfoWrapper recoveryResultInfoWrapper)
 	{
 		RecoveryResultInfoWrapper[] results = null;
 		                            
 		if(this.entityManager != null)
 		{
-			List<RecoveryResult> resultSet = this.entityManager.createQuery("from RecoveryResult a where a.pk.processID=:pid and a.pk.userID=:uid and a.pk.location=:location and a.pk.isPrecondition=:precondition")
-																.setParameter("pid", recoveryResultInfoWrapper.getProcessID())
-																.setParameter("uid", recoveryResultInfoWrapper.getUserID())
-																.setParameter("location", recoveryResultInfoWrapper.getLocation())
-																.setParameter("precondition", recoveryResultInfoWrapper.isPrecondition())
-																.getResultList();
+			List<RecoveryResult> resultSet = getRecoveryResultsList(recoveryResultInfoWrapper);
 			
 			if(resultSet.size() > 0)
 			{
@@ -221,5 +227,39 @@ public class MonitorLoggerBean implements MonitorLogger
 		}
 		
 		return results;
+	}
+
+	@WebMethod
+	public boolean removeRecoveryResults(@WebParam(name="recoveryResultInfoWrapper") RecoveryResultInfoWrapper recoveryResultInfoWrapper) {
+		if (entityManager == null) {
+			LOGGER.severe("The entity manager is unavailable");
+			return false;
+		}
+
+		for (RecoveryResult r : getRecoveryResultsList(recoveryResultInfoWrapper)) {
+			entityManager.remove(r);
+		}
+		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<MonitoringResult> getMonitoringResultsList(
+			MonitoringResultInfoWrapper monitoringResultInfoWrapper) {
+		return entityManager.createQuery("from MonitoringResult a where a.pk.processID=:pid and a.pk.userID=:uid and a.pk.location=:location and a.pk.isPrecondition=:precondition")
+														.setParameter("pid", monitoringResultInfoWrapper.getProcessID())
+														.setParameter("uid", monitoringResultInfoWrapper.getUserID())
+														.setParameter("location", monitoringResultInfoWrapper.getLocation())
+														.setParameter("precondition", monitoringResultInfoWrapper.isPrecondition())
+														.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<RecoveryResult> getRecoveryResultsList(RecoveryResultInfoWrapper recoveryResultInfoWrapper) {
+		return entityManager.createQuery("from RecoveryResult a where a.pk.processID=:pid and a.pk.userID=:uid and a.pk.location=:location and a.pk.isPrecondition=:precondition")
+															.setParameter("pid", recoveryResultInfoWrapper.getProcessID())
+															.setParameter("uid", recoveryResultInfoWrapper.getUserID())
+															.setParameter("location", recoveryResultInfoWrapper.getLocation())
+															.setParameter("precondition", recoveryResultInfoWrapper.isPrecondition())
+															.getResultList();
 	}
 }

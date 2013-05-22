@@ -39,6 +39,6 @@
 <%	} else { %>
 		<p>We have had a problem. Please contact us.</p>
 <%	} %>
-		<p><a href="<%=ruleListURL%>">Return to process list</a></p>
+		<p><a href="<%=ruleListURL%>">Return to rule list</a></p>
 	</body>
 </html>

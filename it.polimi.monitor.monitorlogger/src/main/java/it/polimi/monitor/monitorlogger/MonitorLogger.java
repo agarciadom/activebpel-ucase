@@ -31,17 +31,19 @@ import it.polimi.monitor.monitorlogger.data.MonitoringResultInfoWrapper;
 import it.polimi.monitor.monitorlogger.data.RecoveryResultInfoWrapper;
 
 import javax.ejb.Remote;
-import javax.jws.WebParam;
 
 @Remote
 public interface MonitorLogger {
 
-	RecoveryResultInfoWrapper[] GetRecoveryResults(@WebParam(name="monitoringResultInfoWrapper") RecoveryResultInfoWrapper recoveryResultInfoWrapper);
+	RecoveryResultInfoWrapper[] getRecoveryResults(RecoveryResultInfoWrapper recoveryResultInfoWrapper);
 
-	boolean InsertNewRecoveryResult(@WebParam(name="recoveryResultInfoWrapper") RecoveryResultInfoWrapper recoveryResultInfoWrapper);
+	boolean insertNewRecoveryResult(RecoveryResultInfoWrapper recoveryResultInfoWrapper);
 
-	MonitoringResultInfoWrapper[] GetMonitoringResults(@WebParam(name="monitoringResultInfoWrapper") MonitoringResultInfoWrapper monitoringResultInfoWrapper);
+	boolean removeRecoveryResults(RecoveryResultInfoWrapper recoveryResultInfoWrapper);
 
-	boolean InsertNewMonitoringResult(@WebParam(name="monitoringResultInfoWrapper") MonitoringResultInfoWrapper monitoringResultInfoWrapper);
+	MonitoringResultInfoWrapper[] getMonitoringResults(MonitoringResultInfoWrapper monitoringResultInfoWrapper);
 
+	boolean insertNewMonitoringResult(MonitoringResultInfoWrapper monitoringResultInfoWrapper);
+
+	boolean removeMonitoringResults(MonitoringResultInfoWrapper monitoringResultInfoWrapper);
 }

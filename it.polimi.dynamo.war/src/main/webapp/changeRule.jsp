@@ -35,31 +35,38 @@
 			<table border=2>
 				<tr>
 					<th>User ID</th>
-					<td><input type="text" name="uID" size="20" value="<%= uID %>"></td>
+					<td>
+						<%=uID%>
+						<input type="hidden" name="uID" size="20" value="<%=uID%>">
+					</td>
 				</tr>
 				<tr>
 					<th>Process ID</th>
-					<td><input type="text" name="pID" size="20" value="<%= pID %>"></td>
+					<td>
+						<%=pID%>
+						<input type="hidden" name="pID" size="20" value="<%=pID%>">
+					</td>
 				</tr>
 				<tr>
 					<th>Location</th>
-					<td><input type="text" name="location" size="50" value="<%=loc %>"></td>
+					<td>
+						<%=loc%>
+						<input type="hidden" name="location" size="50" value="<%=loc%>">
+					</td>
 				</tr>
 				<tr>
 					<th>Type</th>
 					<td>
-						<select name="precondition">
-							<option value="true" <% if (rule.isPrecondition()) {out.print("selected");}%> >Pre-condition</option>
-							<option value="false" <% if (!(rule.isPrecondition())) {out.print("selected");}%> >Post-condition</option>
-						</select>
+						<%= rule.isPrecondition() ? "pre-condition" : "post-condition" %>
+						<input type="hidden" name="precondition" value="<%=rule.isPrecondition()%>"/>
 					</td>
 				</tr>
 				<tr>
 					<th>Priority</th>
 					<td>
 						<select name="priority">
-<% 		for (int i = 1; i <= 5; i++) { %>
-						<option value="<%=i%>" <%if (rule.getPriority() == i) {out.print("selected");} %>>1</option>
+<% 		for (int i = 1; i <= 5; i = i + 1) { %>
+						<option value="<%=i %>" <%if (rule.getPriority() == i) {out.print("selected");} %>><%=i %></option>
 <% 		} %>
 						</select>
 					</td>
