@@ -123,6 +123,4 @@ public interface ConfigurationManager
 	TemporaryRuleChangingInfoWrapper getTemporaryChangingRule(TemporaryRuleChangingInfoWrapper temporaryRuleChangingInfoWrapper);
 	
 	void releaseTemporaryProcessChanges(ProcessInfoWrapper processInfoWrapper);
-
-//	public boolean eraseDatabase();
 }

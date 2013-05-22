@@ -10,15 +10,12 @@
 <%@ page import="javax.xml.ws.WebServiceException" %>
 
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Supervision rules</title>
-</head>
-<body>
-<img src="figures/testa_dynamo_small.jpg"/>
-<br>
-<br>
-
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"/>
+		<title>Supervision rules</title>
+	</head>
+	<body>
+		<img src="figures/testa_dynamo_small.jpg"/>
 <%
 final String pID = request.getParameter("pID");
 final String uID = request.getParameter("uID");
@@ -34,9 +31,7 @@ try {
 }
 
 %>
-Rules for process <b><%=pID %></b> and user <b><%=uID %></b>
-<br>
-<br>
+<h2>Rules for process <b><%=pID %></b> and user <b><%=uID %></b></h2>
 
 <%
 	int iRuleCounter = 0;
@@ -64,7 +59,7 @@ Rules for process <b><%=pID %></b> and user <b><%=uID %></b>
 		}
 		
 		%>
-		<b>Rule number <%=iRuleCounter + 1 %></b>
+		<h3>Rule number <%=iRuleCounter + 1 %></b></h3>
 		<br>
 		<br>
 		<table border=2>
@@ -76,9 +71,11 @@ Rules for process <b><%=pID %></b> and user <b><%=uID %></b>
 		<tr><td><b>Monitoring Expression</b></td><td><%=monitoring %></td></tr>
 		<tr><td><b>Recovery Strategy</b></td><td><%=recovery %></td></tr>
 		</table>
-		<br>
-		<a href="changeRule.jsp?pID=<%=pID %>&uID=<%=uID %>&loc=<%=location %>&precondition=<%=precondition %>">Modify Rule</a><br>
-		<a href="viewLogging.jsp?pID=<%=pID %>&uID=<%=uID %>&loc=<%=location %>&precondition=<%=precondition %>">View Log</a>
+		<ul style="list-style: none">
+			<li><a href="changeRule.jsp?pID=<%=pID%>&uID=<%=uID%>&loc=<%=location%>&precondition=<%=precondition%>">Modify</a></li>
+			<li><a href="removeRule.jsp?pID=<%=pID%>&uID=<%=uID%>&loc=<%=location%>&precondition=<%=precondition%>">Remove</a></li>
+			<li><a href="viewLogging.jsp?pID=<%=pID%>&uID=<%=uID%>&loc=<%=location%>&precondition=<%=precondition%>">Log</a></li>
+		</ul>
 		<br>
 		<br>
 		<br>

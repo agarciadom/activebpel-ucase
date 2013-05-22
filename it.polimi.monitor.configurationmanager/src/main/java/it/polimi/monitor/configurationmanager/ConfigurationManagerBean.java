@@ -1,4 +1,3 @@
-
 /* 
  * Copyright 2007, 2008, DEEP SE group, Dipartimento di Elettronica e Informazione (DEI), Politecnico di Milano
  * 
@@ -6,11 +5,9 @@
  */
 
 /*  
- *  Licence: 
+ *  License: 
  *
- *
- *  This file is part of  DYNAMO .
- *
+ *  This file is part of DYNAMO.
  *
  *	DYNAMO is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -26,8 +23,6 @@
  *  along with DYNAMO.  If not, see <http://www.gnu.org/licenses/>.
  *   
  */
- 
-
 package it.polimi.monitor.configurationmanager;
 
 import it.polimi.monitor.configurationmanager.data.ProcessInfoWrapper;
@@ -186,32 +181,29 @@ public class ConfigurationManagerBean implements ConfigurationManager
 	@WebMethod
 	public Integer getProcessPriority(@WebParam(name="processInfo") ProcessInfoWrapper processInfo)
 	{
-		ProcessData pd = null;
-		
 		try
 		{
-			if(entityManager!=null)
+			if(entityManager != null)
 			{
-				ProcessDataPK pk = new ProcessDataPK(processInfo.getProcessId(), processInfo.getUserId());
-				pd = (ProcessData) this.entityManager.find(ProcessData.class, pk);
-				
+				final ProcessDataPK pk = new ProcessDataPK(processInfo.getProcessId(), processInfo.getUserId());
+				final ProcessData pd = (ProcessData) this.entityManager.find(ProcessData.class, pk);
 				if(pd == null)
 				{
 					System.out.println("No data recorded for process '" + processInfo.getProcessId() + "' and user '" + processInfo.getUserId() + "'"); 
 					return null;
 				}
-
 				return pd.GetProcessPriority();
 			}
 			else
 			{
-				System.out.println("EntityManager -> " + entityManager);
+				LOGGER.warning("EntityManager -> " + entityManager);
 			}
 		}
 		catch(Throwable e)
 		{
-			e.printStackTrace();
+			LOGGER.severe(e.getLocalizedMessage());
 		}
+
 		return null;
 	}
 
@@ -229,8 +221,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 			{
 				SupervisionRulePK pk = new SupervisionRulePK(processID, userID, location, isPrecondition);
 				ad = (SupervisionRule) this.entityManager.find(SupervisionRule.class, pk);
-	
-				if(ad!=null)
+				if(ad != null)
 				{
 					SupervisionRuleInfoWrapper response = new SupervisionRuleInfoWrapper();
 					
@@ -248,12 +239,12 @@ public class ConfigurationManagerBean implements ConfigurationManager
 				}
 				else
 				{
-					System.out.println("No assertions recorded for: " + location); 
+					LOGGER.info("No assertions recorded for: " + location); 
 				}
 			}
 			else
 			{
-				System.out.println("EntityManager -> " + entityManager);
+				LOGGER.warning("EntityManager -> " + entityManager);
 			}
 		}
 		catch(Throwable e)
@@ -263,6 +254,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@WebMethod
 	public ProcessInfoWrapper[] getMonitoredProcesses()
 	{
@@ -275,7 +267,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		{
 			if(entityManager!=null)
 			{
-				Collection <ProcessData> pd = this.entityManager.createQuery("from ProcessData p").getResultList();
+				Collection<ProcessData> pd = this.entityManager.createQuery("from ProcessData p").getResultList();
 				
 				if(pd != null)
 				{
@@ -300,12 +292,12 @@ public class ConfigurationManagerBean implements ConfigurationManager
 				}
 				else
 				{
-					System.out.println("No process registered in database!"); 
+					LOGGER.severe("No process registered in database!"); 
 				}
 			}
 			else
 			{
-				System.out.println("EntityManager -> " + entityManager);
+				LOGGER.warning("EntityManager -> " + entityManager);
 			}
 		}
 		catch(Throwable e)
@@ -320,10 +312,6 @@ public class ConfigurationManagerBean implements ConfigurationManager
 												@WebParam(name="userID") String userID)
 	{
 		ProcessInfoWrapper result = null;
-
-		System.out.println("Process ID : " + processID);
-		System.out.println("userID : " + userID);
-		
 		try
 		{
 			if(entityManager!=null)
@@ -344,12 +332,12 @@ public class ConfigurationManagerBean implements ConfigurationManager
 				}
 				else
 				{
-					System.out.println("No process registered in database!"); 
+					LOGGER.severe("No process registered in database!"); 
 				}
 			}
 			else
 			{
-				System.out.println("EntityManager -> " + entityManager);
+				LOGGER.warning("EntityManager -> " + entityManager);
 			}
 		}
 		catch(Throwable e)
@@ -359,7 +347,6 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		return result;
 	}
 	
-	@SuppressWarnings("unchecked")
 	@WebMethod
 	public SupervisionRuleInfoWrapper[] getProcessSupervisionRules(@WebParam(name="processID") String processID, 
 																	@WebParam(name="userID") String userID)
@@ -398,13 +385,13 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		return null;
 	}
 
-	private List<SupervisionRule> getProcessSupervisionRulesList(
-			String processID, String userID) {
-		List<SupervisionRule> set = this.entityManager.createQuery("from SupervisionRule a where a.pk.processID=:pid and a.pk.userID=:uid")
-															.setParameter("pid", processID)
-															.setParameter("uid", userID)
-															.getResultList();
-		return set;
+	@SuppressWarnings("unchecked")
+	private List<SupervisionRule> getProcessSupervisionRulesList(String processID, String userID) {
+		return entityManager
+				.createQuery(
+						"from SupervisionRule a where a.pk.processID=:pid and a.pk.userID=:uid")
+				.setParameter("pid", processID).setParameter("uid", userID)
+				.getResultList();
 	}
 
 	@WebMethod
@@ -421,7 +408,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 				
 				if(pd == null)
 				{
-					System.out.println("Process '" + newProcessInfo.getProcessId() + "' or User '" + newProcessInfo.getUserId() + "' unkown!"); 
+					LOGGER.severe("Process '" + newProcessInfo.getProcessId() + "' or User '" + newProcessInfo.getUserId() + "' unknown!"); 
 					return false;
 				}
 
@@ -431,7 +418,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 			}
 			else
 			{
-				System.out.println("EntityManager -> " + entityManager);
+				LOGGER.warning("EntityManager -> " + entityManager);
 			}
 		}
 		catch(Throwable e)
@@ -468,13 +455,13 @@ public class ConfigurationManagerBean implements ConfigurationManager
 				}
 				else
 				{
-					System.out.println("Rules for Invoke '" + newInvokeInfo.getLocation() + "' for process '" + newInvokeInfo.getProcessID() + "' not existing!");
+					LOGGER.severe("Rules for Invoke '" + newInvokeInfo.getLocation() + "' for process '" + newInvokeInfo.getProcessID() + "' not existing!");
 					return false;
 				}
 			}
 			else
 			{
-				System.out.println("EntityManager -> " + entityManager);
+				LOGGER.warning("EntityManager -> " + entityManager);
 			}
 		}
 		catch(Throwable e)
@@ -494,7 +481,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		
 		if(result == null)
 		{
-			System.out.println("Inserting new temporary changes for process' info --> Process: " + processInfoWrapper.getProcessId() + 
+			LOGGER.info("Inserting new temporary changes for process' info --> Process: " + processInfoWrapper.getProcessId() + 
 																					" | User: " + processInfoWrapper.getUserId() + 
 																					" | Process Instance: " + processInfoWrapper.getProcessInstanceId());
 			TemporaryProcessDataChanging newProcessInfo = new TemporaryProcessDataChanging(pk, processInfoWrapper.getPriority());
@@ -504,7 +491,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		}
 		else
 		{
-			System.out.println("Updating new temporary changes for process' info --> Process: " + processInfoWrapper.getProcessId() + 
+			LOGGER.info("Updating new temporary changes for process' info --> Process: " + processInfoWrapper.getProcessId() + 
 																					" | User: " + processInfoWrapper.getUserId() + 
 																					" | Process Instance: " + processInfoWrapper.getProcessInstanceId());
 			result.setNewPriority(processInfoWrapper.getPriority());
@@ -525,7 +512,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		
 		if(result == null)
 		{
-			System.out.println("Inserting new temporary changes for rule's info --> Process: " + temporaryRuleChangingInfoWrapper.getProcessID() + 
+			LOGGER.info("Inserting new temporary changes for rule's info --> Process: " + temporaryRuleChangingInfoWrapper.getProcessID() + 
 																			" | User: " + temporaryRuleChangingInfoWrapper.getUserID() + 
 																			" | Process Instance: " + temporaryRuleChangingInfoWrapper.getProcessInstanceID() +
 																			" | BPEL Action: " + temporaryRuleChangingInfoWrapper.getLocation() +
@@ -543,7 +530,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		}
 		else
 		{
-			System.out.println("Updating new temporary changes for rule's info --> Process: " + temporaryRuleChangingInfoWrapper.getProcessID() + 
+			LOGGER.info("Updating new temporary changes for rule's info --> Process: " + temporaryRuleChangingInfoWrapper.getProcessID() + 
 					" | User: " + temporaryRuleChangingInfoWrapper.getUserID() + 
 					" | Process Instance: " + temporaryRuleChangingInfoWrapper.getProcessInstanceID() +
 					" | BPEL Action: " + temporaryRuleChangingInfoWrapper.getLocation() +
@@ -574,7 +561,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 
 		if(queryResult == null)
 		{
-			System.out.println("No temporary changes for process' info --> Process: " + processInfoWrapper.getProcessId() + 
+			LOGGER.info("No temporary changes for process' info --> Process: " + processInfoWrapper.getProcessId() + 
 																		" | User: " + processInfoWrapper.getUserId() + 
 																		" | Process Instance: " + processInfoWrapper.getProcessInstanceId());
 
@@ -582,7 +569,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		}
 		else
 		{
-			System.out.println("Found temporary changes for process --> Process: " + processInfoWrapper.getProcessId() + 
+			LOGGER.info("Found temporary changes for process --> Process: " + processInfoWrapper.getProcessId() + 
 																		" | User: " + processInfoWrapper.getUserId() + 
 																		" | Process Instance: " + processInfoWrapper.getProcessInstanceId());
 
@@ -605,7 +592,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		
 		if(queryResult == null)
 		{
-			System.out.println("No temporary changes for rule --> Process: " + temporaryRuleChangingInfoWrapper.getProcessID() + 
+			LOGGER.info("No temporary changes for rule --> Process: " + temporaryRuleChangingInfoWrapper.getProcessID() + 
 																" | User: " + temporaryRuleChangingInfoWrapper.getUserID() + 
 																" | Process Instance: " + temporaryRuleChangingInfoWrapper.getLocation() +
 																" | BPEL Action: " + temporaryRuleChangingInfoWrapper.getProcessInstanceID() +
@@ -615,7 +602,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		}
 		else
 		{
-			System.out.println("Found temporary changes for rule --> Process: " + temporaryRuleChangingInfoWrapper.getProcessID() + 
+			LOGGER.info("Found temporary changes for rule --> Process: " + temporaryRuleChangingInfoWrapper.getProcessID() + 
 																	" | User: " + temporaryRuleChangingInfoWrapper.getUserID() + 
 																	" | Process Instance: " + temporaryRuleChangingInfoWrapper.getLocation() +
 																	" | BPEL Action: " + temporaryRuleChangingInfoWrapper.getProcessInstanceID() +
@@ -642,7 +629,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 
 		if(queryResult == null)
 		{
-			System.out.println("No temporary changes for process' info --> Process: " + processInfoWrapper.getProcessId() + 
+			LOGGER.info("No temporary changes for process' info --> Process: " + processInfoWrapper.getProcessId() + 
 																		" | User: " + processInfoWrapper.getUserId() + 
 																		" | Process Instance: " + processInfoWrapper.getProcessInstanceId());
 		}
@@ -650,11 +637,12 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		{
 			this.entityManager.remove(queryResult);
 
-			System.out.println("Succesfully deleted temporary changes for process' info --> Process: " + processInfoWrapper.getProcessId() + 
+			LOGGER.info("Succesfully deleted temporary changes for process' info --> Process: " + processInfoWrapper.getProcessId() + 
 																		" | User: " + processInfoWrapper.getUserId() + 
 																		" | Process Instance: " + processInfoWrapper.getProcessInstanceId());
 		}
 		
+		@SuppressWarnings("unchecked")
 		List<TemporarySupervisionRuleChange> queryResult2 = this.entityManager.createQuery("from TemporarySupervisionRuleChange t where t.pk.processID=:pid and t.pk.userID=:uid and t.pk.processInstanceID=:iid")
 																			.setParameter("pid", processInfoWrapper.getProcessId())
 																			.setParameter("uid", processInfoWrapper.getUserId())
@@ -663,7 +651,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		
 		if(queryResult2 == null)
 		{
-			System.out.println("No temporary changes for process' rules --> Process: " + processInfoWrapper.getProcessId() + 
+			LOGGER.info("No temporary changes for process' rules --> Process: " + processInfoWrapper.getProcessId() + 
 																		" | User: " + processInfoWrapper.getUserId() + 
 																		" | Process Instance: " + processInfoWrapper.getProcessInstanceId());
 		}
@@ -673,7 +661,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 			{
 				this.entityManager.remove(queryResult2.get(i));
 
-				System.out.println("Succesfully deleted temporary changes for process' rule --> Process: " + processInfoWrapper.getProcessId() + 
+				LOGGER.info("Succesfully deleted temporary changes for process' rule --> Process: " + processInfoWrapper.getProcessId() + 
 																		" | User: " + processInfoWrapper.getUserId() + 
 																		" | Process Instance: " + processInfoWrapper.getProcessInstanceId() +
 																		" | location: " + queryResult2.get(i).getPk().getLocation() + 
@@ -682,39 +670,27 @@ public class ConfigurationManagerBean implements ConfigurationManager
 		}
 	}
 
-	public boolean releaseSupervisionRule(String processID, String userID,
-			String location, boolean isPrecondition) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	@WebMethod
+	public boolean releaseSupervisionRule(
+			@WebParam(name = "processID") String processID,
+			@WebParam(name = "userID") String userID,
+			@WebParam(name = "location") String location,
+			@WebParam(name = "isPrecondition") boolean isPrecondition) {
+		if (entityManager == null) {
+			LOGGER.severe("Entity manager is not available");
+			return false;
+		}
 
-//	public boolean eraseDatabase()
-//	{
-//		// TODO Auto-generated method stub
-//		
-//		ProcessInfoWrapper[] processes = null;
-//
-//		processes = getMonitoredProcess();
-//		
-//		for (int i = 0; i < processes.length; i++) {
-//			
-//			ProcessInfoWrapper pInfo = processes[i];
-//			String processID = pInfo.getProcessId(); 
-//			String userID = pInfo.getUserId();
-//			
-//			InvokeInfoWrapper[] invokes = getProcessAssertion(processID, userID);
-//			
-//			for (int j= 0; j< invokes.length; j++) {
-//				
-//				entityManager.remove(invokes[j]);
-//				
-//			}
-//			
-//			entityManager.remove(processes[i]);
-//			
-//		}
-//		
-//		
-//		return false;
-//	}
+		final SupervisionRulePK pk = new SupervisionRulePK(processID, userID, location, isPrecondition);
+		final SupervisionRule rule = entityManager.find(SupervisionRule.class, pk);
+		if (rule == null) {
+			LOGGER.severe(String
+					.format("No supervision rule exists with pID='%s', uID='%s', location='%s', isPrecondition='%s'",
+							processID, userID, location, isPrecondition));
+			return false;
+		}
+
+		entityManager.remove(rule);
+		return true;
+	}
 }

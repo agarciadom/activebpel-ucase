@@ -579,7 +579,6 @@ public privileged aspect MainInterceptor {
 			recoveryTimePost=recoveryTime;
 			monitoringTime=0;
 			recoveryTime=0;
-			addProcessAnalysis(obj.getLocationPath());
 		} if (obj instanceof AeActivityReceiveImpl) {
 			timer=System.currentTimeMillis();
 			AeActivityReceiveImpl receive = (AeActivityReceiveImpl) obj;
@@ -589,7 +588,6 @@ public privileged aspect MainInterceptor {
 			monitoringTime=0;
 			recoveryTime=0;
 			dynamoPostTime=System.currentTimeMillis()-timer;
-			addProcessAnalysis(obj.getLocationPath());
 		}
 		proceed(obj);
 	}
@@ -1408,7 +1406,6 @@ public privileged aspect MainInterceptor {
 
 				if (processInfoWrapper == null){
 					dynamoPostTime=System.currentTimeMillis()-timer;
-					addProcessAnalysis(obj.getLocationPath());
 					return;
 				}
 
@@ -1595,14 +1592,12 @@ public privileged aspect MainInterceptor {
 						if (recoveryResultWrapper.isRecoveryResult()) {
 							if (recoveryResultWrapper.isIgnore()) {
 								dynamoPostTime=System.currentTimeMillis()-timer;
-								addProcessAnalysis(obj.getLocationPath());
 								return;
 							}
 
 							if (recoveryResultWrapper.isTerminateProcess()) {
 								this.terminateProcess((obj.getProcess()),userName);
 								dynamoPostTime=System.currentTimeMillis()-timer;
-								addProcessAnalysis(obj.getLocationPath());
 								return;
 							}
 						}
@@ -1610,8 +1605,6 @@ public privileged aspect MainInterceptor {
 				}
 			}
 			dynamoPostTime=System.currentTimeMillis()-timer;
-			
-			addProcessAnalysis(obj.getLocationPath());
 		}
 	}
 

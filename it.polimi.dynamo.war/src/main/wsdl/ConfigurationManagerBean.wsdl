@@ -1,6 +1,20 @@
 <definitions name='ConfigurationManagerWS' targetNamespace='http://it.polimi.monitor/configurationmanager' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://it.polimi.monitor/configurationmanager' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
  <types>
   <xs:schema targetNamespace='http://it.polimi.monitor/configurationmanager' version='1.0' xmlns:tns='http://it.polimi.monitor/configurationmanager' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:complexType name='temporaryRuleChangingInfoWrapper'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='location' type='xs:string'/>
+     <xs:element minOccurs='0' name='newCondition' type='xs:string'/>
+     <xs:element minOccurs='0' name='newConditionPriority' type='xs:int'/>
+     <xs:element minOccurs='0' name='newConditionRecovery' type='xs:string'/>
+     <xs:element minOccurs='0' name='newProviderList' type='xs:string'/>
+     <xs:element minOccurs='0' name='newTimeFrame' type='xs:string'/>
+     <xs:element name='precondition' type='xs:boolean'/>
+     <xs:element minOccurs='0' name='processID' type='xs:string'/>
+     <xs:element name='processInstanceID' type='xs:long'/>
+     <xs:element minOccurs='0' name='userID' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
    <xs:complexType name='processInfoWrapper'>
     <xs:sequence>
      <xs:element minOccurs='0' name='priority' type='xs:int'/>
@@ -20,20 +34,6 @@
      <xs:element minOccurs='0' name='timeFrame' type='xs:string'/>
      <xs:element minOccurs='0' name='userID' type='xs:string'/>
      <xs:element minOccurs='0' name='wscolRule' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='temporaryRuleChangingInfoWrapper'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='location' type='xs:string'/>
-     <xs:element minOccurs='0' name='newCondition' type='xs:string'/>
-     <xs:element minOccurs='0' name='newConditionPriority' type='xs:int'/>
-     <xs:element minOccurs='0' name='newConditionRecovery' type='xs:string'/>
-     <xs:element minOccurs='0' name='newProviderList' type='xs:string'/>
-     <xs:element minOccurs='0' name='newTimeFrame' type='xs:string'/>
-     <xs:element name='precondition' type='xs:boolean'/>
-     <xs:element minOccurs='0' name='processID' type='xs:string'/>
-     <xs:element name='processInstanceID' type='xs:long'/>
-     <xs:element minOccurs='0' name='userID' type='xs:string'/>
     </xs:sequence>
    </xs:complexType>
    <xs:complexType final='#all' name='processInfoWrapperArray'>
@@ -104,6 +104,9 @@
  <message name='ConfigurationManager_insertNewSupervisionRuleResponse'>
   <part name='return' type='xsd:boolean'></part>
  </message>
+ <message name='ConfigurationManager_releaseSupervisionRuleResponse'>
+  <part name='return' type='xsd:boolean'></part>
+ </message>
  <message name='ConfigurationManager_releaseTemporaryProcessChangesResponse'></message>
  <message name='ConfigurationManager_getTemporaryChangingRuleResponse'>
   <part name='return' type='tns:temporaryRuleChangingInfoWrapper'></part>
@@ -138,6 +141,12 @@
  </message>
  <message name='ConfigurationManager_releaseTemporaryProcessChanges'>
   <part name='processInfoWrapper' type='tns:processInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_releaseSupervisionRule'>
+  <part name='processID' type='xsd:string'></part>
+  <part name='userID' type='xsd:string'></part>
+  <part name='location' type='xsd:string'></part>
+  <part name='isPrecondition' type='xsd:boolean'></part>
  </message>
  <portType name='ConfigurationManager'>
   <operation name='changeSupervisionRuleParams' parameterOrder='newInvokeInfo'>
@@ -183,6 +192,10 @@
   <operation name='releaseProcess' parameterOrder='processInfo'>
    <input message='tns:ConfigurationManager_releaseProcess'></input>
    <output message='tns:ConfigurationManager_releaseProcessResponse'></output>
+  </operation>
+  <operation name='releaseSupervisionRule' parameterOrder='processID userID location isPrecondition'>
+   <input message='tns:ConfigurationManager_releaseSupervisionRule'></input>
+   <output message='tns:ConfigurationManager_releaseSupervisionRuleResponse'></output>
   </operation>
   <operation name='releaseTemporaryProcessChanges' parameterOrder='processInfoWrapper'>
    <input message='tns:ConfigurationManager_releaseTemporaryProcessChanges'></input>
@@ -294,6 +307,15 @@
    </output>
   </operation>
   <operation name='releaseProcess'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
+   </output>
+  </operation>
+  <operation name='releaseSupervisionRule'>
    <soap:operation soapAction=''/>
    <input>
     <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
