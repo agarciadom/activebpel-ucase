@@ -600,7 +600,7 @@ public class ConfigurationManagerBean implements ConfigurationManager
 	}
 	
 	@WebMethod
-	public void realeseTemporaryProcessChanges(@WebParam(name="processInfoWrapper") ProcessInfoWrapper processInfoWrapper)
+	public void releaseTemporaryProcessChanges(@WebParam(name="processInfoWrapper") ProcessInfoWrapper processInfoWrapper)
 	{
 		TemporaryProcessDataChangingPK pk = new TemporaryProcessDataChangingPK(processInfoWrapper.getProcessId(), 
 				processInfoWrapper.getUserId(), 

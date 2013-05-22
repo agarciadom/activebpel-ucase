@@ -9,6 +9,19 @@
      <xs:element minOccurs='0' name='userId' type='xs:string'/>
     </xs:sequence>
    </xs:complexType>
+   <xs:complexType name='supervisionRuleInfoWrapper'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='location' type='xs:string'/>
+     <xs:element name='precondition' type='xs:boolean'/>
+     <xs:element name='priority' type='xs:int'/>
+     <xs:element minOccurs='0' name='processID' type='xs:string'/>
+     <xs:element minOccurs='0' name='providers' type='xs:string'/>
+     <xs:element minOccurs='0' name='recoveryStrategy' type='xs:string'/>
+     <xs:element minOccurs='0' name='timeFrame' type='xs:string'/>
+     <xs:element minOccurs='0' name='userID' type='xs:string'/>
+     <xs:element minOccurs='0' name='wscolRule' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
    <xs:complexType name='temporaryRuleChangingInfoWrapper'>
     <xs:sequence>
      <xs:element minOccurs='0' name='location' type='xs:string'/>
@@ -21,19 +34,6 @@
      <xs:element minOccurs='0' name='processID' type='xs:string'/>
      <xs:element name='processInstanceID' type='xs:long'/>
      <xs:element minOccurs='0' name='userID' type='xs:string'/>
-    </xs:sequence>
-   </xs:complexType>
-   <xs:complexType name='supervisionRuleInfoWrapper'>
-    <xs:sequence>
-     <xs:element minOccurs='0' name='location' type='xs:string'/>
-     <xs:element name='precondition' type='xs:boolean'/>
-     <xs:element name='priority' type='xs:int'/>
-     <xs:element minOccurs='0' name='processID' type='xs:string'/>
-     <xs:element minOccurs='0' name='providers' type='xs:string'/>
-     <xs:element minOccurs='0' name='recoveryStrategy' type='xs:string'/>
-     <xs:element minOccurs='0' name='timeFrame' type='xs:string'/>
-     <xs:element minOccurs='0' name='userID' type='xs:string'/>
-     <xs:element minOccurs='0' name='wscolRule' type='xs:string'/>
     </xs:sequence>
    </xs:complexType>
    <xs:complexType final='#all' name='processInfoWrapperArray'>
@@ -61,7 +61,6 @@
  <message name='ConfigurationManager_setNewProcessPriority'>
   <part name='newProcessInfo' type='tns:processInfoWrapper'></part>
  </message>
- <message name='ConfigurationManager_realeseTemporaryProcessChangesResponse'></message>
  <message name='ConfigurationManager_releaseProcess'>
   <part name='processInfo' type='tns:processInfoWrapper'></part>
  </message>
@@ -105,9 +104,7 @@
  <message name='ConfigurationManager_insertNewSupervisionRuleResponse'>
   <part name='return' type='xsd:boolean'></part>
  </message>
- <message name='ConfigurationManager_realeseTemporaryProcessChanges'>
-  <part name='processInfoWrapper' type='tns:processInfoWrapper'></part>
- </message>
+ <message name='ConfigurationManager_releaseTemporaryProcessChangesResponse'></message>
  <message name='ConfigurationManager_getTemporaryChangingRuleResponse'>
   <part name='return' type='tns:temporaryRuleChangingInfoWrapper'></part>
  </message>
@@ -138,6 +135,9 @@
  </message>
  <message name='ConfigurationManager_setTemporaryChangingRule'>
   <part name='temporaryRuleChangingInfoWrapper' type='tns:temporaryRuleChangingInfoWrapper'></part>
+ </message>
+ <message name='ConfigurationManager_releaseTemporaryProcessChanges'>
+  <part name='processInfoWrapper' type='tns:processInfoWrapper'></part>
  </message>
  <portType name='ConfigurationManager'>
   <operation name='changeSupervisionRuleParams' parameterOrder='newInvokeInfo'>
@@ -180,13 +180,13 @@
    <input message='tns:ConfigurationManager_insertNewSupervisionRule'></input>
    <output message='tns:ConfigurationManager_insertNewSupervisionRuleResponse'></output>
   </operation>
-  <operation name='realeseTemporaryProcessChanges' parameterOrder='processInfoWrapper'>
-   <input message='tns:ConfigurationManager_realeseTemporaryProcessChanges'></input>
-   <output message='tns:ConfigurationManager_realeseTemporaryProcessChangesResponse'></output>
-  </operation>
   <operation name='releaseProcess' parameterOrder='processInfo'>
    <input message='tns:ConfigurationManager_releaseProcess'></input>
    <output message='tns:ConfigurationManager_releaseProcessResponse'></output>
+  </operation>
+  <operation name='releaseTemporaryProcessChanges' parameterOrder='processInfoWrapper'>
+   <input message='tns:ConfigurationManager_releaseTemporaryProcessChanges'></input>
+   <output message='tns:ConfigurationManager_releaseTemporaryProcessChangesResponse'></output>
   </operation>
   <operation name='setNewProcessPriority' parameterOrder='newProcessInfo'>
    <input message='tns:ConfigurationManager_setNewProcessPriority'></input>
@@ -293,7 +293,7 @@
     <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
    </output>
   </operation>
-  <operation name='realeseTemporaryProcessChanges'>
+  <operation name='releaseProcess'>
    <soap:operation soapAction=''/>
    <input>
     <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
@@ -302,7 +302,7 @@
     <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>
    </output>
   </operation>
-  <operation name='releaseProcess'>
+  <operation name='releaseTemporaryProcessChanges'>
    <soap:operation soapAction=''/>
    <input>
     <soap:body namespace='http://it.polimi.monitor/configurationmanager' use='literal'/>

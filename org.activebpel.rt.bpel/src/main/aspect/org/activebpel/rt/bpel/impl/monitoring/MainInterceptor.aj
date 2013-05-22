@@ -219,7 +219,7 @@ public privileged aspect MainInterceptor {
 							+ id
 							+ ") and user '" + user + "'");
 			try {
-				this.cm.realeseTemporaryProcessChanges(new ProcessInfoWrapper(
+				this.cm.releaseTemporaryProcessChanges(new ProcessInfoWrapper(
 						null, processName, id, user));
 			} catch (RemoteException e) {
 				// TODO Auto-generated catch block
