@@ -1,13 +1,9 @@
-
 /* Copyright 2007, 2008 , DEEP SE group, Dipartimento di Elettronica e Informazione (DEI), Politecnico di Milano */
-
 
 /*  
  *  Licence: 
  *
- *
  *  This file is part of  DYNAMO .
- *
  *
  *	DYNAMO is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +17,6 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with DYNAMO.  If not, see <http://www.gnu.org/licenses/>.
- *   
  */
 
 package org.activebpel.rt.bpel.impl.monitoring;
@@ -124,15 +119,12 @@ public privileged aspect MainInterceptor {
 	private long recoveryTimePre = 0;
 	private long recoveryTimePost = 0;
 	private long timerRecoveryTime = 0;
-	//protected ProcessTimeAnalysisBean procPt;
 	
 	private static Configuration conf = new Configuration();
 	private String configHVarExample = "<webservice>"
 			+ "<wsdl>"+conf.getString("HistoricalVariable")+"</wsdl>"
 			+ "<store_wm>createHistoricalVariable</store_wm>"
-			+ "<retrieve_wm>findHistoricalVariable</retrieve_wm>";/*
-																	 * + "<processID>process</processID>" + "<assertionType>0</assertionType>" + "<location>/pippo</location>" + "<userID>luca</userID>" + "<instanceID>1233</instanceID>" + "</webservice>";
-																	 */
+			+ "<retrieve_wm>findHistoricalVariable</retrieve_wm>";
 	private WSCoLFinder finder = new WSCoLFinder();
 	private ProcessUsersList list;
 	private HashMap<String, String> processWSDLList;
@@ -198,8 +190,6 @@ public privileged aspect MainInterceptor {
 	}
 
 	pointcut processTermination(AeBusinessProcess process):
-// (execution(public void AeBusinessProcess.terminate()) || execution(protected
-// void AeBusinessProcess.processEnded(IAeFault))) && target(process);
 		execution(protected void AeBusinessProcess.processEnded(IAeFault)) && target(process);
 
 	before(AeBusinessProcess process): processTermination(process){
@@ -238,17 +228,6 @@ public privileged aspect MainInterceptor {
 		execution(public void AeBusinessProcessEngine.start()) && target(processEngine);
 
 	after(AeBusinessProcessEngine processEngine): startEngine(processEngine){
-//da eliminare
-		/*if (procPt==null){
-			ProcessTimeAnalysisBeanService procLocator=new ProcessTimeAnalysisBeanServiceLocator();
-		try {
-			this.procPt=procLocator.getProcessTimeAnalysisBeanPort();
-		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		}*/
-		
 		if (this.cm == null) {
 			try {
 				ConfigurationManagerWS cmLocator = new ConfigurationManagerWSLocator();
@@ -572,20 +551,6 @@ public privileged aspect MainInterceptor {
 								dynamoPreTime=System.currentTimeMillis()-timer;
 								return;
 							}
-
-							// In Receive/Reply/Pick actions it's obviously not
-							// logical a rebind.
-							// if(recoveryResultWrapper.isRebindService())
-							// {
-							// this.rebindService(partnerLinkName, process,
-							// newServiceEndpoint);
-							// }
-
-							// It's not an invoke action
-							// if(recoveryResultWrapper.isServiceInvocation())
-							// {
-							// //Substitute in output variable
-							// }
 						}
 					}
 				}
@@ -631,7 +596,6 @@ public privileged aspect MainInterceptor {
 	
 	
 	private void monitorInvokePostCondition(AeActivityInvokeImpl obj) {
-		//System.err.println("Search Supervisione Rules");
 		MonitoringResult monitoringResult = null;
 		Vector<Vector> allVariables = new Vector<Vector>();
 		int i, j;
@@ -1144,19 +1108,6 @@ public privileged aspect MainInterceptor {
 								this.terminateProcess((obj.getProcess()),userName);
 								return;
 							}
-
-							// In Receive/Reply/Pick actions it's obviously not
-							// logical a rebind.
-							// if(recoveryResultWrapper.isRebindService())
-							// {
-							// this.rebindService(partnerLinkName, process, newServiceEndpoint);
-							// }
-
-							// It's not an invoke action
-							// if(recoveryResultWrapper.isServiceInvocation())
-							// {
-							// //Substitute in output variable
-							// }
 						}
 					}
 				}
@@ -1413,13 +1364,6 @@ public privileged aspect MainInterceptor {
 								System.out.println("Binding service: " + recoveryResultWrapper.getNewServiceEndpoint());
 								this.rebindService(obj.getDef().getPartnerLink(), process,recoveryResultWrapper.getNewServiceEndpoint());
 							}
-
-							// Not logical to substitute the output of the service invocation, before the invoke executed by
-							// the engine
-							// if(recoveryResultWrapper.isServiceInvocation())
-							// {
-							//
-							// }
 						}
 					}
 				}
@@ -1661,20 +1605,6 @@ public privileged aspect MainInterceptor {
 								addProcessAnalysis(obj.getLocationPath());
 								return;
 							}
-
-							// In Receive/Reply/Pick actions it's obviously not
-							// logical a rebind.
-							// if(recoveryResultWrapper.isRebindService())
-							// {
-							// this.rebindService(partnerLinkName, process,
-							// newServiceEndpoint);
-							// }
-
-							// It's not an invoke action
-							// if(recoveryResultWrapper.isServiceInvocation())
-							// {
-							// //Substitute in output variable
-							// }
 						}
 					}
 				}
@@ -1969,20 +1899,6 @@ public privileged aspect MainInterceptor {
 								dynamoPreTime=System.currentTimeMillis()-timer;
 								return;
 							}
-
-							// In Receive/Reply/Pick actions it's obviously not
-							// logical a rebind.
-							// if(recoveryResultWrapper.isRebindService())
-							// {
-							// this.rebindService(partnerLinkName, process,
-							// newServiceEndpoint);
-							// }
-
-							// It's not an invoke action
-							// if(recoveryResultWrapper.isServiceInvocation())
-							// {
-							// //Substitute in output variable
-							// }
 						}
 					}
 				}
@@ -2004,12 +1920,11 @@ public privileged aspect MainInterceptor {
 			String WsColRule = (String) espressioni.get(k);
 			Vector currentVars = (Vector) allVars.get(k);
 
-			// ---------------------------------------------------------------
-			// modifico la WSColRule togliento i namespace, questa parte di
-			// codice serve
-			// perche' il monitor non li gestisce per ora quindi deve essere
-			// tolta una volta
-			// corretto il monitor
+			/*
+			 * modifico la WSColRule togliento i namespace, questa parte di
+			 * codice serve perche' il monitor non li gestisce per ora quindi
+			 * deve essere tolta una volta corretto il monitor
+			 */
 			int f = 0;
 			String tempWsCol = WsColRule + '#';
 			String var = "";
@@ -2090,12 +2005,6 @@ public privileged aspect MainInterceptor {
 							} else {
 								String part = parts[n];
 								part = part.substring(part.indexOf(":") + 1);
-								// String[] tempSubParts = parts[n].split(":");
-								// preXmlData = preXmlData + " xmlns:"
-								// + tempSubParts[0] + "=\"http://polimi\"";
-								// xmlData.replace("<input","<input xmlns:" +
-								// tempSubParts[0] + "=\"http://polimi\"");
-								// xmlData = xmlData + "<" + parts[n] + ">";
 								xmlData = xmlData + "<" + part + ">";
 							}
 						} else {
@@ -2110,8 +2019,7 @@ public privileged aspect MainInterceptor {
 								preXmlData = preXmlData + " xmlns:"
 										+ tempSubParts[0]
 										+ "=\"http://polimi\"";
-								// xmlData.replace("<input","<input xmlns:" +
-								// tempSubParts[0] + "=\"http://polimi\"");
+
 								String tempPart = parts[n];
 								tempPart.replace("[@", " ");
 								tempPart.replace("'", "\\" + '"');
@@ -2342,7 +2250,6 @@ public privileged aspect MainInterceptor {
 							"");
 			stringResult = stringResult.replace("</part></variable>", "");
 			System.out.println("2 "+stringResult);
-			// System.out.println("stringResult: " + stringResult);
 
 			if (stringResult.charAt(0) != '<') {
 				Node part = document.getFirstChild().getFirstChild();
@@ -2437,10 +2344,7 @@ public privileged aspect MainInterceptor {
 	 * Recursively it visits the structure of the BPEL variable and substitutes
 	 * the values
 	 */
-	private void substituteValuesInVariables(Node parent, XMLParser parser,
-			String xPath) {
-		// System.out.println("parent name: " + parent.getLocalName());
-
+	private void substituteValuesInVariables(Node parent, XMLParser parser, String xPath) {
 		if (parent.hasChildNodes() && (parent.getLocalName() != null)) {
 			xPath += "/" + parent.getLocalName();
 			NodeList children = parent.getChildNodes();
@@ -2462,13 +2366,4 @@ public privileged aspect MainInterceptor {
 		}
 	}
 
-	
-	
-	private void addProcessAnalysis(String x) {
-		/*try {
-			procPt.addResult(x.replaceAll("@", ""), dynamoPreTime, dynamoPostTime, (System.currentTimeMillis()-timerGlobal), monitoringTimePre, recoveryTimePre,monitoringTimePost, recoveryTimePost);
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}*/
-	}
 }
