@@ -37,6 +37,7 @@
     <module>it.polimi.monitor.configurationmanager</module>
     <module>it.polimi.monitor.monitorlogger</module>
     <module>it.polimi.historicalvars</module>
+    <module>it.polimi.wscol</module>
     <module>it.polimi.dynamo.war</module>
   </modules>
 

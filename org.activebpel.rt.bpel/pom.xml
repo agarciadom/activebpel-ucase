@@ -26,75 +26,24 @@
       <artifactId>wsio</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <dependency>
+
+   <dependency>
       <groupId>javax.activation</groupId>
       <artifactId>activation</artifactId>
       <version>1.0.2</version>
       <scope>runtime</scope>
     </dependency>
 
-    <!-- Dynamo uses AspectJ and an ANTLR-based parser for WSCoL -->
+    <!-- Dynamo -->
+    <dependency>
+      <groupId>it.polimi</groupId>
+      <artifactId>wscol</artifactId>
+      <version>${project.version}</version>
+    </dependency>
     <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>aspectjrt</artifactId>
         <version>1.6.11</version>
-    </dependency>
-
-    <!-- More Dynamo dependencies -->
-    <dependency>
-        <groupId>antlr</groupId>
-        <artifactId>antlr</artifactId>
-        <version>2.7.7</version>
-    </dependency>
-    <dependency>
-        <groupId>edu.indiana.extreme</groupId>
-        <artifactId>xsul</artifactId>
-        <version>2.7.4</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.axis</groupId>
-        <artifactId>axis</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-jaxrpc_1.1_spec</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>saxon</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>net.sf.saxon</groupId>
-      <artifactId>saxon-dom</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>javax.mail</groupId>
-        <artifactId>mail</artifactId>
-        <version>1.4.7</version>
-    </dependency>
-    <dependency>
-        <groupId>wsdl4j</groupId>
-        <artifactId>wsdl4j-debug</artifactId>
-        <version>1.6.2</version>
-    </dependency>
-
-    <!-- For Dynamo -->
-    <dependency>
-        <groupId>org.apache.xmlbeans</groupId>
-        <artifactId>xmlbeans-xpath</artifactId>
-        <version>2.3.0</version>
-    </dependency>
-    <dependency>
-        <groupId>org.apache.xmlbeans</groupId>
-        <artifactId>xmlbeans</artifactId>
-        <version>2.3.0</version>
-    </dependency>
-
-  <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>4.11</version>
-        <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -114,37 +63,6 @@
                           <source>1.5</source>
                           <target>1.5</target>
                       </configuration>
-                  </execution>
-              </executions>
-          </plugin>
-          <plugin>
-	      <groupId>org.codehaus.mojo</groupId>
-	      <artifactId>antlr-maven-plugin</artifactId>
-              <version>2.2</version>
-              <configuration>
-                  <grammars>WSCoL_2.g</grammars>
-              </configuration>
-              <executions>
-	          <execution>
-	              <goals>
-		          <goal>generate</goal>
-	              </goals>
-	          </execution>
-	      </executions>
-          </plugin>
-          <plugin>
-              <groupId>org.codehaus.mojo</groupId>
-              <artifactId>axistools-maven-plugin</artifactId>
-              <version>1.4</version>
-              <configuration>
-                  <packageSpace>it.polimi.monitor.stubs</packageSpace>
-                  <subPackageByFileName>true</subPackageByFileName>
-              </configuration>
-              <executions>
-                  <execution>
-                      <goals>
-                          <goal>wsdl2java</goal>
-                      </goals>
                   </execution>
               </executions>
           </plugin>

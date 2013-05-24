@@ -9,7 +9,6 @@
 
     <groupId>it.polimi.monitor</groupId>
     <artifactId>configurationmanager</artifactId>
-    <version>4.1-uca15-dynamo1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>Dynamo::JBoss WS::Configuration Manager</name>
 
