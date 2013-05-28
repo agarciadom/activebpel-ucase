@@ -1,5 +1,7 @@
 /*
  Copyright 2007 Politecnico di Milano
+ Copyright 2013 Antonio García-Domínguez (rewrite on top of WSDL4J and XMLBeans)
+
  This file is part of Dynamo.
 
  Dynamo is free software; you can redistribute it and/or modify
@@ -14,21 +16,22 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.invoker;
 
 import it.polimi.monitor.invoker.data.OutXMLVariable;
 import it.polimi.monitor.invoker.data.XMLVariable;
-import it.polimi.monitor.invoker.exceptions.ServiceWSDLExcpetion;
-import it.polimi.monitor.invoker.service.Element;
+import it.polimi.monitor.invoker.exceptions.ServiceWSDLException;
 import it.polimi.monitor.invoker.service.ServiceWSDL;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.Map;
+import java.util.logging.Logger;
 
+import javax.wsdl.Part;
+import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.Name;
@@ -39,249 +42,181 @@ import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 import javax.xml.soap.SOAPMessage;
-import javax.xml.soap.SOAPPart;
 import javax.xml.ws.Dispatch;
 import javax.xml.ws.Service;
 
-import xsul.wsdl.WsdlMessagePart;
+import org.apache.xmlbeans.SchemaLocalElement;
+import org.apache.xmlbeans.SchemaParticle;
+import org.apache.xmlbeans.SchemaType;
 
-public class Invoker
-{
-        private XMLVariable inVariable;
+public class Invoker {
+	private static final String NS_PREFIX = "ser";
+	private static final Logger LOGGER = Logger.getLogger(Invoker.class.getCanonicalName());
 
-        private ServiceWSDL serviceWsdl;
+	public String invoke(String wsdlLocation, String operationName, String xmlInVariable) {
+		// FIXME: Dynamo only works with doc/literal (one part with the 'element' attribute). It does not work with rpc/lit.
+		try {
+			final ServiceWSDL serviceWsdl = new ServiceWSDL(wsdlLocation);
 
-        private SOAPFactory soapFactory;
+			final SOAPMessage request = MessageFactory.newInstance().createMessage();
+			final SOAPBodyElement bodyElement = createSOAPBody(operationName, serviceWsdl, request);
+			final QName serviceName = populateBody(operationName, xmlInVariable, serviceWsdl, bodyElement);
+			final QName portName = new QName(serviceName.getNamespaceURI(), serviceWsdl.getPortName());
 
-        public Invoker()
-        {
+			final String outVariable = invokeService(wsdlLocation, serviceName, portName, request);
+			if (outVariable != null) {
+				return outVariable;
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			LOGGER.severe(e.getLocalizedMessage());
+		}
+		return null;
+	}
 
-        }
+	private QName populateBody(String operationName, String xmlInVariable,
+			final ServiceWSDL serviceWsdl, final SOAPBodyElement bodyElement)
+			throws ServiceWSDLException, SOAPException {
+		final QName serviceName = serviceWsdl.getServiceName();
+		final QName messageName = serviceWsdl.getInMessageName(operationName);
+		final Map<String, Part> parts = serviceWsdl.getMessageParts(messageName);
+		final XMLVariable inVariable = new XMLVariable(xmlInVariable);
+		for (Map.Entry<String, Part> partEntry : parts.entrySet()) {
+			populatePart(serviceWsdl, bodyElement, serviceName, inVariable,
+					partEntry.getKey(), partEntry.getValue());
+		}
+		return serviceName;
+	}
 
-        @SuppressWarnings("unchecked")
-        public String Invoke(String wsdlLocation, String operationName, String xmlInVariable)
-        {
-//		long start = System.currentTimeMillis();
+	private void populatePart(final ServiceWSDL serviceWsdl,
+			final SOAPBodyElement bodyElement, final QName serviceName,
+			final XMLVariable inVariable, final String partName,
+			final Part messagePart) throws ServiceWSDLException, SOAPException {
+		final QName nameElement = getPartElementName(serviceWsdl, serviceName, messagePart);
+		final SchemaType type = getPartType(serviceWsdl, messagePart);
 
-                try
-                {
-                        String query = "/InvokeServiceParameters";
+		final SOAPElement symbol = bodyElement.addChildElement(nameElement);
+		final String partQuery = "/InvokeServiceParameters/" + partName;
+		if (isComplex(type)) {
+			addSOAPElement(symbol, type, partQuery, inVariable);
+		} else {
+			final String value = inVariable.GetValue(partQuery);
+			if (value.equals("")) {
+				LOGGER.warning("Value of " + partQuery + " is null.");
+				symbol.setAttribute("xsi:nil", "true");
+			} else {
+				symbol.addTextNode(value);
+			}
+		}
+	}
 
-                        Service service;
+	private SOAPBodyElement createSOAPBody(String operationName,
+			final ServiceWSDL serviceWsdl, final SOAPMessage request)
+			throws SOAPException {
+		final SOAPEnvelope envelope = request.getSOAPPart().getEnvelope();
+		final SOAPBody body = envelope.getBody();
+		envelope.addNamespaceDeclaration("xsi", XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
 
-                        QName portName;
+		final Name bodyName = SOAPFactory.newInstance().createName(operationName, NS_PREFIX, serviceWsdl.GetTargetNamespace());
+		final SOAPBodyElement bodyElement = body.addBodyElement(bodyName);
+		return bodyElement;
+	}
 
-                        this.inVariable = new XMLVariable(xmlInVariable);
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private String invokeService(String wsdlLocation, final QName serviceName,
+			final QName portName, final SOAPMessage request)
+			throws MalformedURLException, SOAPException {
+		final Service service = Service.create(new URL(wsdlLocation), serviceName);
+		final Dispatch dispatch = service.createDispatch(portName, SOAPMessage.class, Service.Mode.MESSAGE);
+		final SOAPMessage response = (SOAPMessage) dispatch.invoke(request);
+		final String outVariable = new OutXMLVariable().GetXMLVariable(response.getSOAPBody());
+		LOGGER.info("Response: " + outVariable);
+		return outVariable;
+	}
 
-                        this.serviceWsdl = new ServiceWSDL(wsdlLocation);
-                        URL url = new URL(wsdlLocation);
-                        QName serviceName = new QName(this.serviceWsdl.GetTargetNamespace(), this.serviceWsdl.GetServiceName());
-                        portName = new QName(this.serviceWsdl.GetTargetNamespace(), this.serviceWsdl.GetPortName());
+	private SchemaType getPartType(final ServiceWSDL serviceWsdl,
+			final Part messagePart) throws ServiceWSDLException {
+		SchemaType type;
+		if (serviceWsdl.isDocumentStyle()) {
+			type = serviceWsdl.getElement(messagePart.getElementName()).getType();
+		} else {
+			type = serviceWsdl.getType(messagePart.getTypeName());
+		}
+		return type;
+	}
 
-                        service = Service.create(url, serviceName);
+	private boolean isComplex(final SchemaType type) {
+		return type.getContentType() != SchemaType.NOT_COMPLEX_TYPE;
+	}
 
-                        Dispatch dispatch = service.createDispatch(portName, SOAPMessage.class, Service.Mode.MESSAGE);
+	private QName getPartElementName(ServiceWSDL serviceWsdl,
+			final QName serviceName, final Part messagePart) {
+		// We assume that the service is WS-I compliant: doc/lit uses 'element', rpc/lit uses 'type'
+		if (serviceWsdl.isDocumentStyle()) {
+			return messagePart.getElementName();
+		} else {
+			// Wrapper element, according to WS-I spec
+			return new QName(serviceName.getNamespaceURI(), serviceName.getLocalPart() + "Request");
+		}
+	}
 
-                        MessageFactory mf = MessageFactory.newInstance();
+	private void addSOAPElement(SOAPElement parentElement, SchemaType type,
+			String queryXPath, XMLVariable inVariable) {
+		try {
+			processParticle(parentElement, queryXPath, type.getContentModel(), inVariable);
+		} catch (Exception e) {
+			LOGGER.severe(e.getLocalizedMessage());
+		}
+	}
 
-                        SOAPMessage request = mf.createMessage();
+	private void processParticle(SOAPElement parentElement, String queryXPath,
+			SchemaParticle particle, XMLVariable inVariable)
+			throws SOAPException {
+		switch (particle.getParticleType()) {
+		case SchemaParticle.ELEMENT:
+			processElement(parentElement, queryXPath, particle, inVariable);
+			break;
+		case SchemaParticle.ALL:
+		case SchemaParticle.SEQUENCE:
+			processSequence(particle, parentElement, queryXPath, inVariable);
+			break;
+		default:
+			throw new IllegalArgumentException(
+					"Cannot understand particles of type "
+							+ particle.getParticleType());
+		}
+	}
 
-                        SOAPPart part = request.getSOAPPart();
-                        SOAPEnvelope envelope = part.getEnvelope();
-                        //envelope.addNamespaceDeclaration("ser", this.serviceWsdl.GetTargetNamespace());
-                        envelope.addNamespaceDeclaration("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+	private void processElement(SOAPElement parentElement, String queryXPath,
+			SchemaParticle particle, XMLVariable inVariable)
+			throws SOAPException {
+		final SchemaLocalElement element = (SchemaLocalElement) particle;
+		final QName elementQName = new QName(element.getName().getNamespaceURI(), element.getName().getLocalPart());
 
-                        SOAPBody body = envelope.getBody();
-                        this.soapFactory = SOAPFactory.newInstance();
+		final SOAPElement childElement = parentElement.addChildElement(elementQName);
+		final String query = queryXPath + "/*[local-name(.)='" + elementQName.getLocalPart() + "']";
 
-                        final String namespacePrefix = "ser";
-                        Name bodyName = this.soapFactory.createName(operationName, namespacePrefix, this.serviceWsdl.GetTargetNamespace());
-                        SOAPBodyElement bodyElement = body.addBodyElement(bodyName);
+		if (element.getType().getContentType() != SchemaType.SIMPLE_CONTENT) {
+			// FIXME: this doesn't consider the fact that some .wsdl files may
+			// have elements with attributes and so on.
+			addSOAPElement(childElement, element.getType(), query, inVariable);
+		} else {
+			String value = inVariable.GetValue(query);
+			if (value.equals("")) {
+				LOGGER.warning("Value of " + query + " is null.");
+				childElement.setAttribute("xsi:nil", "true");
+			} else {
+				childElement.addTextNode(value);
+			}
+		}
+	}
 
-                        String messageName = this.serviceWsdl.RetreiveInMessageName(operationName);
-
-                        Iterator<Element> parts = this.serviceWsdl.GetMessageParts(messageName);
-
-                        Element messagePart;
-
-                        if(this.serviceWsdl.getSoapBindingType().equals("document"))
-                        {
-                                messagePart = parts.next();
-
-                                parts = this.serviceWsdl.GetComplexTypeDefinition(messagePart.GetType()).iterator();
-
-                                query += "/" + messagePart.GetType();
-                        }
-
-                        while(parts.hasNext())
-                        {
-                                messagePart = parts.next();
-
-                                Name child;
-
-                                if(this.serviceWsdl.isSchemaQualified() && this.serviceWsdl.getSoapBindingType().equals("document"))
-                                {
-                                        child = this.soapFactory.createName(messagePart.GetName(), "ser", this.serviceWsdl.getSchemaTargetNamespace());
-                                }
-                                else if(this.serviceWsdl.isSchemaQualified() && this.serviceWsdl.getSoapBindingType().equals("rpc"))
-                                {
-                                        child = this.soapFactory.createName(messagePart.GetName(), null, null);
-                                }
-                                else
-                                {
-                                        child = this.soapFactory.createName(messagePart.GetName());
-                                }
-
-                                SOAPElement symbol = bodyElement.addChildElement(child);
-
-                                if(this.isComplexType(messagePart.GetType()))
-                                {
-                                        this.addSOAPElement(symbol, messagePart.GetType(), query + "/" + messagePart.GetName());
-                                }
-                                else
-                                {
-                                        String value = this.inVariable.GetValue(query + "/" + messagePart.GetName());
-
-                                        if(value.equals(""))
-                                        {
-                                                System.out.println("Value of " + query + "/" + messagePart.GetName() + " is null.");
-//						symbol.addAttribute(new QName("http://www.w3.org/2001/XMLSchema-instance", "nil"), "true");
-                                                symbol.setAttribute("xsi:nil", "true");
-                                        }
-                                        else
-                                                symbol.addTextNode(value);
-                                }
-                        }
-
-//			System.out.println("SOAP:" + request.getSOAPBody());
-
-//			long stop = System.currentTimeMillis();
-//			System.out.println("Start: " + start + " | Stop: " + stop + " | time to complete: " + (stop - start));
-
-                        SOAPMessage response = (SOAPMessage) dispatch.invoke(request);
-
-//			long start_post = System.currentTimeMillis();
-
-                        String outVariable = new OutXMLVariable().GetXMLVariable(response.getSOAPBody());
-
-//			long stop_post = System.currentTimeMillis();
-//			System.out.println("Start post: " + start_post + " | Stop_post: " + stop_post + " | time to complete without invoke: " + ((stop - start)+(stop_post - start_post)));
-
-                        System.out.println("Response: " + outVariable);
-
-                        if(outVariable != null)
-                        {
-                                return outVariable;
-                        }
-                        else
-                        {
-                                return null;
-                        }
-                }
-                catch (ServiceWSDLExcpetion e)
-                {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                }
-                catch (MalformedURLException e)
-                {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                }
-                catch (SOAPException e)
-                {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                }
-                catch (Throwable e)
-                {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                }
-
-                return null;
-        }
-
-        private void addSOAPElement(SOAPElement parentElement, String parentType, String queryXPath)
-        {
-                Element temp;
-                String query;
-                SOAPElement childElement;
-
-                try
-                {
-                        Vector <Element> complexTypeElements = this.serviceWsdl.GetComplexTypeDefinition(parentType);
-
-                        for(int i = 0; i < complexTypeElements.size(); i++)
-                        {
-                                temp = (Element) complexTypeElements.elementAt(i);
-
-//				Name childName = this.soapFactory.createName(temp.GetName());
-                                Name childName;
-
-                                if(this.serviceWsdl.isSchemaQualified())
-                                {
-                                        childName = this.soapFactory.createName(temp.GetName(), "ser", this.serviceWsdl.getSchemaTargetNamespace());
-                                }
-                                else
-                                {
-                                        childName = this.soapFactory.createName(temp.GetName());
-                                }
-
-                                childElement = parentElement.addChildElement(childName);
-
-                                if(isComplexType(temp.GetType()))
-                                {
-                                        query = queryXPath + "/" + temp.GetName();
-                                        addSOAPElement(childElement, temp.GetType(), query);
-                                }
-                                else
-                                {
-                                        query = queryXPath + "/" + temp.GetName();
-
-//					childElement.addTextNode(this.inVariable.GetValue(query));
-                                        String value = this.inVariable.GetValue(query);
-
-                                        if(value.equals(""))
-                                        {
-                                                System.out.println("Value of " + query + " is null.");
-//						childElement.addAttribute(new QName("http://www.w3.org/2001/XMLSchema-instance", "nil"), "true");
-                                                childElement.setAttribute("xsi:nil", "true");
-                                        }
-                                        else
-                                                childElement.addTextNode(value);
-                                }
-                        }
-                }
-                catch (SOAPException e)
-                {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                }
-                catch (ServiceWSDLExcpetion e)
-                {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                }
-        }
-
-        private boolean isComplexType(WsdlMessagePart mp)
-        {
-                String partType = mp.getPartType().getLocalPart();
-
-                return !(partType.equals("int") ||
-                                partType.equals("string") ||
-                                partType.equals("boolean") ||
-                                partType.equals("float"));
-        }
-
-        private boolean isComplexType(String type)
-        {
-                return !(type.contains("int") ||
-                                type.contains("string") ||
-                                type.contains("boolean") ||
-                                type.contains("float") ||
-                                type.contains("double") ||
-                                type.contains("long"));
-        }
+	private void processSequence(SchemaParticle particle,
+			SOAPElement parentElement, String queryXPath, XMLVariable inVariable)
+			throws SOAPException {
+		for (SchemaParticle child : particle.getParticleChildren()) {
+			processParticle(parentElement, queryXPath, child, inVariable);
+		}
+	}
 }

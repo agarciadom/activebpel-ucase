@@ -111,7 +111,7 @@ public class AtomicRecoveryAction
 	public static RecoveryResult Retry(ServiceInvocationParams serviceParams)
 	{
 		Invoker invoker = new Invoker();
-		String serviceInvokeResponse = invoker.Invoke(serviceParams.getWsdlURL(), serviceParams.getOperation(), serviceParams.getInput());
+		String serviceInvokeResponse = invoker.invoke(serviceParams.getWsdlURL(), serviceParams.getOperation(), serviceParams.getInput());
 
 		if((serviceInvokeResponse != null) && (!serviceInvokeResponse.equals("")))
 		{
@@ -134,7 +134,7 @@ public class AtomicRecoveryAction
 		if(toInvoke)
 		{
 			Invoker invoker = new Invoker();
-			serviceInvokeResponse = invoker.Invoke(newServiceURI, serviceParams.getOperation(), serviceParams.getInput());
+			serviceInvokeResponse = invoker.invoke(newServiceURI, serviceParams.getOperation(), serviceParams.getInput());
 			recoveryResult.setThereInokeActivity();
 			recoveryResult.setServiceReinvocationOutput(serviceInvokeResponse);
 		}
@@ -192,7 +192,7 @@ public class AtomicRecoveryAction
 	{
 		Invoker invoker = new Invoker();
 		
-		String serviceInvokeResponse = invoker.Invoke(serviceParams.getWsdlURL(), serviceParams.getOperation(), serviceParams.getInput());
+		String serviceInvokeResponse = invoker.invoke(serviceParams.getWsdlURL(), serviceParams.getOperation(), serviceParams.getInput());
 		
 		if((serviceInvokeResponse != null) && (!serviceInvokeResponse.equals("")))
 		{
@@ -211,7 +211,7 @@ public class AtomicRecoveryAction
 	{
 		Invoker invoker = new Invoker();
 		
-		String serviceInvokeResponse = invoker.Invoke(serviceParams.getWsdlURL(), serviceParams.getOperation(), serviceParams.getInput());
+		String serviceInvokeResponse = invoker.invoke(serviceParams.getWsdlURL(), serviceParams.getOperation(), serviceParams.getInput());
 		
 		try
 		{
@@ -248,7 +248,7 @@ public class AtomicRecoveryAction
 	{
 		Invoker invoker = new Invoker();
 		
-		String serviceInvocationResponse = invoker.Invoke(bpelWSDL, eventHandlerName, params);
+		String serviceInvocationResponse = invoker.invoke(bpelWSDL, eventHandlerName, params);
 
 		RecoveryResult recoveryResult = new RecoveryResult(true, "Succesfully executed: call(" + bpelWSDL + "," +
 																									eventHandlerName + "," +

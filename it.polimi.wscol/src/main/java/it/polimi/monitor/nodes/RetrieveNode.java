@@ -192,7 +192,7 @@ public class RetrieveNode extends Variable {
 		String input=costructMessage();
 		Invoker invoker=new Invoker();
 		System.err.println(input);
-		String out=invoker.Invoke(wsdl, retrieve_wm, input);
+		String out=invoker.invoke(wsdl, retrieve_wm, input);
 		if (out==null)
 			throw new DataException("Data from external variable not found","null","");
 		parseXml(out);	

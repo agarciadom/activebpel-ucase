@@ -65,7 +65,7 @@ public class ExtVarNode extends Variable {
 		outs.evaluate(inputMonitor,  aliases,  tempAliases);
 		xpath=outs.getMonitoringValue();
 		Invoker invoker=new Invoker();
-		String out=invoker.Invoke((String)wsdl.getMonitoringValue(), (String)wm.getMonitoringValue(), (String)ins.getMonitoringValue());
+		String out=invoker.invoke((String)wsdl.getMonitoringValue(), (String)wm.getMonitoringValue(), (String)ins.getMonitoringValue());
 		this.parseXml(out);
 		this.getXmlCursor(xpath);
 	}

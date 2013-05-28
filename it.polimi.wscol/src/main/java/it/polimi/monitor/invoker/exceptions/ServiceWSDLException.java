@@ -18,7 +18,7 @@
 
 package it.polimi.monitor.invoker.exceptions;
 
-public class ServiceWSDLExcpetion extends Exception
+public class ServiceWSDLException extends Exception
 {
         /**
          *
@@ -26,7 +26,7 @@ public class ServiceWSDLExcpetion extends Exception
         private static final long serialVersionUID = 1L;
         private String message;
 
-        public ServiceWSDLExcpetion(String message)
+        public ServiceWSDLException(String message)
         {
                 this.message = message;
         }

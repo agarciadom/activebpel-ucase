@@ -220,7 +220,7 @@ public class StoreNode extends NodeWSCoL {
         private boolean invokeService(String aliasName,String value) throws WSCoLException {
                 String input=costructMessage(aliasName, value);
                 Invoker invoke=new Invoker();
-                String out= invoke.Invoke(wsdl, store_wm, input);
+                String out= invoke.invoke(wsdl, store_wm, input);
                 parseXml(out);
                 return Boolean.parseBoolean(this.extractValue("Response/return"));
         }
@@ -262,7 +262,7 @@ public class StoreNode extends NodeWSCoL {
                 for(String i :values) {
                         String input=costructMessage(aliasName, i);
                         Invoker invoke=new Invoker();
-                        String out= invoke.Invoke(wsdl, store_wm, input);
+                        String out= invoke.invoke(wsdl, store_wm, input);
                         parseXml(out);
                         if ( Boolean.parseBoolean(this.extractValue("Response/result"))==false)
                                 return false;

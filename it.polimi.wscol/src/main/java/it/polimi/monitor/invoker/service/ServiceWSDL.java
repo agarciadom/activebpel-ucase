@@ -1,5 +1,7 @@
 /*
  Copyright 2007 Politecnico di Milano
+ Copyright 2013 Antonio García-Domínguez (University of Cádiz)
+
  This file is part of Dynamo.
 
  Dynamo is free software; you can redistribute it and/or modify
@@ -14,385 +16,164 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.invoker.service;
 
-import it.polimi.monitor.invoker.exceptions.ServiceWSDLExcpetion;
+import it.polimi.monitor.invoker.exceptions.ServiceWSDLException;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.Map;
+import java.util.logging.Logger;
 
+import javax.wsdl.Binding;
+import javax.wsdl.Definition;
+import javax.wsdl.Operation;
+import javax.wsdl.Part;
+import javax.wsdl.Port;
+import javax.wsdl.Service;
+import javax.wsdl.Types;
+import javax.wsdl.extensions.schema.Schema;
+import javax.wsdl.extensions.soap.SOAPBinding;
+import javax.wsdl.extensions.soap12.SOAP12Binding;
+import javax.wsdl.factory.WSDLFactory;
 import javax.xml.namespace.QName;
 
-import org.xmlpull.v1.builder.XmlElement;
-
-import xsul.wsdl.WsdlBinding;
-import xsul.wsdl.WsdlBindingOperation;
-import xsul.wsdl.WsdlDefinitions;
-import xsul.wsdl.WsdlException;
-import xsul.wsdl.WsdlMessage;
-import xsul.wsdl.WsdlMessagePart;
-import xsul.wsdl.WsdlPortType;
-import xsul.wsdl.WsdlResolver;
-import xsul.wsif.WSIFException;
-import xsul.wsif.WSIFMessage;
-import xsul.wsif.WSIFOperation;
-import xsul.wsif.WSIFPort;
-import xsul.wsif.WSIFService;
-import xsul.wsif.WSIFServiceFactory;
-import xsul.wsif.spi.WSIFProviderManager;
-
-public class ServiceWSDL
-{
-        private String wsdlLocation;
-
-    private WSIFPort port;
-    private WSIFService service;
-
-    private WsdlDefinitions definitions;
-    private WsdlBinding binding;
-
-    private String soapBindingType;
-    private String schemaTargetNamespace;
-
-    private HashMap<String, Vector<Element>> types;
-    private HashMap<String, Vector<Element>> messages;
-
-    private boolean schemaQualified = false;
-
-    public ServiceWSDL(String wsdl) throws ServiceWSDLExcpetion
-        {
-                this.wsdlLocation = wsdl;
-
-        WSIFProviderManager.getInstance().addProvider(new xsul.wsif_xsul_soap_http.Provider());
-
-        System.err.println("Loading Service WSDL from " + this.wsdlLocation);
-
-        try
-        {
-                        this.definitions = WsdlResolver.getInstance().loadWsdl(new URI(this.wsdlLocation));
-
-                        WSIFServiceFactory wsf = WSIFServiceFactory.newInstance();
-                        this.service = wsf.getService(definitions);
-
-                        /*if only one port type. If there is more than one specify the one desired. not supported yet*/
-                        this.port = this.service.getPort();
-
-                        QName bindingQN = this.port.getWsdlServicePort().getBinding();
-                        this.binding = this.definitions.getBinding(bindingQN.getLocalPart());
-                        XmlElement subBinding = binding.findElementByName("binding");
-
-                        this.soapBindingType = subBinding.attribute("style").getValue();
-//			System.out.println("SOAP Binding Style: " + this.soapBindingType);
-
-                        this.types = new HashMap<String, Vector<Element>>();
-                        this.LoadWsdlTypes();
-
-                        this.messages = new HashMap<String, Vector<Element>>();
-                        this.LoadWsdlMessages();
-        }
-        catch (WsdlException e)
-        {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                }
-        catch (WSIFException e)
-        {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                }
-        catch (URISyntaxException e)
-        {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                }
-        }
-
-    public String GetServiceName()
-    {
-        return this.port.getWsdlServicePort().getService().attribute("name").getValue();
-    }
-
-    public String GetTargetNamespace()
-    {
-        return this.definitions.attribute("targetNamespace").getValue();
-    }
-
-    public String GetTargetNamespacePrefix()
-    {
-        return this.definitions.attribute("targetNamespace").getValue();
-    }
-
-    public String GetPortName()
-    {
-        return this.port.getWsdlServicePort().getPortName();
-    }
-
-    /**
-     *
-     * @param messageName
-     * @return Iterator<Element>
-     * @throws ServiceWSDLExcpetion
-     */
-    public Iterator<Element> GetMessageParts(String messageName) throws ServiceWSDLExcpetion
-    {
-        if(!this.messages.containsKey(messageName))
-        {
-                throw new ServiceWSDLExcpetion("No '" + messageName + "' message found.");
-        }
-
-        return this.messages.get(messageName).iterator();
-    }
-
-    public String RetreiveInMessageName(String operation)
-    {
-        if(this.binding.getOperation(operation).lookupOperation().getInput().getInputName() != null)
-        {
-                return this.binding.getOperation(operation).lookupOperation().getInput().getInputName();
-        }
-
-        WsdlPortType portType = this.definitions.getPortType(this.binding.getPortType().getLocalPart());
-
-        if(portType.getOperation(operation).getInput().getInputName() != null)
-        {
-                return portType.getOperation(operation).getInput().getInputName();
-        }
-
-        return portType.getOperation(operation).getInput().getMessage().getLocalPart();
-    }
-
-    public String RetreiveOutMessageName(String operation)
-    {
-        if(this.binding.getOperation(operation).lookupOperation().getOutput().getOutputName() != null)
-        {
-                return this.binding.getOperation(operation).lookupOperation().getOutput().getOutputName();
-        }
-
-        WsdlPortType portType = this.definitions.getPortType(this.binding.getPortType().getLocalPart());
-
-        if(portType.getOperation(operation).getOutput().getOutputName() != null)
-        {
-                return portType.getOperation(operation).getOutput().getOutputName();
-        }
-
-        return portType.getOperation(operation).getOutput().getMessage().getLocalPart();
-    }
-
-    public Vector<Element> GetComplexTypeDefinition(String name) throws ServiceWSDLExcpetion
-    {
-        if(name.equals("") || (name == null))
-        {
-                throw new ServiceWSDLExcpetion("Input param 'name' null or ''.");
-        }
-
-        if(!this.types.containsKey(name))
-        {
-                throw new ServiceWSDLExcpetion("No '" + name + "' type found.");
-        }
-
-        return this.types.get(name);
-    }
-
-    private void LoadWsdlTypes() throws ServiceWSDLExcpetion
-    {
-        Vector<Element> typeElementList;
-        String typeName = null;
-
-                //Retreiving 'types' defined in the WSDL
-                XmlElement types = definitions.getTypes();
-
-                //if(!types.hasChildren())
-                if(types == null)
-                {
-                        this.types = null;
-
-                        return;
-                }
-
-                Iterator schemas = types.children();
-                Iterator elements;
-                Iterator sequences;
-                XmlElement schema;
-                XmlElement element;
-                XmlElement sequence;
-                XmlElement sequenceElement;
-                Object temp;
-                int i = 1;
-
-                while(schemas.hasNext())
-                {
-                        temp = schemas.next();
-
-                        if(temp instanceof XmlElement)
-                        {
-//				System.out.println("Schema: " + i++);
-
-                                schema = (XmlElement) temp;
-
-                                if(schema.attribute("elementFormDefault") != null)
-                                {
-                                        if(schema.attribute("elementFormDefault").getValue().equals("qualified"))
-                                        {
-                                                this.schemaQualified = true;
-                                                this.schemaTargetNamespace = schema.attribute("targetNamespace").getValue();
-                                        }
-
-//					System.out.println("schema TN: " + this.schemaTargetNamespace);
-                                }
-
-                                elements = schema.children();
-
-                                while(elements.hasNext())
-                                {
-                                        temp = elements.next();
-
-                                        if(temp instanceof XmlElement)
-                                        {
-                                                element = (XmlElement) temp;
-
-                                                if(element.getName().equals("element"))
-                                                {
-                                                        typeName = element.attribute("name").getValue();
-
-                                                        Iterator iterator = element.children();
-
-                                                        while(iterator.hasNext())
-                                                        {
-                                                                temp = iterator.next();
-
-                                                                if(temp instanceof XmlElement)
-                                                                {
-                                                                        element = (XmlElement) temp;
-
-                                                                        if(element.getName().equals("complexType"))
-                                                                        {
-                                                                                break;
-                                                                        }
-                                                                }
-                                                        }
-                                                }
-                                                if(element.getName().equals("complexType"))
-                                                {
-                                                        if(element.attribute("name") != null)
-                                                        {
-                                                                typeName = element.attribute("name").getValue();
-                                                        }
-
-                                                        typeElementList = new Vector<Element>();
-                                                        sequences = element.children();
-
-                                                        Element typeElement;
-
-                                                        while(sequences.hasNext())
-                                                        {
-                                                                temp = sequences.next();
-
-                                                                if(temp instanceof XmlElement)
-                                                                {
-                                                                        sequence = (XmlElement) temp;
-
-                                                                        Iterator iterator = sequence.children();
-
-                                                                        while(iterator.hasNext())
-                                                                        {
-                                                                                temp = iterator.next();
-
-                                                                                if(temp instanceof XmlElement)
-                                                                                {
-                                                                                        sequenceElement = (XmlElement) temp;
-
-                                                                                        typeElement = new Element();
-
-                                                                                        typeElement.SetName(sequenceElement.attribute("name").getValue());
-                                                                                        typeElement.SetType(sequenceElement.attribute("type").getValue());
-
-                                                                                        typeElementList.add(typeElement);
-                                                                                }
-                                                                        }
-                                                                }
-
-                                                                this.types.put(typeName, typeElementList);
-                                                        }
-                                                }
-                                        }
-                                }
-                        }
-                }
-    }
-
-    private void LoadWsdlMessages()
-    {
-        Object object;
-        WsdlMessage message;
-        WsdlMessagePart messagePart;
-        Iterator messageParts;
-        Vector<Element> wsdlMessageParts;
-        Element wsdlMessagePart;
-
-        Iterator messages = this.definitions.getMessages().iterator();
-
-        while(messages.hasNext())
-        {
-                object = messages.next();
-
-                if(object instanceof WsdlMessage)
-                {
-                        message = (WsdlMessage) object;
-
-                        wsdlMessageParts = new Vector<Element>();
-
-//                      System.out.println(message.getMessageName());
-                        messageParts = message.getParts().iterator();
-
-                        while(messageParts.hasNext())
-                        {
-                                object = messageParts.next();
-
-                                if(object instanceof WsdlMessagePart)
-                                {
-                                        messagePart = (WsdlMessagePart) object;
-
-                                        wsdlMessagePart = new Element();
-
-                                        if(this.soapBindingType.equals("rpc"))
-                                        {
-                                                wsdlMessagePart.SetName(messagePart.getPartName());
-//                                              System.out.println(messagePart.getPartName());
-                                                wsdlMessagePart.SetType(messagePart.getPartType().getLocalPart());
-
-                                                wsdlMessageParts.add(wsdlMessagePart);
-                                        }
-                                        if(this.soapBindingType.equals("document"))
-                                        {
-                                                wsdlMessagePart.SetName(messagePart.getPartName());
-                                                wsdlMessagePart.SetType(messagePart.getPartElement().getLocalPart());
-
-                                                wsdlMessageParts.add(wsdlMessagePart);
-                                        }
-                                }
-                        }
-
-                        this.messages.put(message.getMessageName(), wsdlMessageParts);
-                }
-        }
-    }
-
-        public String getSoapBindingType()
-        {
-                return soapBindingType;
-        }
-
-        public boolean isSchemaQualified()
-        {
-                return schemaQualified;
-        }
-
-        public String getSchemaTargetNamespace()
-        {
-                return schemaTargetNamespace;
-        }
+import org.apache.xmlbeans.SchemaGlobalElement;
+import org.apache.xmlbeans.SchemaType;
+import org.apache.xmlbeans.SchemaTypeSystem;
+import org.apache.xmlbeans.XmlBeans;
+import org.apache.xmlbeans.XmlObject;
+import org.apache.xmlbeans.XmlOptions;
+
+public class ServiceWSDL {
+	private static final String DOC_STYLE = "document";
+	private static final Logger LOGGER = Logger.getLogger(ServiceWSDL.class.getCanonicalName());
+
+	private String wsdlLocation, soapBindingType;
+
+	private Port port;
+	private Service service;
+	private Definition definitions;
+	private Binding binding;
+
+	private SchemaTypeSystem schemaTypeSystem;
+
+	public ServiceWSDL(String wsdl) throws ServiceWSDLException {
+		wsdlLocation = wsdl;
+
+		LOGGER.fine("Loading Service WSDL from " + this.wsdlLocation);
+
+		try {
+			definitions = WSDLFactory.newInstance().newWSDLReader()
+					.readWSDL(wsdlLocation);
+
+			// FIXME: why does Dynamo assume there is always exactly one <service> in a WSDL doc?
+			service = (Service) definitions.getAllServices().values().iterator().next();
+
+			// FIXME: Dynamo assumes the service has only one port
+			port = (Port) this.service.getPorts().values().iterator().next();
+			binding = port.getBinding();
+
+			for (Object ext : binding.getExtensibilityElements()) {
+				if (ext instanceof SOAP12Binding) {
+					soapBindingType = ((SOAP12Binding) ext).getStyle();
+				} else if (ext instanceof SOAPBinding) {
+					soapBindingType = ((SOAPBinding) ext).getStyle();
+				}
+			}
+			LOGGER.finer("SOAP binding style: " + soapBindingType);
+
+			// Parse the WSDL schema with XMLBeans
+			final org.w3c.dom.Element schemaElement = getSchema().getElement();
+			XmlObject schemaXSB = XmlObject.Factory.parse(schemaElement);
+			schemaTypeSystem = XmlBeans.compileXsd(
+					new XmlObject[] { schemaXSB },
+					XmlBeans.getBuiltinTypeSystem(),
+					new XmlOptions().setCompileDownloadUrls());
+		} catch (Exception e) {
+			LOGGER.severe(e.getLocalizedMessage());
+		}
+	}
+
+	public Port getPort() {
+		return port;
+	}
+
+	public Service getService() {
+		return service;
+	}
+
+	public Definition getDefinitions() {
+		return definitions;
+	}
+
+	public Binding getBinding() {
+		return binding;
+	}
+
+	public QName getServiceName() {
+		return service.getQName();
+	}
+
+	public String GetTargetNamespace() {
+		return definitions.getTargetNamespace();
+	}
+
+	public String getPortName() {
+		return port.getName();
+	}
+
+	@SuppressWarnings("unchecked")
+	public Map<String, Part> getMessageParts(QName messageName)
+			throws ServiceWSDLException {
+		return (Map<String, Part>) definitions.getMessage(messageName).getParts();
+	}
+
+	public QName getInMessageName(String operation) {
+		final Operation op = binding.getPortType().getOperation(operation, null, null);
+		if (op != null && op.getInput() != null) {
+			return op.getInput().getMessage().getQName();
+		}
+		return null;
+	}
+
+	public QName RetreiveOutMessageName(String operation) {
+		final Operation op = binding.getPortType().getOperation(operation, null, null);
+		if (op != null && op.getOutput() != null) {
+			return op.getOutput().getMessage().getQName();
+		}
+		return null;
+	}
+
+	public SchemaGlobalElement getElement(QName name) throws ServiceWSDLException {
+		if (name.equals("") || (name == null)) {
+			throw new ServiceWSDLException("Input param 'name' null or ''.");
+		}
+		return schemaTypeSystem.findElement(name);
+	}
+
+	public SchemaType getType(QName name) throws ServiceWSDLException {
+		if (name.equals("") || (name == null)) {
+			throw new ServiceWSDLException("Input param 'name' null or ''.");
+		}
+		return schemaTypeSystem.findType(name);
+	}
+
+	public String getSoapBindingType() {
+		return soapBindingType;
+	}
+
+	public boolean isDocumentStyle() {
+		return DOC_STYLE.equals(getSoapBindingType());
+	}
+
+	private Schema getSchema() {
+		final Types types = definitions.getTypes();
+		for (Object ext : types.getExtensibilityElements()) {
+			if (ext instanceof Schema) {
+				return ((Schema) ext);
+			}
+		}
+		return null;
+	}
 }

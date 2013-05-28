@@ -18,7 +18,7 @@
 
 package it.polimi.monitor.invoker.service;
 
-import it.polimi.monitor.invoker.exceptions.ServiceWSDLExcpetion;
+import it.polimi.monitor.invoker.exceptions.ServiceWSDLException;
 
 import java.util.Collection;
 import java.util.Vector;
@@ -62,9 +62,9 @@ public class ServiceWSDLJaxWS {
 		return firstService;
 	}
 
-	public QName GetServiceQName() throws ServiceWSDLExcpetion {
+	public QName GetServiceQName() throws ServiceWSDLException {
 		if (!isThereOnlyOneServiceName()) {
-			throw new ServiceWSDLExcpetion(
+			throw new ServiceWSDLException(
 					"More than one Service present in the wsdl:"
 							+ this.wsdlLocation);
 		}
