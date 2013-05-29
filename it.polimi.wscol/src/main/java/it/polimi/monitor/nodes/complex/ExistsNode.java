@@ -14,7 +14,7 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.nodes.complex;
 
@@ -28,44 +28,47 @@ import it.polimi.monitor.nodes.AliasNodes;
 import it.polimi.monitor.nodes.Aliases;
 import it.polimi.monitor.nodes.NodeWSCoL;
 
+public class ExistsNode extends ComplexQuantificationNode {
 
-public class FORALLNode extends ComplexQuantificationNode {
-	
-	private static final Logger LOGGER = Logger.getLogger(EXISTSNode.class.getCanonicalName());
-	private static final long serialVersionUID = -1444472461556224669L;
+	private static final Logger LOGGER = Logger.getLogger(ExistsNode.class.getCanonicalName());
+	private static final long serialVersionUID = -7234226857203803098L;
 
-	public FORALLNode() {
-		serializeTag="forall";
+	public ExistsNode() {
+		serializeTag = "exist";
 	}
 
 	@Override
-	public void evaluate(InputMonitor inputMonitor, Aliases aliases , AliasNodes tempAliases ) throws WSCoLException {
-		LOGGER.info("Start evaluate "+serializeTag);
-		aliasNode=(AliasNode)this.getFirstChild();
+	public void evaluate(InputMonitor inputMonitor, Aliases aliases,
+			AliasNodes tempAliases) throws WSCoLException {
+		LOGGER.info("Start evaluate " + serializeTag);
+		aliasNode = (AliasNode) this.getFirstChild();
 		aliasNode.setTypeOfExtraction(AliasNode.EXTRACTSTEPBYSTEP);
 		aliasNode.evaluate(inputMonitor, aliases, tempAliases);
-		condition= (NodeWSCoL) aliasNode.getNextSibling();
-		for (int i=0; i < aliasNode.getNumberOfChildren();i++){
+		condition = (NodeWSCoL) aliasNode.getNextSibling();
+		for (int i = 0; i < aliasNode.getNumberOfChildren(); i++) {
 			condition.evaluate(inputMonitor, aliases, tempAliases);
-			Object res=condition.getMonitoringValue();
-			if (!( res instanceof Boolean) ) {
-				if(res instanceof String &&(res.equals("false")||res.equals("true")))
-						value=Boolean.parseBoolean((String)res);
+			condition.evaluate(inputMonitor, aliases, tempAliases);
+			Object res = condition.getMonitoringValue();
+			if (!(res instanceof Boolean)) {
+				if (res instanceof String
+						&& (res.equals("false") || res.equals("true")))
+					value = Boolean.parseBoolean((String) res);
 				else
-					throw new WSCoLCastException("Can't make quantification of "+ res.getClass()); 
+					throw new WSCoLCastException("Can't make qualification of "
+							+ res.getClass());
 			} else {
-				if ((Boolean)res == false) {
+				if ((Boolean) res == true)
 					break;
-				} else 
-					value=(Boolean)res;
+				else
+					value = (Boolean) res;
 			}
 			aliasNode.nextChild();
 		}
-		tempAliases.removeAliasNode(aliasNode.getIdentifier());	
-		LOGGER.info("Finish evaluate "+serializeTag);
+		tempAliases.removeAliasNode(aliasNode.getIdentifier());
+		LOGGER.info("Finish evaluate " + serializeTag);
 	}
-	
-	public String toString(){
-		return "Forall";
+
+	public String toString() {
+		return "Exists";
 	}
 }

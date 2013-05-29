@@ -24,8 +24,8 @@ import it.polimi.exception.WSCoLException;
 import it.polimi.exception.WSCoLCastException;
 import antlr.Token;
 
-public class NumberOperatorNode extends BinaryNode {
-	private static final Logger LOGGER = Logger.getLogger(NumberOperatorNode.class.getCanonicalName());
+public class ArithmeticOperatorNode extends BinaryNode {
+	private static final Logger LOGGER = Logger.getLogger(ArithmeticOperatorNode.class.getCanonicalName());
 	private static final long serialVersionUID = -759269138524555803L;
 
 	private final String PLUS = "+";
@@ -46,7 +46,7 @@ public class NumberOperatorNode extends BinaryNode {
 	/**
          *
          */
-	public NumberOperatorNode(Token tok) {
+	public ArithmeticOperatorNode(Token tok) {
 		op = tok.getText();
 		operator = operatorType(op);
 		switch (operator) {

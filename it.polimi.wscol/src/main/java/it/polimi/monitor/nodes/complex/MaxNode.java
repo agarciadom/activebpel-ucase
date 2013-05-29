@@ -24,7 +24,7 @@ import it.polimi.exception.WSCoLException;
 
 public class MaxNode extends ComplexMathematicalNode {
 
-	private static final Logger LOGGER = Logger.getLogger(EXISTSNode.class.getCanonicalName());
+	private static final Logger LOGGER = Logger.getLogger(ExistsNode.class.getCanonicalName());
 	private static final long serialVersionUID = -1986024938174339410L;
 
 	public MaxNode() {

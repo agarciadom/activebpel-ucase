@@ -1,5 +1,6 @@
 /*
  Copyright 2007 Politecnico di Milano
+ Copyright 2013 Antonio García-Domínguez
  This file is part of Dynamo.
 
  Dynamo is free software; you can redistribute it and/or modify
@@ -18,21 +19,22 @@
 
 package it.polimi.monitor.nodes;
 
-import java.util.Vector;
-
 import it.polimi.exception.WSCoLException;
 import it.polimi.monitor.InputMonitor;
 
-public class PARAM_LISTNode extends NodeWSCoL{
+import java.util.ArrayList;
+import java.util.List;
 
-	private Vector<NodeWSCoL> parametres;
+public class ParameterListNode extends NodeWSCoL{
+
+	private List<NodeWSCoL> parameters;
 	private static final long serialVersionUID = 9197523087897922080L;
 
 	/**
 	 * 
 	 */
-	public PARAM_LISTNode() {
-		parametres= new Vector<NodeWSCoL>();
+	public ParameterListNode() {
+		parameters = new ArrayList<NodeWSCoL>();
 	}
 
 	@Override
@@ -40,18 +42,18 @@ public class PARAM_LISTNode extends NodeWSCoL{
     	NodeWSCoL temp=null;
     	for(int i=0; i < this.getNumberOfChildren(); i++) {
     		if(i==0) {
-    			parametres.add(temp=(NodeWSCoL)this.getFirstChild());
+    			parameters.add(temp=(NodeWSCoL)this.getFirstChild());
     		}
     		else {
-    			parametres.add(temp=(NodeWSCoL)temp.getNextSibling());
+    			parameters.add(temp=(NodeWSCoL)temp.getNextSibling());
     		}
     	}
 		
 	}
 
 	@Override
-	public Vector<NodeWSCoL> getMonitoringValue() throws WSCoLException {
-		return parametres;
+	public List<NodeWSCoL> getMonitoringValue() throws WSCoLException {
+		return parameters;
 	}
 
 }

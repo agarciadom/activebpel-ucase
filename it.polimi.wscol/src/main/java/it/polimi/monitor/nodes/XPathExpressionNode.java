@@ -24,18 +24,18 @@ import it.polimi.monitor.InputMonitor;
 
 import java.util.logging.Logger;
 
-public class XPath_ExpressionNode extends NodeWSCoL {
-	private static final Logger LOGGER = Logger.getLogger(XPath_ExpressionNode.class.getCanonicalName());
+public class XPathExpressionNode extends NodeWSCoL {
+	private static final Logger LOGGER = Logger.getLogger(XPathExpressionNode.class.getCanonicalName());
 
 	private static final long serialVersionUID = -9206263043804090275L;
 
 	private String tree = null;
-	private SLASHNode slashNode = null;
+	private SlashNode slashNode = null;
 
 	@Override
 	public void evaluate(InputMonitor inputMonitor, Aliases aliases,
 			AliasNodes tempAliases) throws WSCoLException {
-		slashNode = (SLASHNode) getFirstChild();
+		slashNode = (SlashNode) getFirstChild();
 		slashNode.evaluate(inputMonitor, aliases, tempAliases);
 	}
 

@@ -14,52 +14,53 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.nodes;
 
 import it.polimi.exception.WSCoLException;
 import it.polimi.monitor.InputMonitor;
 
-public class SLASHNode extends NodeWSCoL {
-	private String tree=null;
-  
+public class SlashNode extends NodeWSCoL {
+	private String tree = null;
+
 	private static final long serialVersionUID = -4864006265851756450L;
-    
+
 	@Override
-	public void evaluate(InputMonitor inputMonitor, Aliases aliases , AliasNodes tempAliases) throws WSCoLException {
-		//Guardo il numero di livelli
-		if((this.getFirstChild().getClass()).equals(SLASHNode.class)){
-			//	ho piu livelli
-			SLASHNode node = (SLASHNode)this.getFirstChild();
-			node.evaluate(inputMonitor,  aliases ,  tempAliases);
-			tree=node.getMonitoringValue();
+	public void evaluate(InputMonitor inputMonitor, Aliases aliases, AliasNodes tempAliases) throws WSCoLException {
+		// Guardo il numero di livelli
+		if ((this.getFirstChild().getClass()).equals(SlashNode.class)) {
+			// ho piu livelli
+			SlashNode node = (SlashNode) this.getFirstChild();
+			node.evaluate(inputMonitor, aliases, tempAliases);
+			tree = node.getMonitoringValue();
 			// ho uno slash e un figlio simpleAST
 			if (node.getNextSibling() != null) {
-				SimpleAST brother=(SimpleAST)node.getNextSibling();
-				brother.evaluate(inputMonitor,  aliases ,  tempAliases);
-				tree=tree + "/" + brother.getMonitoringValue();
+				SimpleAST brother = (SimpleAST) node.getNextSibling();
+				brother.evaluate(inputMonitor, aliases, tempAliases);
+				tree = tree + "/" + brother.getMonitoringValue();
 			}
 		} else {
 			// ho un solo livello
-			SimpleAST brother = (SimpleAST)this.getFirstChild();
-			brother.evaluate(inputMonitor,  aliases ,  tempAliases);
-			tree="/"+brother.getMonitoringValue();
+			SimpleAST brother = (SimpleAST) this.getFirstChild();
+			brother.evaluate(inputMonitor, aliases, tempAliases);
+			tree = "/" + brother.getMonitoringValue();
 			// ho 2 elementi
 			if (brother.getNextSibling() != null) {
-				brother=(SimpleAST)brother.getNextSibling();
-				brother.evaluate(inputMonitor,  aliases ,  tempAliases);
-				tree=tree + "/" + brother.getMonitoringValue();
+				brother = (SimpleAST) brother.getNextSibling();
+				brother.evaluate(inputMonitor, aliases, tempAliases);
+				tree = tree + "/" + brother.getMonitoringValue();
 			}
-		}		
+		}
 	}
 
 	@Override
 	public String getMonitoringValue() throws WSCoLException {
 		return tree;
 	}
+
 	@Override
 	public String toString() {
-        return "/";
-    }
+		return "/";
+	}
 }

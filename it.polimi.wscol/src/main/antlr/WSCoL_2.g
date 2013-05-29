@@ -22,9 +22,9 @@ options
         KW_FORALL = "forall";
         KW_EXISTS = "exists";
         KW_IN = "in";
-        KW_LET = "let";	// For make alias
-        KW_STORE = "store"; // For create historical variable
-        KW_RETRIEVE = "retrieve"; //	For read historical variable
+        KW_LET = "let"; // For making alias
+        KW_STORE = "store"; // For creating historical variable
+        KW_RETRIEVE = "retrieve"; // For reading historical variable
         KW_RESP_TIME = "Resp_Time"; // For access to special historical variable Resp_Time
         KW_MAX = "max";
         KW_MIN = "min";
@@ -87,56 +87,56 @@ IDENTIFIER
 SEMI: ';' ;
 
 LEFT_PAREN
-    :	'('		;
+    : '('  ;
 
 RIGHT_PAREN
-    :	')'		;
+    : ')'  ;
 
 LEFT_BRACKET
-    :	'['		;
+    : '['  ;
 
 RIGHT_BRACKET
-    :	']'		;
+    : ']'  ;
 LEFT_CURLY
-    :	'{'		;
+    : '{'  ;
 
 RIGHT_CURLY
-    :	'}'		;
+    : '}'  ;
 PIPE
-    :	'|'		;
+    : '|'  ;
 
 DOT
-    :	'.'		;
+    : '.'  ;
 
 DOT_DOT
-    :	".."	;
+    : ".." ;
 
 AT
-    :	'@'		;
+    : '@'  ;
 
 COMMA
-    :	','		;
+    : ','  ;
 
 DOUBLE_COLON
-    :	"::"	;
+    : "::" ;
 
 COLON
-    :	":"		;
+    : ":"  ;
 
 SLASH
-    :	'/'		;
+    : '/'  ;
 
 DOUBLE_SLASH
-    :	'/' '/'	;
+    : '/' '/' ;
 
 DOLLAR_SIGN
-    :	'$'		;
+    : '$'  ;
 
 PLUS
-    :	'+'		;
+    : '+'  ;
 
 MINUS
-    :	'-'		;
+    : '-'  ;
 
 PERCENTAGE
     : '%'
@@ -144,28 +144,28 @@ PERCENTAGE
 
 
 DOUBLE_EQUALS
-    :   "=="	;
+    :   "==" ;
 
 EQUALS
-    :	'='		;
+    : '='  ;
 
 NOT_EQUALS
-    :	"!="	;
+    : "!=" ;
 
 LT
-    :	'<'		;
+    : '<'  ;
 
 LTE
-    :	"<="	;
+    : "<=" ;
 
 GT
-    :	'>'		;
+    : '>'  ;
 
 GTE
-    :	">="	;
+    : ">=" ;
 
 STAR
-    :	'*'		;
+    : '*'  ;
 
 AND: "&&";
 
@@ -179,10 +179,6 @@ KW_RL_IMPLIES : "<==";
 
 KW_2WIMPLIES :"<==>";
 
-
-
-//METHOD: ("startswith") | ("length") | ("endswith");
-
 NEWLINE: ("\r\n"
     | '\r'
     |'\n'
@@ -191,8 +187,6 @@ NEWLINE: ("\r\n"
       $setType(Token.SKIP);
     }
     ;
-
-
 
 class WSCoLParser extends Parser;
 
@@ -277,7 +271,7 @@ imaginaryTokenDefinitions :
     ;
 
 analyzer
-    :rules | recovery
+    : rules | recovery
     ;
 
 recovery!:
@@ -295,22 +289,12 @@ complete_strategy
     :
         ifStrategy (elseIfStrategy)* (elseStrategy)?
     ;
-/*
-ifBlock
-    : ifStrategy (elseIfStrategy)* (elseStrategy)?
-    ;
-complete_strategy
-    :
-        (ifBlock)*
-    ;
-*/
-
 
 ifStrategy!
     :
         KW_IF c:condition s:strategy
         {
-            #ifStrategy = #([IF, "If","it.polimi.recovery.nodes.IfStamentNode"],    #c, #s);
+            #ifStrategy = #([IF, "If","it.polimi.recovery.nodes.IfStatementNode"],    #c, #s);
         }
     ;
 
@@ -318,7 +302,7 @@ elseIfStrategy!
     :
         KW_ELSEIF c:condition s:strategy
         {
-            #elseIfStrategy = #([ELSEIF, "ElseIf","it.polimi.recovery.nodes.IfStamentNode"], #c, #s);
+            #elseIfStrategy = #([ELSEIF, "ElseIf","it.polimi.recovery.nodes.IfStatementNode"], #c, #s);
         }
     ;
 
@@ -326,7 +310,7 @@ elseStrategy
     :
         KW_ELSE s:strategy
         {
-            #elseStrategy = #([ELSE, "Else","it.polimi.recovery.nodes.IfStamentNode"], #s);
+            #elseStrategy = #([ELSE, "Else","it.polimi.recovery.nodes.IfStatementNode"], #s);
         }
     ;
 
@@ -364,7 +348,7 @@ action!
     :
     m:IDENTIFIER<AST=it.polimi.recovery.nodes.SimpleAST> LEFT_PAREN (l:list)? RIGHT_PAREN
     {
-        #action = #([ACTION, "Action","it.polimi.recovery.nodes.ActionNode"], #m,  #([PARAM_LIST, "Param_List","it.polimi.monitor.nodes.PARAM_LISTNode"], #l));
+        #action = #([ACTION, "Action","it.polimi.recovery.nodes.ActionNode"], #m,  #([PARAM_LIST, "Param_List","it.polimi.monitor.nodes.ParameterListNode"], #l));
     }
     ;
 
@@ -396,11 +380,11 @@ equals_expression:
 ;
 
 relational_expression:
-    operator_expression ( (GT^<AST=it.polimi.monitor.nodes.binary.GLOperatorNode> | GTE^<AST=it.polimi.monitor.nodes.binary.GLOperatorNode> | LT^<AST=it.polimi.monitor.nodes.binary.GLOperatorNode> | LTE^<AST=it.polimi.monitor.nodes.binary.GLOperatorNode>) operator_expression)?
+    operator_expression ( (GT^<AST=it.polimi.monitor.nodes.binary.RelationalOperatorNode> | GTE^<AST=it.polimi.monitor.nodes.binary.RelationalOperatorNode> | LT^<AST=it.polimi.monitor.nodes.binary.RelationalOperatorNode> | LTE^<AST=it.polimi.monitor.nodes.binary.RelationalOperatorNode>) operator_expression)?
 ;
 
 operator_expression:
-    basic_expression ( (PLUS^<AST=it.polimi.monitor.nodes.binary.NumberOperatorNode> | MINUS^<AST=it.polimi.monitor.nodes.binary.NumberOperatorNode> | STAR^<AST=it.polimi.monitor.nodes.binary.NumberOperatorNode> | SLASH^<AST=it.polimi.monitor.nodes.binary.NumberOperatorNode> | PERCENTAGE^<AST=it.polimi.monitor.nodes.binary.NumberOperatorNode> ) basic_expression)*
+    basic_expression ( (PLUS^<AST=it.polimi.monitor.nodes.binary.ArithmeticOperatorNode> | MINUS^<AST=it.polimi.monitor.nodes.binary.ArithmeticOperatorNode> | STAR^<AST=it.polimi.monitor.nodes.binary.ArithmeticOperatorNode> | SLASH^<AST=it.polimi.monitor.nodes.binary.ArithmeticOperatorNode> | PERCENTAGE^<AST=it.polimi.monitor.nodes.binary.ArithmeticOperatorNode> ) basic_expression)*
 ;
 
 basic_expression:
@@ -416,7 +400,7 @@ forall!:
             inputState.guessing++;
             throw new it.polimi.exception.DuplicateIdentifierException();
         }
-        #forall = #([FORALL, "Forall","it.polimi.monitor.nodes.complex.FORALLNode"], #([VAR, "Variable","it.polimi.monitor.nodes.AliasNode"], #v, #s), #r);
+        #forall = #([FORALL, "Forall","it.polimi.monitor.nodes.complex.ForAllNode"], #([VAR, "Variable","it.polimi.monitor.nodes.AliasNode"], #v, #s), #r);
         {
             symbols.remove(v.getText());
         }
@@ -431,7 +415,7 @@ exists!:
             inputState.guessing++;
             throw new it.polimi.exception.DuplicateIdentifierException();
         }
-        #exists = #([EXISTS, "Existsl","it.polimi.monitor.nodes.complex.EXISTSNode"], #([VAR, "Variable","it.polimi.monitor.nodes.AliasNode"], #v, #s), #r);
+        #exists = #([EXISTS, "Existsl","it.polimi.monitor.nodes.complex.ExistsNode"], #([VAR, "Variable","it.polimi.monitor.nodes.AliasNode"], #v, #s), #r);
         {
             symbols.remove(v.getText());
         }
@@ -442,8 +426,8 @@ exists!:
 dot_expression!:
     v:variable DOT m:IDENTIFIER<AST= it.polimi.monitor.nodes.SimpleAST> LEFT_PAREN (l:list)? RIGHT_PAREN
     {
-        #dot_expression = #([METHOD, "Method","it.polimi.monitor.nodes.METHODNode"], #v, #m,  #([PARAM_LIST, "Param_List","it.polimi.monitor.nodes.PARAM_LISTNode"], #l));
-    //	#dot_expression = #([METHOD, "Method"], #(#m, #v, #([PARAM_LIST, "Param_List"], #l)));
+        #dot_expression = #([METHOD, "Method","it.polimi.monitor.nodes.MethodNode"], #v, #m,  #([PARAM_LIST, "Param_List","it.polimi.monitor.nodes.ParameterListNode"], #l));
+    // #dot_expression = #([METHOD, "Method"], #(#m, #v, #([PARAM_LIST, "Param_List"], #l)));
     }
 ;
 
@@ -591,7 +575,7 @@ hvar!:
             inputState.guessing++;
             throw new it.polimi.exception.DuplicateIdentifierException();
         }
-//		#hvar = #([RETRIEVE, "Retrievel","it.polimi.monitor.nodes.RetrieveNode"], #([PROCESS_ID, "Process_ID"], #p), #([ USER_ID, "User_ID"],#u), #([INSTANCE_ID, "Instance_ID"],#i), #([LOCATION, "Location"],#l), #([ ASSERTION_TYPE, "Assertion_Type"],#ass), #([ALIAS_HISTORICAL_VARIABLE,"Alias_HVar"],#al),#([NUMBER_OF_RESULTS, "Number_Of_Result"],#n));
+//  #hvar = #([RETRIEVE, "Retrievel","it.polimi.monitor.nodes.RetrieveNode"], #([PROCESS_ID, "Process_ID"], #p), #([ USER_ID, "User_ID"],#u), #([INSTANCE_ID, "Instance_ID"],#i), #([LOCATION, "Location"],#l), #([ ASSERTION_TYPE, "Assertion_Type"],#ass), #([ALIAS_HISTORICAL_VARIABLE,"Alias_HVar"],#al),#([NUMBER_OF_RESULTS, "Number_Of_Result"],#n));
         #hvar = #([RETRIEVE, "Retrievel","it.polimi.monitor.nodes.RetrieveNode"], #p,#u,#i,#l,#ass ,#al, #n);
     }
 ;*/
@@ -602,7 +586,7 @@ list:
 ;
 
 string_value:
-    s1:sub_string_value (PLUS^<AST=it.polimi.monitor.nodes.binary.PLUSNode> s2: sub_string_value)*
+    s1:sub_string_value (PLUS^<AST=it.polimi.monitor.nodes.binary.StringConcatenationNode> s2: sub_string_value)*
      //{#string_value = #([CONCAT,"String_value"], #s1, #s2);}
 ;
 
@@ -621,7 +605,7 @@ serialized!:
 xpath_expression!:
     u:union_expr
     {
-        #xpath_expression = #([XPATH, "XPath_Expression","it.polimi.monitor.nodes.XPath_ExpressionNode"], #u);
+        #xpath_expression = #([XPATH, "XPath_Expression","it.polimi.monitor.nodes.XPathExpressionNode"], #u);
     }
 ;
 
@@ -630,7 +614,7 @@ location_path:
 ;
 
 absolute_location_path:
-    ( SLASH^<AST=it.polimi.monitor.nodes.SLASHNode> | DOUBLE_SLASH^ ) ( ( AT | STAR | IDENTIFIER ) => i_relative_location_path | )
+    ( SLASH^<AST=it.polimi.monitor.nodes.SlashNode> | DOUBLE_SLASH^ ) ( ( AT | STAR | IDENTIFIER ) => i_relative_location_path | )
 ;
 
 relative_location_path:
@@ -638,13 +622,13 @@ relative_location_path:
 ;
 
 i_relative_location_path:
-    step ( ( SLASH^<AST=it.polimi.monitor.nodes.SLASHNode>	| DOUBLE_SLASH^ ) step )*
+    step ( ( SLASH^<AST=it.polimi.monitor.nodes.SlashNode> | DOUBLE_SLASH^ ) step )*
 ;
 
 step:
     ( // If it has an axis
-        ( (IDENTIFIER DOUBLE_COLON | AT)=> axis	| )( (	( (ns:IDENTIFIER COLON)? (	id:IDENTIFIER<AST=it.polimi.monitor.nodes.SimpleAST> |
-            STAR ) ) ) | special_step )	( predicate	)* ) | abbr_step ( predicate )*
+        ( (IDENTIFIER DOUBLE_COLON | AT)=> axis | )( ( ( (ns:IDENTIFIER COLON)? ( id:IDENTIFIER<AST=it.polimi.monitor.nodes.SimpleAST> |
+            STAR ) ) ) | special_step ) ( predicate )* ) | abbr_step ( predicate )*
 ;
 
 special_step:
@@ -654,19 +638,19 @@ special_step:
         IDENTIFIER LEFT_PAREN ( IDENTIFIER )? RIGHT_PAREN
     | {
         LT(1).getText().equals("comment")
-            ||	LT(1).getText().equals("text")
-            ||	LT(1).getText().equals("node")
+            || LT(1).getText().equals("text")
+            || LT(1).getText().equals("node")
     }?
         IDENTIFIER LEFT_PAREN RIGHT_PAREN
 ;
 
 axis:
-    ( id:IDENTIFIER DOUBLE_COLON^ |	AT )
+    ( id:IDENTIFIER DOUBLE_COLON^ | AT )
 ;
 
 // ----------------------------------------
-//		Section 2.4
-//			Predicates
+//  Section 2.4
+//   Predicates
 // ----------------------------------------
 
 // .... production [8] ....
@@ -684,7 +668,7 @@ predicate_expr:
 // .... production [12] ....
 //
 abbr_step:
-    DOT	| DOT_DOT
+    DOT | DOT_DOT
 ;
 
 // .... production [13] ....
@@ -695,13 +679,13 @@ abbr_axis_specifier:
 
 
 // ----------------------------------------
-//		Section 3
-//			Expressions
+//  Section 3
+//   Expressions
 // ----------------------------------------
 
 // ----------------------------------------
-//		Section 3.1
-//			Basics
+//  Section 3.1
+//   Basics
 // ----------------------------------------
 
 // .... production [14] ....
@@ -713,7 +697,7 @@ expr:
 // .... production [15] ....
 //
 primary_expr:
-    variable_reference	| LEFT_PAREN! expr RIGHT_PAREN!	| literal |	number | function_call
+    variable_reference | LEFT_PAREN! expr RIGHT_PAREN! | literal | number | function_call
 ;
 
 literal:
@@ -729,8 +713,8 @@ variable_reference:
 ;
 
 // ----------------------------------------
-//		Section 3.2
-//			Function Calls
+//  Section 3.2
+//   Function Calls
 // ----------------------------------------
 
 // .... production [16] ....
@@ -752,14 +736,14 @@ argument:
 ;
 
 // ----------------------------------------
-//		Section 3.3
-//			Node-sets
+//  Section 3.3
+//   Node-sets
 // ----------------------------------------
 
 // .... production [18] ....
 //
 union_expr:
-    path_expr (	PIPE! path_expr )*
+    path_expr ( PIPE! path_expr )*
 ;
 
 // .... production [19] ....
@@ -772,12 +756,12 @@ path_expr:
     // Is it a special nodeType 'function name'
 
     (IDENTIFIER LEFT_PAREN)=>{ LT(1).getText().equals("processing-instruction")
-        ||	LT(1).getText().equals("comment")
+        || LT(1).getText().equals("comment")
         ||  LT(1).getText().equals("text")
         ||  LT(1).getText().equals("node")
     }?
 
-    location_path |	(IDENTIFIER LEFT_PAREN)=> filter_expr (	absolute_location_path )?
+    location_path | (IDENTIFIER LEFT_PAREN)=> filter_expr ( absolute_location_path )?
         | (DOT|DOT_DOT|SLASH|DOUBLE_SLASH|IDENTIFIER|AT)=> location_path | filter_expr ( absolute_location_path )?
 ;
 
@@ -789,20 +773,20 @@ filter_expr:
 
 
 // ----------------------------------------
-//		Section 3.4
-//			Booleans
+//  Section 3.4
+//   Booleans
 // ----------------------------------------
 
 // .... production [21] ....
 //
 or_expr:
-    and_expr (	KW_OR^ and_expr )*
+    and_expr ( KW_OR^ and_expr )*
 ;
 
 // .... production [22] ....
 //
 and_expr:
-    equality_expr (	KW_AND^ equality_expr )?
+    equality_expr ( KW_AND^ equality_expr )?
 ;
 
 // .... production [23] ....
@@ -814,24 +798,24 @@ equality_expr:
 // .... production [24] ....
 //
 relational_expr:
-    additive_expr ( ( LT^ |	GT^ | LTE^ | GTE^ )	additive_expr )?
+    additive_expr ( ( LT^ | GT^ | LTE^ | GTE^ ) additive_expr )?
 ;
 
 // ----------------------------------------
-//		Section 3.5
-//			Numbers
+//  Section 3.5
+//   Numbers
 // ----------------------------------------
 
 // .... production [25] ....
 //
 additive_expr:
-    mult_expr (	( PLUS^	| MINUS^ ) mult_expr )?
+    mult_expr ( ( PLUS^ | MINUS^ ) mult_expr )?
 ;
 
 // .... production [26] ....
 //
 mult_expr:
-    unary_expr ( ( STAR^ | DIV^ | MOD^ ) unary_expr	)?
+    unary_expr ( ( STAR^ | DIV^ | MOD^ ) unary_expr )?
 ;
 
 // .... production [27] ....

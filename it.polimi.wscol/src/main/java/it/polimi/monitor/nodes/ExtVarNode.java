@@ -61,7 +61,7 @@ public class ExtVarNode extends Variable {
 		ins=(NodeWSCoL)wm.getNextSibling();
 		ins.evaluate(inputMonitor,  aliases,  tempAliases);
 		
-		XPath_ExpressionNode outs=(XPath_ExpressionNode)ins.getNextSibling();
+		XPathExpressionNode outs=(XPathExpressionNode)ins.getNextSibling();
 		outs.evaluate(inputMonitor,  aliases,  tempAliases);
 		xpath=outs.getMonitoringValue();
 		Invoker invoker=new Invoker();

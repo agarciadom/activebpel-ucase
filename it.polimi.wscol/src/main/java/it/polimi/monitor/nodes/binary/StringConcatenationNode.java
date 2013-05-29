@@ -22,11 +22,11 @@ import java.util.logging.Logger;
 
 import it.polimi.exception.WSCoLException;
 
-public class PLUSNode extends BinaryNode {
-	private static final Logger LOGGER = Logger.getLogger(PLUSNode.class.getCanonicalName());
+public class StringConcatenationNode extends BinaryNode {
+	private static final Logger LOGGER = Logger.getLogger(StringConcatenationNode.class.getCanonicalName());
 	private static final long serialVersionUID = 6510899876508241932L;
 
-	public PLUSNode() {
+	public StringConcatenationNode() {
 		serializeTag = "plus";
 	}
 

@@ -27,7 +27,7 @@ public class VariableNode extends NodeWSCoL {
 
         private static final long serialVersionUID = 345501908200925896L;
         private SimpleAST identifier;
-        private XPath_ExpressionNode xpath=null;
+        private XPathExpressionNode xpath=null;
         private String extraPath;
         private AliasNodeInfo aliasNodeInfo=null;
         private Alias alias=null;
@@ -43,7 +43,7 @@ public class VariableNode extends NodeWSCoL {
                         AliasNode aliasNode=tempAliases.getAliasNode(id);
                         String x="";
                         if(this.getNextSibling()!=null) {
-                                xpath = ((XPath_ExpressionNode)this.getNextSibling());
+                                xpath = ((XPathExpressionNode)this.getNextSibling());
                                 xpath.evaluate(inputMonitor,  aliases,  tempAliases);
                                 x=xpath.getMonitoringValue();
                         }
@@ -63,14 +63,14 @@ public class VariableNode extends NodeWSCoL {
                         alias=aliases.getAlias(id);
                         String x="";
                         if(this.getNextSibling()!=null && alias.getAliasType() == Alias.ALIAS_VAR) {
-                                xpath = ((XPath_ExpressionNode)this.getNextSibling());
+                                xpath = ((XPathExpressionNode)this.getNextSibling());
                                 xpath.evaluate(inputMonitor,  aliases ,  tempAliases);
                                 x=xpath.getMonitoringValue();
                                 alias.setExtraPath(x);
                         }
                 } else {//the second child represents the Xpath of the Variable. The Xpath of the variable could be null
                         if(this.getNextSibling()!=null) {
-                                xpath = ((XPath_ExpressionNode)this.getNextSibling());
+                                xpath = ((XPathExpressionNode)this.getNextSibling());
                                 xpath.evaluate(inputMonitor,  aliases, tempAliases);
                         }
                 }

@@ -14,7 +14,7 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.recovery.nodes;
 
@@ -24,48 +24,25 @@ import it.polimi.monitor.nodes.Aliases;
 import it.polimi.recovery.data.RecoveryParams;
 import it.polimi.recovery.data.RecoveryResult;
 
-public class StrategyNode extends WSReLNode 
-{	
-	//It can be an 'or' node or a 'recovery step' node
+public class StrategyNode extends WSReLNode {
 	private WSReLNode first = null;
-//	//It can be only a 'recovery step' node
-//	private WSReLNode second = null;
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8379839875438740841L;
 
 	@Override
-	public void doRecovery(RecoveryParams recoveryParams, RecoveryResult recoveryResult)
-	{
+	public void doRecovery(RecoveryParams recoveryParams, RecoveryResult recoveryResult) {
 		this.first.doRecovery(recoveryParams, recoveryResult);
-		
-//		//If the first branch of recovery strategy is successful or a blocking action
-//		//then the result is returned back.
-//		if(recoveryResult.isRecoveryResult() ||
-//			recoveryResult.isThereHaltAction() || 
-//			recoveryResult.isThereIgnoreAction())
-//		{
-//			return;
-//		}
-//		
-//		if(this.second != null)
-//			this.second.doRecovery(recoveryParams, recoveryResult);
 	}
 
 	@Override
-	public void evaluate(InputMonitor inputMonitor, Aliases aliases , AliasNodes tempAliases)
+	public void evaluate(InputMonitor inputMonitor, Aliases aliases,
+			AliasNodes tempAliases)
 	{
-		//We can have only one child
+		// We can have only one child
 		this.first = (WSReLNode) this.getFirstChild();
 		this.first.evaluate(inputMonitor, aliases, tempAliases);
-		
-//		this.second = (WSReLNode) this.first.getNextSibling();
-//		if(this.second != null)
-//			this.second.evaluate();
 	}
-	public String toString()
-	{
+
+	public String toString() {
 		return "Strategy";
 	}
 }

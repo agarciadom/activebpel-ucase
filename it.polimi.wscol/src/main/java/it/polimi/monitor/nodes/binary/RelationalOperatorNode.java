@@ -25,8 +25,8 @@ import it.polimi.exception.WSCoLCastException;
 
 import antlr.Token;
 
-public class GLOperatorNode extends BinaryNode {
-	private static final Logger LOGGER = Logger.getLogger(GLOperatorNode.class.getCanonicalName());
+public class RelationalOperatorNode extends BinaryNode {
+	private static final Logger LOGGER = Logger.getLogger(RelationalOperatorNode.class.getCanonicalName());
 	private static final long serialVersionUID = -3630358764383397353L;
 
 	private final String LT = "<";
@@ -45,7 +45,7 @@ public class GLOperatorNode extends BinaryNode {
 	/**
          *
          */
-	public GLOperatorNode(Token tok) {
+	public RelationalOperatorNode(Token tok) {
 		op = tok.getText();
 		operator = operatorType(op);
 		serializeTag = "op";
