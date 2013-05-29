@@ -1,5 +1,6 @@
 /*
  Copyright 2007 Politecnico di Milano
+ Copyright 2013 Antonio García-Domínguez (UCA)
  This file is part of Dynamo.
 
  Dynamo is free software; you can redistribute it and/or modify
@@ -14,37 +15,38 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.nodes;
 
 import it.polimi.exception.WSCoLException;
 import it.polimi.monitor.InputMonitor;
 
+import java.util.logging.Logger;
 
-public class XPath_ExpressionNode extends NodeWSCoL{
-	private String tree=null;
-	private SLASHNode slashNode=null;
+public class XPath_ExpressionNode extends NodeWSCoL {
+	private static final Logger LOGGER = Logger.getLogger(XPath_ExpressionNode.class.getCanonicalName());
+
 	private static final long serialVersionUID = -9206263043804090275L;
-	
-	/**
-	 * 
-	 */
-	public XPath_ExpressionNode() {
-		super();
-	}	
+
+	private String tree = null;
+	private SLASHNode slashNode = null;
+
 	@Override
-	public void evaluate(InputMonitor inputMonitor, Aliases aliases , AliasNodes tempAliases) throws WSCoLException {		
-		slashNode=(SLASHNode)getFirstChild();
-		slashNode.evaluate(inputMonitor,  aliases ,  tempAliases);
+	public void evaluate(InputMonitor inputMonitor, Aliases aliases,
+			AliasNodes tempAliases) throws WSCoLException {
+		slashNode = (SLASHNode) getFirstChild();
+		slashNode.evaluate(inputMonitor, aliases, tempAliases);
 	}
+
 	@Override
 	public String getMonitoringValue() throws WSCoLException {
-		//		restituisco il valore
-		tree=slashNode.getMonitoringValue();
-		logger.info("xpath: " +tree);
+		// Restore the value
+		tree = slashNode.getMonitoringValue();
+		LOGGER.info("xpath: " + tree);
 		return tree;
 	}
+
 	@Override
 	public String toString() {
 		return "XpathExpression";

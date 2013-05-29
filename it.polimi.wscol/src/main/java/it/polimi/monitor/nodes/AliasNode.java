@@ -1,5 +1,6 @@
 /*
  Copyright 2007 Politecnico di Milano
+ Copyright 2013 Antonio García-Domínguez (UCA)
  This file is part of Dynamo.
 
  Dynamo is free software; you can redistribute it and/or modify
@@ -14,9 +15,11 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.nodes;
+
+import java.util.logging.Logger;
 
 import org.apache.xmlbeans.XmlCursor;
 
@@ -24,113 +27,114 @@ import it.polimi.exception.WSCoLException;
 import it.polimi.monitor.InputMonitor;
 
 public class AliasNode extends NodeWSCoL {
+	private static final Logger LOGGER = Logger.getLogger(AliasNode.class.getCanonicalName());
 
-        private static final long serialVersionUID = 345501908200925896L;
-        private NodeWSCoL identifier;
-        private NodeWSCoL variable=null;
-        protected XmlCursor data=null;
-        private int numberOfCurrentChildren = 0;
-        private int numberOfChildren = -1;
-    private int typeOfExtraction = -1;
-    private String rootXml=null;
+	private static final long serialVersionUID = 345501908200925896L;
+	private NodeWSCoL identifier;
+	private NodeWSCoL variable = null;
+	protected XmlCursor data = null;
+	private int numberOfCurrentChildren = 0;
+	private int numberOfChildren = -1;
+	private int typeOfExtraction = -1;
+	private String rootXml = null;
 
-    public static final int EXTRACTSTEPBYSTEP = 0;
-    public static final int EXTRACTALLTOGETHER = 1;
+	public static final int EXTRACTSTEPBYSTEP = 0;
+	public static final int EXTRACTALLTOGETHER = 1;
 
+	@Override
+	public void evaluate(InputMonitor inputMonitor, Aliases aliases,
+			AliasNodes tempAliases) throws WSCoLException {
+		// The first child represents the identifier of the Alias
+		identifier = (SimpleAST) getFirstChild();
+		identifier.evaluate(inputMonitor, aliases, tempAliases);
+		variable = (NodeWSCoL) identifier.getNextSibling();
+		variable.evaluate(inputMonitor, aliases, tempAliases);
+		if (variable instanceof Variable) {
+			// controllare se è una temp alias
+			Variable var = (Variable) variable;
+			numberOfChildren = var.numberOfNode();
+			data = var.getData();
+			if (!data.xmlText().contains("<xml-fragment>"))
+				rootXml = var.getXpath();
+			else
+				rootXml = var.serializeTag;
+			tempAliases.addAliasNode(this);
 
+		} else {
+			throw new WSCoLException("Error in determine variable");
+		}
 
-        @Override
-        public void evaluate(InputMonitor inputMonitor, Aliases aliases , AliasNodes tempAliases) throws WSCoLException {
-                //The first child represents the identifier of the Alias
-                identifier = (SimpleAST)getFirstChild();
-                identifier.evaluate(inputMonitor,  aliases, tempAliases);
-                variable=(NodeWSCoL)identifier.getNextSibling();
-                variable.evaluate(inputMonitor, aliases, tempAliases);
-                if (variable instanceof Variable) {
-                        //controllare se è una temp alias
-                        Variable var=(Variable)variable;
-                        numberOfChildren=var.numberOfNode();
-                        data=var.getData();
-                        if (! data.xmlText().contains("<xml-fragment>"))
-                                rootXml=var.getXpath();
-                        else
-                                rootXml=var.serializeTag;
-                        tempAliases.addAliasNode(this);
+	}
 
-                }  else {
-                        throw new WSCoLException("Error in determine variable");
-                }
+	@Override
+	public XmlCursor getMonitoringValue() throws WSCoLException {
+		switch (typeOfExtraction) {
+		case EXTRACTALLTOGETHER:
+			return data;
+		case EXTRACTSTEPBYSTEP:
+			return extractCursor(numberOfCurrentChildren).newCursor();
+		default:
+			return extractCursor(numberOfCurrentChildren).newCursor();
+		}
+	}
 
+	@Override
+	public String toString() {
+		return "AliasNode";
+	}
 
-        }
+	/**
+	 * @return the identifier
+	 */
+	public String getIdentifier() throws WSCoLException {
+		return (String) identifier.getMonitoringValue();
+	}
 
-        @Override
-        public XmlCursor getMonitoringValue() throws WSCoLException {
-                switch (typeOfExtraction) {
-                        case EXTRACTALLTOGETHER:
-                                return data;
-                        case EXTRACTSTEPBYSTEP:
-                                return extractCursor(numberOfCurrentChildren).newCursor();
-                        default:
-                                return extractCursor(numberOfCurrentChildren).newCursor();
-                }
-        }
-        @Override
-        public String toString(){
-                return "AliasNode";
-        }
+	public void nextChild() {
+		LOGGER.severe("Figlio attuale " + numberOfCurrentChildren
+				+ " prossimo figlio " + numberOfCurrentChildren + 1);
+		if (numberOfCurrentChildren + 1 < numberOfChildren) {
+			numberOfCurrentChildren++;
+		}
+	}
 
+	/**
+	 * @return the numberOfChildren
+	 */
+	public int getNumberOfChildren() {
+		return numberOfChildren;
+	}
 
-        /**
-         * @return the identifier
-         */
-        public String getIdentifier() throws WSCoLException {
-                return (String)identifier.getMonitoringValue();
-        }
+	public void setTypeOfExtraction(int type) {
+		this.typeOfExtraction = type;
+	}
 
-        public void nextChild() {
-                logger.severe("Figlio attuale "+numberOfCurrentChildren+ " prossimo figlio " + numberOfCurrentChildren +1 );
-                if( numberOfCurrentChildren +1 < numberOfChildren){
-                        numberOfCurrentChildren++;		}
-        }
+	/**
+	 * @return the typeOfExtraction
+	 */
+	public int getTypeOfExtraction() {
+		return typeOfExtraction;
+	}
 
-        /**
-         * @return the numberOfChildren
-         */
-        public int getNumberOfChildren() {
-                return numberOfChildren;
-        }
+	/**
+	 * @return the numberOfCurrentChildren
+	 */
+	public int getNumberOfCurrentChildren() {
+		return numberOfCurrentChildren;
+	}
 
-        public void setTypeOfExtraction(int type){
-                this.typeOfExtraction=type;
-        }
+	private XmlCursor extractCursor(int i) throws WSCoLException {
+		XmlCursor cursor = data.newCursor();
+		if (cursor.toChild(i))
+			return cursor;
+		else
+			throw new WSCoLException("pippo");
+	}
 
-        /**
-         * @return the typeOfExtraction
-         */
-        public int getTypeOfExtraction() {
-                return typeOfExtraction;
-        }
-
-        /**
-         * @return the numberOfCurrentChildren
-         */
-        public int getNumberOfCurrentChildren() {
-                return numberOfCurrentChildren;
-        }
-
-        private XmlCursor extractCursor(int i) throws WSCoLException{
-                XmlCursor cursor=data.newCursor();
-                if (cursor.toChild(i))
-                        return cursor;
-                else
-                        throw new WSCoLException("pippo");
-        }
-
-        /**
-         * @return the rootXml
-         */
-        public String getRootXml() {
-                return rootXml;
-        }
+	/**
+	 * @return the rootXml
+	 */
+	public String getRootXml() {
+		return rootXml;
+	}
 }

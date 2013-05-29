@@ -21,9 +21,6 @@ package it.polimi.monitor.nodes;
 import it.polimi.exception.WSCoLException;
 import it.polimi.monitor.InputMonitor;
 import it.polimi.monitor.ResultMonitor;
-
-import java.util.logging.Logger;
-
 import antlr.BaseAST;
 import antlr.Token;
 import antlr.collections.AST;
@@ -40,17 +37,8 @@ public abstract class NodeWSCoL extends BaseAST {
 	private static final long serialVersionUID = -7610762948410522700L;
 
 	protected InputMonitor inputMonitor = null;
-	protected Logger logger = null;
 	protected ResultMonitor resultMonitor = null;
 	protected String serializeTag;
-
-	/**
-	 * Create a new NodeWSCoL and set the logger for have more information.
-	 * 
-	 */
-	public NodeWSCoL() {
-		logger = Logger.getLogger("Monitor WSCoL");
-	}
 
 	/**
 	 * This method is use for costruct a NodeWSCoL with his child derived from
