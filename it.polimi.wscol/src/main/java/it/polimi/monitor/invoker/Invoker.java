@@ -46,6 +46,10 @@ import org.apache.xmlbeans.SchemaLocalElement;
 import org.apache.xmlbeans.SchemaParticle;
 import org.apache.xmlbeans.SchemaType;
 
+/**
+ * Dynamic invoker used by Dynamo to invoke external services at runtime, without having
+ * to generate Java code.
+ */
 public class Invoker {
 	private static final Logger LOGGER = Logger.getLogger(Invoker.class.getCanonicalName());
 
@@ -83,7 +87,7 @@ public class Invoker {
 			return body;
 		} else {
 			// RPC style needs a wrapper, according to the WS-I spec
-			final QName bodyQName = new QName(serviceWsdl.getTargetNamespace(), operationName);
+			final QName bodyQName = new QName(serviceWsdl.getTargetNamespace(), operationName, "ser");
 			return body.addBodyElement(bodyQName);
 		}
 	}
@@ -143,7 +147,7 @@ public class Invoker {
 			return messagePart.getElementName();
 		} else {
 			// The RPC wrapper element was already created elsewhere
-			return new QName(messagePart.getName());
+			return new QName("", messagePart.getName());
 		}
 	}
 
