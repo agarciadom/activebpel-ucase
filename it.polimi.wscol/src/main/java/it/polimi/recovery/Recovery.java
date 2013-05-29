@@ -43,8 +43,8 @@ import it.polimi.recovery.data.RecoveryResult;
 import it.polimi.recovery.nodes.WSReLNode;
 
 import java.io.StringReader;
-import java.rmi.RemoteException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -56,20 +56,24 @@ import antlr.collections.AST;
 
 public class Recovery
 {
-	private RecoveryParams recoveryParams = null;
-	private Logger logger=Logger.getLogger("WSReL Executor");
-	private Level defaultLoggerLivel=Level.INFO;
-	private RecoveryResult recoveryResult = null;
-	private Aliases aliases = null;
-	private AliasNodes tempAliases = null;
-	
+	private static final Logger LOGGER = Logger.getLogger(Recovery.class.getCanonicalName());
+	private static final Level DEFAULT_LEVEL = Level.INFO;
+
+	private RecoveryParams recoveryParams;
+	private RecoveryResult recoveryResult;
+	private Aliases aliases;
+	private AliasNodes tempAliases;
+
 	private ConfigurationManager cm;
 	private MonitorLogger ml;
-	
+
+	static {
+		LOGGER.setLevel(DEFAULT_LEVEL);
+	}
+
 	public Recovery(RecoveryParams recoveryParams, Aliases aliases, AliasNodes tempAliases)
 	{
 		this.recoveryParams = recoveryParams;
-		this.logger.setLevel(defaultLoggerLivel);
 		this.recoveryResult = new RecoveryResult();
 		
 		this.aliases = aliases;
@@ -91,147 +95,65 @@ public class Recovery
 		} 
 		catch (ServiceException e) 
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.severe(e.getLocalizedMessage());
 		}
 	}
 
-	public void setLevelLogger(Level l)
+	public static void setLevelLogger(Level l)
 	{
-		this.logger.setLevel(l);
+		LOGGER.setLevel(l);
 	}
 	
-	private void parseRecoveryStrategy()
+	private void parseRecoveryStrategy() throws RecognitionException, TokenStreamException
 	{
-		WSCoLLexer lexer = new WSCoLLexer(new StringReader(this.recoveryParams.getSupervisionParams().getRecoveryStrategies()));
-		WSCoLParser parser = new WSCoLParser(lexer);
-		
-		try
-		{
-			parser.recovery();
-		}
-		catch (RecognitionException e)
-		{
-			// TODO Auto-generated catch block
-			this.recoveryResult.setRecoveryResult(false);
-			e.printStackTrace();
-		}
-		catch (TokenStreamException e)
-		{
-			// TODO Auto-generated catch block
-			this.recoveryResult.setRecoveryResult(false);
-			e.printStackTrace();
-		}
-		
-//		ASTFrame frame = new ASTFrame("The tree",parser.getAST() );
-//		frame.setVisible(true);
+		final WSCoLLexer lexer = new WSCoLLexer(new StringReader(recoveryParams.getSupervisionParams().getRecoveryStrategies()));
+		final WSCoLParser parser = new WSCoLParser(lexer);
+		parser.recovery();
 
-		AST recovery = parser.getAST();
-
-		Vector<WSReLNode> wsrelNodes=new Vector<WSReLNode>();
-		WSReLNode temp=null;
-		
-//		this.logger.info("Creating a list of recovery strategies");
-		
-		for(int i = 0; i < recovery.getNumberOfChildren(); i++)
-		{
-			if(i == 0)
-			{
-				temp = (WSReLNode) recovery.getFirstChild();
-			}
-			else
-			{
-				temp = (WSReLNode) temp.getNextSibling();
-			}
-			
-			try
-			{
-				temp.evaluate(new InputMonitor(this.recoveryParams.getSupervisionParams().getMonitoringData(), this.recoveryParams.getSupervisionParams().getConfigHvar()), 
-												this.aliases, 
-												this.tempAliases);
-			}
-			catch (InvalidInputMonitor e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			wsrelNodes.add(temp);
-		}
-		
-		this.logger.info("Start to evaluate recovery strategies");
-		
-		WSReLNode node = null;
-		
-		ProcessParams processParams = this.recoveryParams.getProcessParams();					
-
-		for(int i = 0; i < wsrelNodes.size(); i++)
-		{
-			node = wsrelNodes.elementAt(i);
+		LOGGER.info("Start to evaluate recovery strategies");
+		final List<WSReLNode> wsrelNodes = evaluateRecoveryNodes(parser.getAST());
+		final ProcessParams processParams = this.recoveryParams.getProcessParams();
+		for (final WSReLNode node : wsrelNodes) {
 			node.doRecovery(this.recoveryParams, this.recoveryResult);
+			LOGGER.fine("Rebind?? " + this.recoveryResult.isThereRebindAction() + " | " + this.recoveryResult.getMessage());
 
-//			System.out.println("Rebind?? " + this.recoveryResult.isThereRebindAction() + " | " + this.recoveryResult.getMessage());
-			
 			if(this.recoveryResult.isRecoveryResult())
 			{
 				if(!this.recoveryResult.isThereIgnoreAction())
 				{
-					//Modification in supervision parameters are taken all toghether. If one of the 
-					//parameters remains the same, it must be copied as it is at the time.
-					//So, if the 'recovery' parameter of the 'change_supervision_rules' action is has omitted
-					//(i.e change_supervision_rules('newRule', '', 'permanent')), the recovery will be switched 
-					//off.
-					//Differently, if the changing parameter is a priority, omitting will lead to set
-					//the priority to 0.
+					/*
+					 * Modification in supervision parameters are taken all
+					 * toghether. If one of the parameters remains the same, it
+					 * must be copied as it is at the time. So, if the
+					 * 'recovery' parameter of the 'change_supervision_rules'
+					 * action is has omitted (i.e
+					 * change_supervision_rules('newRule', '', 'permanent')),
+					 * the recovery will be switched off. Differently, if the
+					 * changing parameter is a priority, omitting will lead to
+					 * set the priority to 0.
+					 */
 					
 					if(this.recoveryResult.isThereChangingProcessParams())
 					{
-						//Update process params
-						
-						ChangeProcessParams tempCPP = this.recoveryResult.getChangeProcessParams();
-						
-						if(tempCPP.getChangeType().equals("permanent"))
-						{
-							//In main db tables
-							ProcessInfoWrapper processInfoWrapper = new ProcessInfoWrapper(tempCPP.getNewPriority(),
-																							processParams.getProcessID(),
-																							null,
-																							processParams.getUserID());
-							
-							try
-							{
+						final ChangeProcessParams tempCPP = this.recoveryResult.getChangeProcessParams();
+						try {
+							final ProcessInfoWrapper processInfoWrapper = createProcessInfoWrapper(tempCPP, processParams);
+
+							if (tempCPP.getChangeType().equals("permanent")) {
+								processInfoWrapper.setProcessInstanceId(null);
 								this.cm.setNewProcessPriority(processInfoWrapper);
 							}
-							catch (RemoteException e)
-							{
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						else if(tempCPP.getChangeType().equals("bpel_instance"))
-						{
-							//In temporary db tables
-							ProcessInfoWrapper processInfoWrapper = new ProcessInfoWrapper(tempCPP.getNewPriority(),
-																							processParams.getProcessID(),
-																							processParams.getProcessInstanceID(),
-																							processParams.getUserID());
-
-							try
-							{
+							else if (tempCPP.getChangeType().equals("bpel_instance")) {
 								this.cm.setTemporaryProcessDataChanging(processInfoWrapper);
 							}
-							catch (RemoteException e)
-							{
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+						} catch (Exception e) {
+							LOGGER.severe(e.getLocalizedMessage());
 						}
 					}
 					
 					if(this.recoveryResult.isThereChangingSupervisionParams() || this.recoveryResult.isThereChangingSupervisionRules())
 					{
 						//Update supervision params and rules
-						
 						boolean permanentSupervisionChange = false;
 						boolean temporarySupervisionChange = false;
 						
@@ -239,17 +161,15 @@ public class Recovery
 						ChangeSupervisionRule tempCPR = this.recoveryResult.getChangeSupervisionRule();
 						
 						SupervisionRuleInfoWrapper supervisionRuleInfoWrapper = null;
-						try
-						{
+						try	{
 							supervisionRuleInfoWrapper = this.cm.getSupervisionRule(processParams.getProcessID(), 
 																					processParams.getUserID(), 
 																					processParams.getLocation(), 
 																					processParams.isPrecondition());
 						}
-						catch (RemoteException e1)
+						catch (Exception e1)
 						{
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
+							LOGGER.severe(e1.getLocalizedMessage());
 						}
 						
 						if(supervisionRuleInfoWrapper == null)
@@ -317,10 +237,9 @@ public class Recovery
 							if(temporarySupervisionChange)
 								this.cm.setTemporaryChangingRule(temporaryRuleChangingInfoWrapper);
 						}
-						catch (RemoteException e)
+						catch (Exception e)
 						{
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							LOGGER.severe(e.getLocalizedMessage());
 						}
 					}
 				}
@@ -340,21 +259,44 @@ public class Recovery
 		recoveryResultInfoWrapper.setSuccessful(this.recoveryResult.isRecoveryResult());
 		recoveryResultInfoWrapper.setCompleteRecoveryStrategy(this.recoveryParams.getSupervisionParams().getRecoveryStrategies());
 		recoveryResultInfoWrapper.setExecutedRecoveryStrategy(this.recoveryResult.getMessage());
-		//codice doppio
-		/*try
-		{
-			this.ml.insertNewRecoveryResult(recoveryResultInfoWrapper);
+	}
+
+	private List<WSReLNode> evaluateRecoveryNodes(final AST recovery) {
+		final List<WSReLNode> wsrelNodes = new ArrayList<WSReLNode>();
+		WSReLNode temp = (WSReLNode)recovery.getFirstChild();
+		for(int i = 0; i < recovery.getNumberOfChildren(); i++) {
+			try {
+				temp.evaluate(new InputMonitor(this.recoveryParams.getSupervisionParams().getMonitoringData(), this.recoveryParams.getSupervisionParams().getConfigHvar()), 
+												this.aliases, 
+												this.tempAliases);
+			}
+			catch (InvalidInputMonitor e) {
+				LOGGER.severe(e.getLocalizedMessage());
+			}
+
+			wsrelNodes.add(temp);
+			temp = (WSReLNode) temp.getNextSibling();  
 		}
-		catch (RemoteException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		return wsrelNodes;
+	}
+
+	private ProcessInfoWrapper createProcessInfoWrapper(
+			ChangeProcessParams changeParams, ProcessParams processParams) {
+		final ProcessInfoWrapper processInfoWrapper = new ProcessInfoWrapper();
+		processInfoWrapper.setPriority(changeParams.getNewPriority());
+		processInfoWrapper.setProcessId(processParams.getProcessID());
+		processInfoWrapper.setUserId(processParams.getUserID());
+		processInfoWrapper.setProcessInstanceId(processParams.getProcessInstanceID());
+		return processInfoWrapper;
 	}
 	
 	public boolean DoRecovery()
 	{
-		this.parseRecoveryStrategy();
+		try {
+			this.parseRecoveryStrategy();
+		} catch (Exception e) {
+			LOGGER.severe(e.getLocalizedMessage());
+		}
 		return this.recoveryResult.isRecoveryResult();
 	}
 	
