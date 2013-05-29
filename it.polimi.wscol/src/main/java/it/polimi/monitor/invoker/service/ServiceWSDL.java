@@ -83,13 +83,18 @@ public class ServiceWSDL {
 			}
 			LOGGER.finer("SOAP binding style: " + soapBindingType);
 
-			// Parse the WSDL schema with XMLBeans
-			final org.w3c.dom.Element schemaElement = getSchema().getElement();
-			XmlObject schemaXSB = XmlObject.Factory.parse(schemaElement);
-			schemaTypeSystem = XmlBeans.compileXsd(
+			// Parse the embedded XML Schema with XMLBeans (if any exists)
+			// FIXME: handle WSDL imports (perhaps using WSDL2XSDTree)
+			if (getSchema() != null) {
+				final org.w3c.dom.Element schemaElement = getSchema().getElement();
+				XmlObject schemaXSB = XmlObject.Factory.parse(schemaElement);
+				schemaTypeSystem = XmlBeans.compileXsd(
 					new XmlObject[] { schemaXSB },
 					XmlBeans.getBuiltinTypeSystem(),
 					new XmlOptions().setCompileDownloadUrls());
+			} else {
+				schemaTypeSystem = XmlBeans.getBuiltinTypeSystem();
+			}
 		} catch (Exception e) {
 			LOGGER.severe(e.getLocalizedMessage());
 		}
@@ -115,7 +120,7 @@ public class ServiceWSDL {
 		return service.getQName();
 	}
 
-	public String GetTargetNamespace() {
+	public String getTargetNamespace() {
 		return definitions.getTargetNamespace();
 	}
 
@@ -137,7 +142,7 @@ public class ServiceWSDL {
 		return null;
 	}
 
-	public QName RetreiveOutMessageName(String operation) {
+	public QName getOutMessageName(String operation) {
 		final Operation op = binding.getPortType().getOperation(operation, null, null);
 		if (op != null && op.getOutput() != null) {
 			return op.getOutput().getMessage().getQName();

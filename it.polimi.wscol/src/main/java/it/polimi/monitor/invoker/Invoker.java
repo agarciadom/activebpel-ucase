@@ -34,13 +34,10 @@ import javax.wsdl.Part;
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import javax.xml.soap.MessageFactory;
-import javax.xml.soap.Name;
 import javax.xml.soap.SOAPBody;
-import javax.xml.soap.SOAPBodyElement;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
-import javax.xml.soap.SOAPFactory;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.ws.Dispatch;
 import javax.xml.ws.Service;
@@ -50,7 +47,6 @@ import org.apache.xmlbeans.SchemaParticle;
 import org.apache.xmlbeans.SchemaType;
 
 public class Invoker {
-	private static final String NS_PREFIX = "ser";
 	private static final Logger LOGGER = Logger.getLogger(Invoker.class.getCanonicalName());
 
 	public String invoke(String wsdlLocation, String operationName, String xmlInVariable) {
@@ -59,7 +55,7 @@ public class Invoker {
 			final ServiceWSDL serviceWsdl = new ServiceWSDL(wsdlLocation);
 
 			final SOAPMessage request = MessageFactory.newInstance().createMessage();
-			final SOAPBodyElement bodyElement = createSOAPBody(operationName, serviceWsdl, request);
+			final SOAPElement bodyElement = createSOAPBody(operationName, serviceWsdl, request);
 			final QName serviceName = populateBody(operationName, xmlInVariable, serviceWsdl, bodyElement);
 			final QName portName = new QName(serviceName.getNamespaceURI(), serviceWsdl.getPortName());
 
@@ -75,8 +71,25 @@ public class Invoker {
 		return null;
 	}
 
+	private SOAPElement createSOAPBody(String operationName,
+			final ServiceWSDL serviceWsdl, final SOAPMessage request)
+			throws SOAPException {
+		final SOAPEnvelope envelope = request.getSOAPPart().getEnvelope();
+		final SOAPBody body = envelope.getBody();
+		envelope.addNamespaceDeclaration("xsi", XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
+	
+		if (serviceWsdl.isDocumentStyle()) {
+			// Document style does not need a wrapper
+			return body;
+		} else {
+			// RPC style needs a wrapper, according to the WS-I spec
+			final QName bodyQName = new QName(serviceWsdl.getTargetNamespace(), operationName);
+			return body.addBodyElement(bodyQName);
+		}
+	}
+
 	private QName populateBody(String operationName, String xmlInVariable,
-			final ServiceWSDL serviceWsdl, final SOAPBodyElement bodyElement)
+			final ServiceWSDL serviceWsdl, final SOAPElement bodyElement)
 			throws ServiceWSDLException, SOAPException {
 		final QName serviceName = serviceWsdl.getServiceName();
 		final QName messageName = serviceWsdl.getInMessageName(operationName);
@@ -90,7 +103,7 @@ public class Invoker {
 	}
 
 	private void populatePart(final ServiceWSDL serviceWsdl,
-			final SOAPBodyElement bodyElement, final QName serviceName,
+			final SOAPElement bodyElement, final QName serviceName,
 			final XMLVariable inVariable, final String partName,
 			final Part messagePart) throws ServiceWSDLException, SOAPException {
 		final QName nameElement = getPartElementName(serviceWsdl, serviceName, messagePart);
@@ -111,18 +124,6 @@ public class Invoker {
 		}
 	}
 
-	private SOAPBodyElement createSOAPBody(String operationName,
-			final ServiceWSDL serviceWsdl, final SOAPMessage request)
-			throws SOAPException {
-		final SOAPEnvelope envelope = request.getSOAPPart().getEnvelope();
-		final SOAPBody body = envelope.getBody();
-		envelope.addNamespaceDeclaration("xsi", XMLConstants.W3C_XML_SCHEMA_INSTANCE_NS_URI);
-
-		final Name bodyName = SOAPFactory.newInstance().createName(operationName, NS_PREFIX, serviceWsdl.GetTargetNamespace());
-		final SOAPBodyElement bodyElement = body.addBodyElement(bodyName);
-		return bodyElement;
-	}
-
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private String invokeService(String wsdlLocation, final QName serviceName,
 			final QName portName, final SOAPMessage request)
@@ -135,6 +136,17 @@ public class Invoker {
 		return outVariable;
 	}
 
+	private QName getPartElementName(ServiceWSDL serviceWsdl,
+			final QName serviceName, final Part messagePart) {
+		// We assume that the service is WS-I compliant: doc/lit uses 'element', rpc/lit uses 'type'
+		if (serviceWsdl.isDocumentStyle()) {
+			return messagePart.getElementName();
+		} else {
+			// The RPC wrapper element was already created elsewhere
+			return new QName(messagePart.getName());
+		}
+	}
+
 	private SchemaType getPartType(final ServiceWSDL serviceWsdl,
 			final Part messagePart) throws ServiceWSDLException {
 		SchemaType type;
@@ -144,21 +156,6 @@ public class Invoker {
 			type = serviceWsdl.getType(messagePart.getTypeName());
 		}
 		return type;
-	}
-
-	private boolean isComplex(final SchemaType type) {
-		return type.getContentType() != SchemaType.NOT_COMPLEX_TYPE;
-	}
-
-	private QName getPartElementName(ServiceWSDL serviceWsdl,
-			final QName serviceName, final Part messagePart) {
-		// We assume that the service is WS-I compliant: doc/lit uses 'element', rpc/lit uses 'type'
-		if (serviceWsdl.isDocumentStyle()) {
-			return messagePart.getElementName();
-		} else {
-			// Wrapper element, according to WS-I spec
-			return new QName(serviceName.getNamespaceURI(), serviceName.getLocalPart() + "Request");
-		}
 	}
 
 	private void addSOAPElement(SOAPElement parentElement, SchemaType type,
@@ -218,5 +215,9 @@ public class Invoker {
 		for (SchemaParticle child : particle.getParticleChildren()) {
 			processParticle(parentElement, queryXPath, child, inVariable);
 		}
+	}
+
+	private boolean isComplex(final SchemaType type) {
+		return type.getContentType() != SchemaType.NOT_COMPLEX_TYPE;
 	}
 }
