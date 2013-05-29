@@ -14,61 +14,63 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.nodes.binary;
 
+import java.util.logging.Logger;
+
 import it.polimi.exception.WSCoLCastException;
 import it.polimi.exception.WSCoLException;
+
 /**
- * Class for analyze a left implication ("==>") of boolen logic between two terms. The analyze return false
- * the left term is true and the right is false. Otherwise return true.
+ * Class for analyze a left implication ("==>") of boolen logic between two
+ * terms. The analyze return false the left term is true and the right is false.
+ * Otherwise return true.
  * 
  * The serialize tag of this node is leftImplies.
  * 
  * @author Luca Galluppi
- *
  */
-public class LeftImpliesNode extends BinaryNode{
-
+public class LeftImpliesNode extends BinaryNode {
+	private static final Logger LOGGER = Logger.getLogger(LeftImpliesNode.class.getCanonicalName());
 	private static final long serialVersionUID = -1467691068700035490L;
 
-	/**
-	 * 
-	 *
-	 */
 	public LeftImpliesNode() {
-		serializeTag="leftImplies";
+		serializeTag = "leftImplies";
 	}
 
 	@Override
 	public Object getMonitoringValue() throws WSCoLException {
 		Boolean res;
-		logger.info("Start getMonitoringValue "+serializeTag);
-		switch(instace){
-			case BOOLEAN:
-				if (bLeft.booleanValue() == true && bRight.booleanValue()== false) {
-					res=new Boolean(false);
-					break;
-				} else {
-					res= new Boolean(true);
-					break;
-				}
-			case NUMBER:
-				logger.severe("WSCoLCastExceprion");
-				throw new WSCoLCastException("Can't define LeftImplies operation beetwen number");
-			case STRING:
-				logger.severe("WSCoLCastExceprion");
-				throw new WSCoLCastException("Can't define LeftImplies operation beetwen string");
-			default:
-				logger.severe("WSCoLCastExceprion");
-				throw new WSCoLCastException("Can't define instace of terms");
+		LOGGER.info("Start getMonitoringValue " + serializeTag);
+		switch (valueType) {
+		case BOOLEAN:
+			if (bLeft.booleanValue() == true && bRight.booleanValue() == false) {
+				res = new Boolean(false);
+				break;
+			} else {
+				res = new Boolean(true);
+				break;
+			}
+		case NUMBER:
+			LOGGER.severe("WSCoLCastExceprion");
+			throw new WSCoLCastException(
+					"Can't define LeftImplies operation beetwen number");
+		case STRING:
+			LOGGER.severe("WSCoLCastExceprion");
+			throw new WSCoLCastException(
+					"Can't define LeftImplies operation beetwen string");
+		default:
+			LOGGER.severe("WSCoLCastExceprion");
+			throw new WSCoLCastException("Can't define instace of terms");
 		}
-		logger.info("Finish getMonitoringValue "+serializeTag+" result: "+res);
+		LOGGER.info("Finish getMonitoringValue " + serializeTag + " result: " + res);
 		return res;
 	}
+
 	@Override
-	public String toString(){
+	public String toString() {
 		return "==>";
 	}
 }

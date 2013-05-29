@@ -14,35 +14,38 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.nodes.complex;
 
+import java.util.logging.Logger;
+
 import it.polimi.exception.WSCoLException;
 
-public class ProductNode extends ComplexMathematicalNode{
+public class ProductNode extends ComplexMathematicalNode {
 
+	private static final Logger LOGGER = Logger.getLogger(ProductNode.class.getCanonicalName());
 	private static final long serialVersionUID = -3841795052973272527L;
 
-	/**
-	 * 
-	 */
 	public ProductNode() {
-		serializeTag="product";
+		serializeTag = "product";
 	}
+
 	@Override
 	public Object getMonitoringValue() throws WSCoLException {
-		logger.info("Start getMonitoringValue "+serializeTag);
+		LOGGER.fine("Start getMonitoringValue " + serializeTag);
+
 		double pro = 1;
-		
-		for (double i:numbers){
+		for (double i : numbers) {
 			System.err.println(i);
 			pro *= i;
 		}
-		logger.info("Finish getMonitoringValue "+serializeTag+" result: "+pro);
-		return new Double(pro);
+
+		LOGGER.fine("Finish getMonitoringValue " + serializeTag + " result: " + pro);
+		return pro;
 	}
-	public String toString(){
+
+	public String toString() {
 		return "Product";
 	}
 }

@@ -18,6 +18,8 @@
 
 package it.polimi.monitor.nodes.binary;
 
+import java.util.logging.Logger;
+
 import it.polimi.exception.WSCoLCastException;
 import it.polimi.exception.WSCoLException;
 /**
@@ -30,9 +32,8 @@ import it.polimi.exception.WSCoLException;
  *
  */
 public class DoubleImpliesNode extends BinaryNode {
-
+	private static final Logger LOGGER = Logger.getLogger(DoubleImpliesNode.class.getCanonicalName());
 	private static final long serialVersionUID = 7945820925585599011L;
-
 	
 	public DoubleImpliesNode() {
 		serializeTag="doubleImplies";
@@ -41,8 +42,8 @@ public class DoubleImpliesNode extends BinaryNode {
 	@Override
 	public Object getMonitoringValue() throws WSCoLException {
 		Boolean res;
-		logger.info("Start getMonitoringValue "+serializeTag);
-		switch(instace){
+		LOGGER.info("Start getMonitoringValue "+serializeTag);
+		switch(valueType){
 			case BOOLEAN:
 				if (bLeft.booleanValue() == false && bRight.booleanValue()== false) {
 					res= new Boolean(true);
@@ -55,16 +56,16 @@ public class DoubleImpliesNode extends BinaryNode {
 					break;
 				}
 			case NUMBER:
-				logger.severe("WSCoLCastExceprion");
+				LOGGER.severe("WSCoLCastExceprion");
 				throw new WSCoLCastException("Can't define DoubleImplies operation beetwen number");
 			case STRING:
-				logger.severe("WSCoLCastExceprion");
+				LOGGER.severe("WSCoLCastExceprion");
 				throw new WSCoLCastException("Can't define DoubleImplies operation beetwen string");
 			default:
-				logger.severe("WSCoLCastExceprion");
+				LOGGER.severe("WSCoLCastExceprion");
 				throw new WSCoLCastException("Can't define instace of terms");
 		}
-		logger.info("Finish getMonitoringValue "+serializeTag+" result: "+res);
+		LOGGER.info("Finish getMonitoringValue "+serializeTag+" result: "+res);
 		return res;
 	}
 	@Override

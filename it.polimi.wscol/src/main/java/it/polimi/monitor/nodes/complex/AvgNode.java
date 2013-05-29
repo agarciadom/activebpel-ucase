@@ -14,40 +14,39 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.nodes.complex;
 
 import it.polimi.exception.WSCoLException;
 
+import java.util.logging.Logger;
 
-public class AvgNode extends ComplexMathematicalNode{
+public class AvgNode extends ComplexMathematicalNode {
 
-	
+	private static final Logger LOGGER = Logger.getLogger(AvgNode.class.getCanonicalName());
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
 	public AvgNode() {
-		serializeTag="avg";
+		serializeTag = "avg";
 	}
 
 	@Override
 	public Object getMonitoringValue() throws WSCoLException {
-		logger.info("Start getMonitoringValue "+serializeTag);
-		double n=numbers.length;
+		LOGGER.info("Start getMonitoringValue " + serializeTag);
+		double n = numbers.length;
 		double sum = 0;
-		for (double i:numbers)
+		for (double i : numbers)
 			sum = sum + i;
-		double res= sum/n;
-		logger.info("Finish getMonitoringValue "+serializeTag+" result: "+res);
+		double res = sum / n;
+		LOGGER.info("Finish getMonitoringValue " + serializeTag + " result: "
+				+ res);
 		return new Double(res);
 	}
+
 	@Override
-	public String toString(){
+	public String toString() {
 		return "Avg";
 	}
-	
 
 }

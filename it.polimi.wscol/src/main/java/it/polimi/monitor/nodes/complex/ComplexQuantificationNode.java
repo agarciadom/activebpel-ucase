@@ -14,7 +14,7 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 /**
  * 
@@ -25,20 +25,25 @@ import it.polimi.exception.WSCoLException;
 import it.polimi.monitor.nodes.AliasNode;
 import it.polimi.monitor.nodes.NodeWSCoL;
 
+import java.util.logging.Logger;
+
 /**
  * @author Luca Galluppi
- *
+ * 
  */
 public abstract class ComplexQuantificationNode extends NodeWSCoL {
-	protected AliasNode aliasNode=null;
-	protected NodeWSCoL condition=null;
+	private static final long serialVersionUID = -5179511447608103977L;
+	private static final Logger LOGGER = Logger.getLogger(ComplexQuantificationNode.class.getCanonicalName());
+
+	protected AliasNode aliasNode = null;
+	protected NodeWSCoL condition = null;
 	protected Boolean value;
-		
-	
+
 	@Override
 	public Boolean getMonitoringValue() throws WSCoLException {
-		logger.info("Start getMonitoringValue "+serializeTag);
-		logger.info("Finish getMonitoringValue "+serializeTag+" result: "+value);
+		LOGGER.fine("Start getMonitoringValue " + serializeTag);
+		LOGGER.fine("Finish getMonitoringValue " + serializeTag + " result: "
+				+ value);
 		return value;
 	}
 

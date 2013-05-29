@@ -14,30 +14,32 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.nodes.complex;
+
+import java.util.logging.Logger;
 
 import it.polimi.exception.WSCoLException;
 
 public class MaxNode extends ComplexMathematicalNode {
 
+	private static final Logger LOGGER = Logger.getLogger(EXISTSNode.class.getCanonicalName());
 	private static final long serialVersionUID = -1986024938174339410L;
 
-	/**
-	 * 
-	 */
 	public MaxNode() {
-		serializeTag="max";
+		serializeTag = "max";
 	}
+
 	@Override
 	public Object getMonitoringValue() throws WSCoLException {
-		logger.info("Start getMonitoringValue "+serializeTag);
-		double res= numbers[numbers.length-1];
-		logger.info("Finish getMonitoringValue "+serializeTag+" result: "+res);
+		LOGGER.fine("Start getMonitoringValue " + serializeTag);
+		double res = numbers[numbers.length - 1];
+		LOGGER.fine("Finish getMonitoringValue " + serializeTag + " result: " + res);
 		return new Double(res);
 	}
-	public String toString(){
+
+	public String toString() {
 		return "Max";
 	}
 }

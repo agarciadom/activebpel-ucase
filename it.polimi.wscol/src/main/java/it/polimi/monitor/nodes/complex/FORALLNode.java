@@ -18,6 +18,8 @@
 
 package it.polimi.monitor.nodes.complex;
 
+import java.util.logging.Logger;
+
 import it.polimi.exception.WSCoLCastException;
 import it.polimi.exception.WSCoLException;
 import it.polimi.monitor.InputMonitor;
@@ -29,18 +31,16 @@ import it.polimi.monitor.nodes.NodeWSCoL;
 
 public class FORALLNode extends ComplexQuantificationNode {
 	
+	private static final Logger LOGGER = Logger.getLogger(EXISTSNode.class.getCanonicalName());
 	private static final long serialVersionUID = -1444472461556224669L;
-	
-	/**
-	 * 
-	 */
+
 	public FORALLNode() {
 		serializeTag="forall";
 	}
 
 	@Override
 	public void evaluate(InputMonitor inputMonitor, Aliases aliases , AliasNodes tempAliases ) throws WSCoLException {
-		logger.info("Start evaluate "+serializeTag);
+		LOGGER.info("Start evaluate "+serializeTag);
 		aliasNode=(AliasNode)this.getFirstChild();
 		aliasNode.setTypeOfExtraction(AliasNode.EXTRACTSTEPBYSTEP);
 		aliasNode.evaluate(inputMonitor, aliases, tempAliases);
@@ -62,7 +62,7 @@ public class FORALLNode extends ComplexQuantificationNode {
 			aliasNode.nextChild();
 		}
 		tempAliases.removeAliasNode(aliasNode.getIdentifier());	
-		logger.info("Finish evaluate "+serializeTag);
+		LOGGER.info("Finish evaluate "+serializeTag);
 	}
 	
 	public String toString(){

@@ -14,34 +14,37 @@
 
  You should have received a copy of the GNU General Public License
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ */
 
 package it.polimi.monitor.nodes.complex;
 
+import java.util.logging.Logger;
+
 import it.polimi.exception.WSCoLException;
 
-public class SumNode extends ComplexMathematicalNode{
+public class SumNode extends ComplexMathematicalNode {
 
-	
+	private static final Logger LOGGER = Logger.getLogger(SumNode.class.getCanonicalName());
 	private static final long serialVersionUID = 3668233340017759784L;
 
-	/**
-	 * 
-	 */
 	public SumNode() {
-		serializeTag="sum";
+		serializeTag = "sum";
 	}
+
 	@Override
 	public Object getMonitoringValue() throws WSCoLException {
-		logger.info("Start getMonitoringValue "+serializeTag);
+		LOGGER.fine("Start getMonitoringValue " + serializeTag);
+
 		double sum = 0;
-		for (double i:numbers) {
+		for (double i : numbers) {
 			sum = sum + i;
 		}
-		logger.info("Finish getMonitoringValue "+serializeTag+" result: " + sum);
-		return new Double(sum);
+
+		LOGGER.fine("Finish getMonitoringValue " + serializeTag + " result: " + sum);
+		return sum;
 	}
-	public String toString(){
+
+	public String toString() {
 		return "Sum";
 	}
 }

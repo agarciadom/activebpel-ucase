@@ -18,12 +18,15 @@
 
 package it.polimi.monitor.nodes.binary;
 
+import java.util.logging.Logger;
+
 import it.polimi.exception.WSCoLCastException;
 import it.polimi.exception.WSCoLException;
 import antlr.Token;
 
 public class OperatorNode extends BinaryNode {
-	
+	private static final Logger LOGGER = Logger.getLogger(OperatorNode.class.getCanonicalName());
+
 	private final String DOUBLE_EQUALS ="==";	
 	private final String NOT_EQUALS ="!=";
 	private int operator;
@@ -56,7 +59,7 @@ public class OperatorNode extends BinaryNode {
 	@Override
 	public Object getMonitoringValue() throws WSCoLException {
 		Boolean res;
-		logger.info("Start getMonitoringValue "+serializeTag);
+		LOGGER.info("Start getMonitoringValue "+serializeTag);
 		switch(operator){
 			case DOUBLE_EQUALS_OPERATOR:
 				res= doubleEqualsEvaluate();
@@ -65,15 +68,15 @@ public class OperatorNode extends BinaryNode {
 				res= notEqualsEvaluate();
 				break;
 			default:
-				logger.severe("WSCoLException");
+				LOGGER.severe("WSCoLException");
 				throw new WSCoLException("Can't define logical operation");
 		}
-		logger.info("Finish getMonitoringValue "+serializeTag+" result: "+res);
+		LOGGER.info("Finish getMonitoringValue "+serializeTag+" result: "+res);
 		return res;
 	}
 	
 	private Boolean doubleEqualsEvaluate() throws WSCoLException {
-		switch(instace){
+		switch(valueType){
 			case BOOLEAN:
 				if (bLeft.equals(bRight)) 
 					return new Boolean(true);
@@ -92,13 +95,13 @@ public class OperatorNode extends BinaryNode {
 				 else 
 					 return new Boolean(false);
 			default:
-				logger.severe("WSCoLCastExceprion");
+				LOGGER.severe("WSCoLCastExceprion");
 				throw new WSCoLCastException("Can't define instace of terms");
 		}
 	}
 	
 	private Boolean notEqualsEvaluate() throws WSCoLException {
-		switch(instace){
+		switch(valueType){
 			case BOOLEAN:
 				if (! bLeft.equals(bRight)) 
 					return new Boolean(true);
@@ -116,7 +119,7 @@ public class OperatorNode extends BinaryNode {
 				else 
 					return new Boolean(false);
 			default:
-				logger.severe("WSCoLCastExceprion");
+				LOGGER.severe("WSCoLCastExceprion");
 				throw new WSCoLCastException("Can't define instace of terms");
 		}
 	}
