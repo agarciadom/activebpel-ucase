@@ -3,7 +3,7 @@
 
 
 /*  
- *  Licence: 
+ *  License: 
  *
  *
  *  This file is part of  DYNAMO .

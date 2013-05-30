@@ -1,13 +1,9 @@
-
-/* Copyright 2007, 2008 , DEEP SE group, Dipartimento di Elettronica e Informazione (DEI), Politecnico di Milano */
-
-
-/*  
- *  Licence: 
+/* Copyright 2007, 2008, DEEP SE group, Dipartimento di Elettronica e Informazione (DEI), Politecnico di Milano
+ * Copyright 2013 Antonio García-Domínguez (UCA)
  *
+ *  License: 
  *
- *  This file is part of  DYNAMO .
- *
+ *  This file is part of DYNAMO.
  *
  *	DYNAMO is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

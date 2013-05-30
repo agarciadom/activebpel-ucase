@@ -1,7 +1,7 @@
 /* Copyright 2007, 2008 , DEEP SE group, Dipartimento di Elettronica e Informazione (DEI), Politecnico di Milano */
 
 /*
- *  Licence:
+ *  License:
  *
  *  This file is part of  DYNAMO .
  *
